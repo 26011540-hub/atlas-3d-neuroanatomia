@@ -1,0 +1,12 @@
+{
+  "name": "atlas-neuro-scripts",
+  "private": true,
+  "type": "module",
+  "description": "Conversao das malhas do Brainder (CC BY-SA 3.0) para o atlas 3D",
+  "scripts": {
+    "converter": "node converter_brainder.mjs",
+    "embutir": "node embutir_glb.mjs",
+    "servir": "node servidor.mjs"
+  },
+  "dependencies": { "meshoptimizer": "^0.22.0" }
+}

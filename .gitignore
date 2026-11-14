@@ -1,0 +1,20 @@
+# Livros (direitos autorais dos autores e editoras): nunca publicar
+*.pdf
+
+# Downloads brutos do Brain for Blender (130 MB): baixar de novo com as instruções em scripts/LEIAME.md
+dados_brainder/*_obj/
+dados_brainder/*.tar.bz2
+
+# Dependências do Node
+node_modules/
+
+# Kit do Anatomy Learning (conteúdo de terceiros, não pode ser publicado)
+neuro_kit/
+kit_neuro_claude_code*/
+
+# Configuração local do Claude Code e cópias de segurança
+.claude/
+atlas-3d-neuroanatomia.original.html
+
+# Anotações de trabalho com o Claude
+prompts-claude-code-atlas-neuroanatomia.md
