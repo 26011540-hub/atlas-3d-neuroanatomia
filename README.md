@@ -1,6 +1,8 @@
 # Atlas 3D de Neuroanatomia
 
-Atlas 3D interativo para estudo de neuroanatomia, feito por um estudante de Medicina com base em Ângelo Machado, *Neuroanatomia Funcional*, 4ª ed. Roda no navegador, em um único arquivo HTML, sem instalação.
+**Autor: Gustavo de Castro** · © 2026 · licença CC BY-SA 3.0 (ver [LICENSE](LICENSE))
+
+Atlas 3D interativo para estudo de neuroanatomia, criado por Gustavo de Castro, estudante de Medicina, com base em Ângelo Machado, *Neuroanatomia Funcional*, 4ª ed. Roda no navegador, em um único arquivo HTML, sem instalação.
 
 **Abrir no navegador:** https://26011540-hub.github.io/atlas-3d-neuroanatomia/
 
@@ -34,4 +36,7 @@ Detalhes da conversão das malhas em [scripts/LEIAME.md](scripts/LEIAME.md); est
 - Textos: resumos a partir de Ângelo Machado, *Neuroanatomia Funcional*, 4ª ed. (Atheneu), com capítulo e página citados em cada item. O livro não está incluído neste repositório.
 - Programas: [three.js](https://threejs.org) r128 (MIT) e [meshoptimizer](https://github.com/zeux/meshoptimizer) (MIT).
 
-Por usar as malhas do Brain for Blender, o atlas é distribuído sob a mesma licença, **CC BY-SA 3.0**.
+Por usar as malhas do Brain for Blender, o atlas é distribuído sob a mesma licença, **CC BY-SA 3.0**. Quem reutilizar deve citar o autor (Gustavo de Castro, com o link deste repositório), indicar as alterações e manter a mesma licença. O código foi escrito com o auxílio de inteligência artificial (Claude, da Anthropic), sob a direção do autor.
+
+## Como citar
+CASTRO, Gustavo de. *Atlas 3D de Neuroanatomia*. 2026. Disponível em: https://github.com/26011540-hub/atlas-3d-neuroanatomia.

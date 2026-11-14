@@ -1,0 +1,28 @@
+Atlas 3D de Neuroanatomia
+Copyright (c) 2026 Gustavo de Castro
+
+Autor e titular: Gustavo de Castro.
+Repositório original: https://github.com/26011540-hub/atlas-3d-neuroanatomia
+
+Esta obra é distribuída sob a licença Creative Commons Atribuição-CompartilhaIgual 3.0
+Não Adaptada (CC BY-SA 3.0):
+https://creativecommons.org/licenses/by-sa/3.0/legalcode
+Resumo em português: https://creativecommons.org/licenses/by-sa/3.0/deed.pt_BR
+
+Quem copiar, redistribuir ou adaptar esta obra deve:
+  1. dar crédito ao autor, Gustavo de Castro, com o link do repositório original;
+  2. indicar se fez alterações;
+  3. distribuir as adaptações sob a mesma licença (CC BY-SA 3.0).
+
+Material de terceiros incluído:
+  - Malhas 3D do cérebro: "Brain for Blender", de Anderson M. Winkler (https://brainder.org),
+    licença CC BY-SA 3.0. As malhas foram decimadas, recoloridas e espelhadas. É por causa delas
+    que esta obra usa a mesma licença.
+  - three.js r128 e GLTFLoader (licença MIT), carregados por CDN, não incluídos aqui.
+  - meshoptimizer (licença MIT), usado só na conversão das malhas.
+
+Os textos do atlas resumem Ângelo Machado, Neuroanatomia Funcional, 4ª ed. (Atheneu), com
+capítulo e página citados em cada item. O livro não faz parte desta obra nem deste repositório.
+
+O código foi escrito com o auxílio de inteligência artificial (Claude, da Anthropic), sob a
+direção do autor.
