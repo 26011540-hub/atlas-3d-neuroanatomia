@@ -2,7 +2,9 @@
 
 Atlas 3D interativo para estudo de neuroanatomia, feito por um estudante de Medicina com base em Ângelo Machado, *Neuroanatomia Funcional*, 4ª ed. Roda no navegador, em um único arquivo HTML, sem instalação.
 
-**Abrir:** baixe `atlas-3d-neuroanatomia.html` e abra com duplo clique (precisa de internet para carregar o three.js).
+**Abrir no navegador:** https://26011540-hub.github.io/atlas-3d-neuroanatomia/
+
+Ou baixe `atlas-3d-neuroanatomia.html` e abra com duplo clique (precisa de internet para carregar o three.js).
 
 ## O que tem
 - Córtex real (malha de um cérebro, parcelação Desikan-Killiany), vista inflada e 19 sulcos selecionáveis.

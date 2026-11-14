@@ -57,6 +57,11 @@ Tronco no código: bloco logo antes de "NÚCLEOS DA BASE, LÍMBICO, DIENCÉFALO"
 
 Cerebelo no código: bloco `CB` logo depois do córtex. Tira as malhas lisas `cerebelo` e `vermis`, refina (`refina`, arestas < 0,5 mm; 0,75 mm em tela de toque), suaviza (`taubin`), classifica cada vértice pelo ângulo em torno do fastígio (`classifica`, tabela `FIS`) e cava fissuras e folhas. Cada lóbulo e fissura vira item (`cb_*`, `f_*`); `userData.pai` (cerebelo ou vermis) e `userData.lobo` (cb_ant, cb_post, cb_fn) fazem o item-pai acender o conjunto. O corte sagital (`arbvida`) é uma textura de canvas, visível só com um hemisfério oculto (`userData.corte`). Pedúnculos `pcs`, `pcm`, `pci` ficam depois de `TRANSL`.
 
+## Publicação
+- GitHub: https://github.com/26011540-hub/atlas-3d-neuroanatomia (público, ramo main). Para atualizar: gerar o atlas, depois git add, commit e push. O gh está em C:Program FilesGitHub CLIgh.exe, já com login.
+- GitHub Pages: https://26011540-hub.github.io/atlas-3d-neuroanatomia/ (o index.html redireciona para o atlas; cada push republica em cerca de 1 minuto).
+- Ficam fora do Git (.gitignore): PDFs dos livros, downloads brutos do Brainder, kit do Anatomy Learning, prompts.
+
 ## Pendências conhecidas
 - Lista completa do que não foi conferido no livro: `REVISAR.md`.
 - Seios occipital e intercavernosos foram criados, mas não vistos na tela; o occipital pode atravessar a malha do cerebelo.
