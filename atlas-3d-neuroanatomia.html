@@ -91,6 +91,20 @@ details.grp li button.on { background: var(--accent); color: var(--accent-ink); 
 .pinos { position: absolute; left: 0; top: 0; width: 100%; height: 100%; pointer-events: none; z-index: 3; overflow: visible; }
 .legtec { position: absolute; right: 10px; bottom: 34px; display: flex; flex-direction: column; gap: 3px; padding: 6px 9px; border-radius: 8px; background: rgba(8, 14, 18, .72); color: #d6e4e9; font-size: 11.5px; pointer-events: none; z-index: 4; }
 .legtec[hidden] { display: none; }
+.tipainel { position: absolute; left: 10px; bottom: 34px; display: flex; flex-direction: column; gap: 6px; padding: 9px 11px; border-radius: 10px; background: rgba(8, 14, 18, .86); color: #eaf7f9; font-size: 12.5px; z-index: 5; max-width: calc(100% - 20px); }
+.tipainel[hidden] { display: none; }
+.tipainel b { font-size: 13px; }
+.tipainel .lin { display: flex; flex-wrap: wrap; gap: 5px; align-items: center; }
+.tipainel button { font: 600 12px var(--f-body); color: #eaf7f9; background: rgba(255, 255, 255, .08); border: 1px solid rgba(255, 255, 255, .18); border-radius: 6px; padding: 3px 8px; cursor: pointer; }
+.tipainel button[aria-pressed="true"] { background: #00a9b4; border-color: #00a9b4; }
+.tipainel i { width: 10px; height: 10px; border-radius: 2px; display: inline-block; margin-right: 4px; }
+#tiBtn[aria-pressed="true"] { background: #00a9b4; color: #fff; }
+.bistbar { position: absolute; left: 50%; bottom: 34px; transform: translateX(-50%); display: flex; align-items: center; gap: 8px; padding: 6px 10px; border-radius: 10px; background: rgba(8, 14, 18, .86); color: #eaf7f9; font-size: 13px; z-index: 5; white-space: nowrap; }
+.bistbar[hidden] { display: none; }
+.bistbar button { font: 600 12px var(--f-body); color: #0b1419; background: #00e8f7; border: 0; border-radius: 6px; padding: 4px 9px; cursor: pointer; }
+#bisturiBtn[aria-pressed="true"] { background: #c0392b; color: #fff; }
+.bist-lista { display: flex; flex-wrap: wrap; gap: 4px; margin: 4px 0 6px; }
+.bist-lista button { font: 400 12.5px var(--f-body); color: var(--ink); background: var(--bg); border: 1px solid var(--line); border-radius: 999px; padding: 3px 9px; cursor: pointer; }
 .legtec span { display: flex; align-items: center; gap: 6px; }
 .legtec i { width: 10px; height: 10px; border-radius: 2px; display: inline-block; }
 .nomes { margin: -4px 0 8px; font-size: 13px; }
@@ -168,10 +182,20 @@ details.grp li button.on { background: var(--accent); color: var(--accent-ink); 
       <button class="chipbtn" type="button" data-view="inferior" aria-pressed="false">Inferior</button>
       <button class="chipbtn" type="button" data-view="anterior" aria-pressed="false">Anterior</button>
       <button class="chipbtn" type="button" data-view="posterior" aria-pressed="false">Posterior</button>
+      <button class="chipbtn" type="button" id="tiBtn" aria-pressed="false" title="Mostra só o tronco encefálico, organizado, com a origem dos pares cranianos">Tronco isolado</button>
+      <button class="chipbtn" type="button" id="bisturiBtn" aria-pressed="false" title="Clique numa estrutura para removê-la e ver o que está por baixo">✂ Bisturi</button>
       <button class="chipbtn" type="button" data-view="base" aria-pressed="false" title="Vista de cima, sem os hemisférios: tronco, nervos cranianos, artérias da base e seios">Base do crânio</button>
       <button class="chipbtn" type="button" id="btnInfl" aria-pressed="false">Vista inflada</button>
     </div>
     <div class="tip" id="tip" hidden></div>
+    <div class="tipainel" id="tipainel" hidden>
+      <b>Tronco encefálico</b>
+      <div class="lin"><button type="button" data-tip="mesenc"><i style="background:#e2b27c"></i>Mesencéfalo</button><button type="button" data-tip="ponte"><i style="background:#c98a55"></i>Ponte</button><button type="button" data-tip="bulbo"><i style="background:#a8714a"></i>Bulbo</button><button type="button" data-tip="medula"><i style="background:#dcc39d"></i>Medula</button></div>
+      <div class="lin">Vista: <button type="button" data-tiv="ventral">Ventral</button><button type="button" data-tiv="dorsal">Dorsal</button><button type="button" data-tiv="lateral">Lateral</button></div>
+      <div class="lin">Pares cranianos: <span class="seg-ti"><button type="button" data-nm="sem">Sem</button> <button type="button" data-nm="curto">Origem (2 cm)</button> <button type="button" data-nm="inteiro">Inteiro</button></span></div>
+      <div class="lin"><button type="button" id="tiSair">Sair do tronco isolado</button></div>
+    </div>
+    <div class="bistbar" id="bistbar" hidden><span id="bistTxt"></span><button type="button" id="bistDesf">Desfazer</button><button type="button" id="bistTudo">Devolver tudo</button></div>
     <svg class="pinos" id="pinos" aria-hidden="true"></svg>
     <div class="legtec" id="legtec" aria-label="Legenda por tecido"></div>
     <div class="rotulos" id="rotulos" aria-hidden="true"></div>
@@ -200,7 +224,8 @@ details.grp li button.on { background: var(--accent); color: var(--accent-ink); 
           <label class="row"><input type="checkbox" id="avc"><span class="lbl">Modo AVC: clicar numa artéria mostra o território e o déficit</span></label>
           <div class="btnrow" style="margin-top:4px"><button class="btn" type="button" id="willis">Ver o polígono de Willis</button></div>
           <div class="sect">Nervos cranianos</div>
-          <div class="btnrow" style="margin-top:4px"><button class="btn" type="button" id="nervos">Ver tronco, nervos e núcleos</button> <button class="btn" type="button" id="cavernoso">Ver o seio cavernoso</button></div>
+          <div class="btnrow" style="margin-top:4px"><button class="btn" type="button" id="nervos">Ver tronco, nervos e núcleos</button> <button class="btn" type="button" id="tiBtn2">Tronco isolado</button>
+          <div class="row" style="gap:8px;margin-top:6px"><span class="lbl">Pares cranianos</span><span class="seg" id="nervSeg"><button type="button" data-nm="sem" aria-pressed="false">Sem</button><button type="button" data-nm="curto" aria-pressed="false">Origem (2 cm)</button><button type="button" data-nm="inteiro" aria-pressed="true">Inteiro</button></span></div> <button class="btn" type="button" id="cavernoso">Ver o seio cavernoso</button></div>
           <p class="legenda" id="legendaNC" style="margin:6px 0 4px 0"><span><i style="background:#e3c044"></i>nervo</span><span><i style="background:#d94f4f"></i>eferente somática</span><span><i style="background:#e89a3c"></i>eferente visceral geral</span><span><i style="background:#c95fb0"></i>eferente visceral especial</span><span><i style="background:#4f86d9"></i>aferente somática geral</span><span><i style="background:#4fae7a"></i>aferente somática especial</span><span><i style="background:#35b3b3"></i>aferente visceral</span></p>
           <div class="sect">Grandes vias</div>
           <div class="btnrow" style="margin-top:4px"><button class="btn" type="button" id="verVias">Ver as grandes vias</button></div>
@@ -217,6 +242,8 @@ details.grp li button.on { background: var(--accent); color: var(--accent-ink); 
           <label class="row"><input type="checkbox" id="auto"><span class="lbl">Girar automaticamente</span></label>
           <div class="sect">Estudo</div>
           <div class="row" style="gap:8px"><span class="lbl">Idioma dos nomes</span><span class="seg" id="linguaSeg"><button type="button" data-l="pt" aria-pressed="true">PT</button><button type="button" data-l="la" aria-pressed="false">Latim</button><button type="button" data-l="en" aria-pressed="false">EN</button></span></div>
+          <div class="btnrow" style="margin:2px 0 6px"><button class="btn" type="button" id="sepBtn">Separar o cerebelo do tronco</button></div>
+          <div id="bistLista" class="bist-lista"></div>
           <label class="row"><input type="checkbox" id="sulcosOn"><span class="lbl">Mostrar os sulcos (linhas sobre o córtex)</span></label>
           <label class="row"><input type="checkbox" id="rotOn"><span class="lbl">Mostrar rótulos no modelo</span></label>
           <label class="row"><input type="checkbox" id="rotOcultar"><span class="lbl">Ocultar os nomes e revelar ao clicar (rótulos, dica e painel)</span></label>
@@ -930,6 +957,25 @@ NOTA('bracinf', 'Trajeto esquemático, do colículo inferior ao corpo geniculado
 NOTA('veusup', 'Lâmina esquemática no teto do IV ventrículo, entre os pedúnculos cerebelares superiores.');
 CONF(['sullatmes'], 'Posição na face lateral do mesencéfalo aproximada: a figura 5.3 (secção do mesencéfalo) não foi conferida.');
 
+NOTA('medula', META.medula.nota + ' No corte da ponta, a substância cinzenta em H (cornos anterior e posterior) e o canal central, desenho esquemático.');
+NOTA('pedunc', 'Faixa achatada esquemática sobre a face ventral do mesencéfalo, abrindo-se para o diencéfalo.');
+/* ---- substância branca do corpo estriado e hipófise (Prometheus, p. 208 e 222; Machado, cap. 21) ---- */
+M('capsext', 'Cápsula externa', 'deep', '#efe6dc', 'Lâmina de substância branca entre o putame e o claustro. De medial para lateral: cápsula interna, núcleo lentiforme (globo pálido e putame), cápsula externa, claustro, cápsula extrema e córtex da ínsula.', '', '');
+M('capsextr', 'Cápsula extrema', 'deep', '#efe6dc', 'Lâmina de substância branca entre o claustro e o córtex da ínsula.', '', '');
+M('adeno', 'Adeno-hipófise (lobo anterior)', 'dien', '#e8a05a', 'Parte glandular da hipófise, anterior. Secreta GH, TSH, ACTH, FSH, LH e prolactina, sob controle dos fatores liberadores do hipotálamo.', '', '');
+M('neurohip', 'Neuro-hipófise (lobo posterior)', 'dien', '#f2c38c', 'Parte neural da hipófise, posterior, continuação do infundíbulo. Libera a vasopressina e a ocitocina produzidas nos núcleos supra-óptico e paraventricular do hipotálamo e trazidas pelo trato hipotálamo-hipofisário.', '', 'Lesão do sistema hipotálamo-neuro-hipofisário: diabetes insipidus (cap. 21, p. 201).');
+REF(['capsext', 'capsextr'], 'Prometheus, Cabeça e Neuroanatomia, p. 208 (fig. C, corte horizontal do telencéfalo).');
+REF(['adeno', 'neurohip'], 'Machado, Neuroanatomia Funcional, 4ª ed., cap. 21, p. 201; forma: Prometheus, Cabeça e Neuroanatomia, p. 222.');
+TXT('claustro', { f: 'Estria de substância cinzenta lateral ao putame, entre as cápsulas externa e extrema. Não faz parte dos núcleos da base (Prometheus, p. 208).' });
+['capsint', 'capsext', 'capsextr', 'claustro'].forEach(k => NOTA(k, 'Lâmina desenhada a partir da superfície real do putame e do globo pálido (malhas do mesmo cérebro), afastada para medial ou lateral; posição aproximada.'));
+/* ---- núcleos do cerebelo: forma e sinônimos (Prometheus) ---- */
+TXT('denteado', { f: META.denteado.f + ' É uma lâmina de substância cinzenta pregueada, em forma de bolsa, aberta medialmente (hilo), por onde saem as fibras do pedúnculo cerebelar superior. Sinônimo: núcleo lateral do cerebelo; recebe da parte lateral do hemisfério.' });
+TXT('emboliforme', { f: META.emboliforme.f + ' Faixa alongada junto ao hilo do denteado. Sinônimo: núcleo interpósito anterior; recebe da parte intermédia.' });
+TXT('globoso', { name: 'Núcleos globosos', f: META.globoso.f + ' Duas ou mais pequenas massas entre o emboliforme e o fastigial. Sinônimo: núcleo interpósito posterior; recebe da parte intermédia.' });
+TXT('fastigial', { f: META.fastigial.f + ' Junto à linha média, no teto do IV ventrículo. Sinônimo: núcleo medial do cerebelo; recebe do verme.' });
+REF(['denteado', 'emboliforme', 'globoso', 'fastigial'], 'Machado, Neuroanatomia Funcional, 4ª ed., cap. 22, p. 208-209; forma e sinônimos: Prometheus, Cabeça e Neuroanatomia, p. 240.');
+NOTA('arbvida', 'No corte, cada lóbulo do verme tem a sua cor e o seu nome; a faixa da borda mostra o lobo (amarelo: anterior; rosa: posterior; verde: floculonodular). Clique num lóbulo do corte para abri-lo. As fissuras prima e posterolateral aparecem mais grossas.');
+
 /* ---- cerebelo: notas ---- */
 CBL.map(q => q[0]).concat(['cb_ant', 'cb_post', 'cb_fn']).forEach(k => NOTA(k, 'A malha real do cerebelo é lisa. Os limites dos lóbulos foram traçados pelo ângulo em torno do fastígio, como na secção sagital da figura 5.5, e ajustados às figuras 5.4 e 5.6; as folhas são um relevo desenhado sobre a malha. Posição aproximada.'));
 CBF.map(q => q[0]).forEach(k => NOTA(k, 'Traçado aproximado sobre a malha lisa, a partir das figuras 5.4 a 5.6.'));
@@ -958,6 +1004,23 @@ CONF(['nc4'], 'As fibras entre o núcleo e a emergência dorsal não foram desen
 CONF(['nc1', 'nc2'], 'A p. 95 do cap. 10 (introdução e tabela dos nervos) saiu em branco na digitalização; o texto vem do item 3 do capítulo (p. 97).');
 CONF(['abmed','ablat'], '');   // conferidos no cap. 5, p. 46 (forame de Magendie e forames de Luschka)
 
+/* ---- etapa E: vasos (Prometheus, Cabeça e Neuroanatomia, p. 246-261) ---- */
+M('aci_cerv', 'Carótida interna: parte cervical', 'art', '#d8322d', 'Sobe no espaço lateral da faringe, medial à veia jugular interna, sem dar ramos, até o canal carótico.', '', '');
+M('aci_petr', 'Carótida interna: parte petrosa', 'art', '#d23a33', 'No canal carótico da parte petrosa do temporal: sobe e dobra em ângulo para frente e medialmente, até o ápice da parte petrosa.', '', '');
+M('aci_cav', 'Carótida interna: parte cavernosa', 'art', '#dc443c', 'Dentro do seio cavernoso, ao lado da sela turca, descreve a curva em S. Com o início da parte cerebral forma o sifão carótico (segmentos C2-C4); a parte cavernosa corresponde a C3-C5 (porção infraclinóidea).', '', 'Aneurisma ou fístula carótido-cavernosa comprimem os nervos do seio (III, IV, V1, V2, VI).');
+M('aci_cer', 'Carótida interna: parte cerebral', 'art', '#e04f45', 'Perfura a dura-máter na cisterna quiasmática (C1-C2, porção supraclinóidea). Dá a oftálmica, a comunicante posterior e a corióidea anterior e divide-se em artérias cerebrais média e anterior.', '', '');
+REF(['aci_cerv', 'aci_petr', 'aci_cav', 'aci_cer'], 'Prometheus, Cabeça e Neuroanatomia, p. 246 (quatro partes da carótida interna e segmentos C1-C5); Machado, cap. 18, p. 162.');
+M('smarg', 'Seio marginal', 'ven', '#24468c', 'Plexo venoso em volta do forame magno. Liga os seios da base (plexo basilar e seio occipital) às redes venosas do canal vertebral.', '', '');
+M('v_emiss', 'Veias emissárias', 'ven', '#7e9bd6', 'Veias sem válvulas que atravessam aberturas do crânio e ligam os seios às veias do couro cabeludo e às diplóicas: parietal, occipital, mastóidea e condilar. Ajudam a equilibrar a pressão.', '', 'Bactérias do couro cabeludo podem chegar por elas aos seios e às meninges (meningite purulenta).');
+M('v_oftsup', 'Veia oftálmica superior', 'ven', '#5a86d6', 'Drena a órbita para a parte anterior do seio cavernoso; comunica-se com a veia angular da face.', '', 'Sem válvulas: infecções da face podem chegar ao seio cavernoso (trombose).');
+M('v_occint', 'Veia occipital interna', 'ven', '#5584d8', 'Drena a face medial do lobo occipital, junto ao sulco calcarino, em direção à veia cerebral magna.', '', '');
+REF(['smarg', 'v_emiss', 'v_oftsup'], 'Prometheus, Cabeça e Neuroanatomia, p. 254-257.');
+REF(['v_occint'], 'Prometheus, Cabeça e Neuroanatomia, p. 258 (figura da face medial).');
+CONF(['v_occint'], 'Desembocadura exata (veia cerebral magna ou veia basal) não descrita no texto; trajeto esquemático.');
+CONF(['vertebral'], 'Alça sobre o arco posterior do atlas: trajeto aproximado (nem o Machado nem o Prometheus a descrevem em detalhe).');
+['trolard', 'labbe', 'basal', 'spsup', 'spinf', 'vsup', 'silv'].forEach(id => { META[id].conf = ''; META[id].ref = (META[id].ref ? META[id].ref + ' ' : '') + 'Confirmado no Prometheus, Cabeça e Neuroanatomia, p. 254-259 (o trajeto das veias varia entre indivíduos).'; });
+CONF(['a_fbl','a_fbm','a_cent','a_par','a_ang','a_temp','calmarg','a_calc','a_parocc','a_dorsalcc','a_tempinf','pericalosa','a_frontmed','a_prefront'], 'Os ramos terminais finos são ilustrativos: mostram que a artéria se divide até a periferia do território, não o número real de ramos.');
+
 /* ===== UTILITÁRIOS ===== */
 const clamp01 = x => Math.max(0, Math.min(1, x));
 const smooth = (a, b, x) => { const t = clamp01((x - a) / (b - a)); return t * t * (3 - 2 * t); };
@@ -971,7 +1034,7 @@ const canvas = document.getElementById('gl');
 const stageEl = document.getElementById('stage');
 const loadEl = document.getElementById('load');
 const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
-renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, window.matchMedia && matchMedia('(pointer: coarse)').matches ? 1.5 : 2));
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(35, 1, 0.5, 300);
 scene.add(camera);
@@ -980,7 +1043,10 @@ scene.add(camera);
 const luzAmb = new THREE.HemisphereLight(0xffffff, 0x6f7a84, 0.5); scene.add(luzAmb);
 const luzPrin = new THREE.DirectionalLight(0xffffff, 0.85); luzPrin.position.set(-0.75, 0.95, 0.7); camera.add(luzPrin);
 const luzPre = new THREE.DirectionalLight(0xdfe8ff, 0.2); luzPre.position.set(0.9, -0.5, 0.5); camera.add(luzPre);
+var sujo = 3;                         // quantos quadros ainda precisam ser desenhados
+function marca() { sujo = 3; }
 function aplicarTema() {
+  marca();
   const bg = getComputedStyle(document.documentElement).getPropertyValue('--bg').trim();
   const n = parseInt(bg.replace('#', ''), 16) || 0xffffff;
   const lum = ((n >> 16 & 255) * 0.299 + (n >> 8 & 255) * 0.587 + (n & 255) * 0.114) / 255;
@@ -999,7 +1065,12 @@ const ITEMS = {};        // id -> {meta, meshes[]}
 const ALLMESH = [];
 function itemOf(id) { return ITEMS[id] || (ITEMS[id] = { meta: META[id], meshes: [] }); }
 function register(id, mesh, side, grp) {
-  const it = itemOf(id);
+  const it = itemOf(id), g0 = grp || META[id].grp, mt = mesh.material;
+  if (mt && mt.isMeshStandardMaterial && !mesh.userData.cortex) {   // acabamento por tecido: vasos úmidos, nervos acetinados, branca fosca
+    if (g0 === 'art' || g0 === 'ven') { mt.roughness = 0.3; mt.metalness = 0.05; }
+    else if (g0 === 'nc') { mt.roughness = 0.42; }
+    else if (g0 === 'vias') { mt.roughness = 0.5; }
+  }
   mesh.userData = Object.assign(mesh.userData || {}, { id, side, base: META[id].color });
   it.meshes.push(mesh); ALLMESH.push(mesh);
   grpObj[grp || META[id].grp].add(mesh);
@@ -1046,15 +1117,123 @@ function tubeGeo(pts, r0, r1, seg, rad) {
   return g;
 }
 // pts: lista de pontos do lado esquerdo (espelhada para o direito) ou função sx -> pontos já no lado certo
+/* ---- formas orgânicas (substituem elipsoides e tubos de raio fixo) ---- */
+function ruido3(x, y, z) { return 0.5 * Math.sin(x * 1.7 + y * 0.3 + 1.1) * Math.cos(y * 1.3 + z * 0.7) + 0.35 * Math.sin(z * 2.1 + x * 0.9 + 0.4) + 0.15 * Math.sin(x * 3.7 - y * 2.9 + z * 3.1); }
+// blob: elipsoide deformado suavemente; o.amp (deformação), o.freq, o.seed, o.achata = [eixo, fator] achata um dos lados
+function blobGeo(r, o) {
+  o = o || {}; const g = new THREE.SphereGeometry(1, o.seg || 40, o.seg2 || 28), p = g.attributes.position, v = new THREE.Vector3();
+  const amp = o.amp === undefined ? 0.08 : o.amp, fr = o.freq || 2.2, sd = o.seed || 0;
+  for (let i = 0; i < p.count; i++) {
+    v.fromBufferAttribute(p, i);
+    if (o.achata) { const ax = o.achata[0], c = v.getComponent(ax); if (c < 0) v.setComponent(ax, c * o.achata[1]); }
+    v.multiplyScalar(1 + amp * ruido3(v.x * fr + sd, v.y * fr + sd * 1.7, v.z * fr + sd * 2.3));
+    p.setXYZ(i, v.x * r[0], v.y * r[1], v.z * r[2]);
+  }
+  g.computeVertexNormals(); return g;
+}
+function blob(id, c, r, rot, o) {
+  o = o || {};
+  const g = blobGeo(r, o);
+  const mk = sx => {
+    const m = new THREE.Mesh(g, stdMat(o.color || META[id].color, { roughness: o.rough || 0.62 }));
+    if (typeof c === 'function') { const p = c(sx); m.position.set(p[0], p[1], p[2]); } else m.position.set(c[0] * sx, c[1], c[2]);
+    if (rot) m.rotation.set(rot[0], rot[1] * sx, rot[2] * sx);
+    if (sx < 0) m.scale.x = -1;
+    register(id, m, o.mid ? 0 : sx);
+  };
+  if (o.mid) mk(1); else { mk(1); mk(-1); }
+}
+// fita: tubo de seção elíptica que varia ao longo do trajeto (largura w(u), espessura e(u)), pontas arredondadas;
+// o lado largo fica perpendicular a o.up (padrão: vertical)
+function fitaGeo(pts, w, e, o) {
+  o = o || {};
+  const curve = new THREE.CatmullRomCurve3(pts.map(p => new THREE.Vector3(p[0], p[1], p[2])), false, 'catmullrom', 0.5);
+  const seg = o.seg || Math.max(24, pts.length * 10), rad = o.rad || 14, up = new THREE.Vector3().fromArray(o.up || [0, 1, 0]).normalize();
+  const fr = curve.computeFrenetFrames(seg, false), pos = [], idx = [], T = new THREE.Vector3(), N = new THREE.Vector3(), Bn = new THREE.Vector3();
+  const tampa = u => { const k = o.ponta === false ? 1 : Math.min(1, Math.min(u, 1 - u) / 0.04); return Math.sqrt(Math.max(0.02, k)); };
+  for (let i = 0; i <= seg; i++) {
+    const u = i / seg, P = curve.getPointAt(u); T.copy(curve.getTangentAt(u));
+    N.copy(up).addScaledVector(T, -up.dot(T)); if (N.lengthSq() < 1e-4) N.copy(fr.normals[i]); N.normalize(); Bn.crossVectors(T, N).normalize();
+    const ww = (typeof w === 'function' ? w(u) : w) * tampa(u), ee = (typeof e === 'function' ? e(u) : e) * tampa(u);
+    for (let j = 0; j <= rad; j++) { const a = j / rad * Math.PI * 2, cx = Math.cos(a), sy = Math.sin(a); pos.push(P.x + Bn.x * ww * cx + N.x * ee * sy, P.y + Bn.y * ww * cx + N.y * ee * sy, P.z + Bn.z * ww * cx + N.z * ee * sy); }
+  }
+  for (let i = 0; i < seg; i++) for (let j = 0; j < rad; j++) { const a = i * (rad + 1) + j, b = a + rad + 1; idx.push(a, b, a + 1, b, b + 1, a + 1); }
+  const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3)); g.setIndex(idx); g.computeVertexNormals(); return g;
+}
+function fita(id, pts, w, e, o) {
+  o = o || {};
+  const mk = sx => {
+    const p = typeof pts === 'function' ? pts(sx) : pts.map(q => [q[0] * sx, q[1], q[2]]);
+    const m = new THREE.Mesh(fitaGeo(p, w, e, o), stdMat(o.color || META[id].color, { roughness: o.rough || 0.6 }));
+    register(id, m, o.mid ? 0 : sx); return m;
+  };
+  if (o.mid) mk(1); else { mk(1); mk(-1); }
+}
+// vaso: tubo que afina, com leve tortuosidade determinística e ponta arredondada
+function vaso(id, pts, r0, r1, o) {
+  o = o || {};
+  const tort = o.tort === undefined ? 0.035 : o.tort;
+  const torto = p => p.map((q, i) => { if (i === 0 || i === p.length - 1 || !tort) return q; const f = Math.sin(i * 2.3 + q[0] * 1.7) * tort, g = Math.cos(i * 1.9 + q[2] * 1.3) * tort; return [q[0] + f, q[1] + g, q[2] - f * 0.5]; });
+  const ff = typeof pts === 'function' ? (sx => torto(pts(sx))) : (sx => torto(pts.map(q => [q[0] * sx, q[1], q[2]])));
+  const raio = u => (r0 + (r1 - r0) * Math.pow(u, 0.8)) * (u > 0.97 ? Math.sqrt(Math.max(0.15, (1 - u) / 0.03)) : 1);
+  tube(id, ff, raio, 0, Object.assign({ seg: 48, rad: 10 }, o, { mid: o.mid }));
+}
+// seios da dura-máter são canais rígidos: não ondulam
+const SEIOS = new Set(['sss', 'sinf', 'sreto', 'stransv', 'ssigm', 'socc', 'sinterc', 'spsup', 'spinf', 'sesfpar', 'plexbas', 'smarg', 'jugular', 'galeno']);
+// leve sinuosidade dos vasos: deslocamento suave ao longo do comprimento, nulo nas pontas (as junções não se soltam)
+function ondula(p, a, sd) {
+  const s = [0]; for (let i = 1; i < p.length; i++) s.push(s[i - 1] + Math.hypot(p[i][0] - p[i - 1][0], p[i][1] - p[i - 1][1], p[i][2] - p[i - 1][2]));
+  const S = s[s.length - 1] || 1;
+  return p.map((q, i) => { if (i === 0 || i === p.length - 1) return q; const k = a * Math.sin(Math.PI * s[i] / S), t = s[i] * 2.1 + sd; return [q[0] + k * Math.sin(t), q[1] + k * Math.cos(t * 0.8 + 1.3), q[2] + k * Math.sin(t * 1.3 + 2.1)]; });
+}
+// ramos terminais: a artéria (ou veia) se divide e afina até a periferia do território, apoiada na superfície
+// o.galhos: 'lat' (face lateral), 'med' (face medial), 'inf' (face inferior), 'cbs'/'cbi' (cerebelo, face superior/inferior)
+function galhos(id, p, o, sx, r0, r1) {
+  const c = new THREE.CatmullRomCurve3(p.map(q => new THREE.Vector3(q[0], q[1], q[2])), false, 'catmullrom', 0.5), tot = c.getLength();
+  if (tot < 1.0) return;
+  const modo = o.galhos, fr = o.gfr || [0.5, 0.75, 0.96];
+  const proj = q => {
+    if (modo === 'med') return medP(sx, [q])[0];
+    if (modo === 'inf') return infP(sx, [[Math.abs(q[0]), q[2]]])[0];
+    if (modo === 'cbs') return cbSup(sx, Math.abs(q[0]), q[2]);
+    if (modo === 'cbi') return cbInf(sx, Math.abs(q[0]), q[2]);
+    return ENV[sx].radial(q, 0.09);
+  };
+  fr.forEach((u, k) => {
+    const b = c.getPointAt(u), T = c.getTangentAt(u), N = new THREE.Vector3();
+    if (modo === 'med') N.set(-sx, 0, 0); else if (modo === 'inf' || modo === 'cbi') N.set(0, -1, 0); else if (modo === 'cbs') N.set(0, 1, 0); else N.copy(b).sub(ENV[sx].C).normalize();
+    const S = new THREE.Vector3().crossVectors(T, N); if (S.lengthSq() < 1e-6) return; S.normalize().multiplyScalar(k % 2 ? 1 : -1);
+    const L = Math.min(1.4, 0.3 * tot + 0.35) * (u > 0.9 ? 0.75 : 1);
+    const at = (a, f) => { const q = b.clone().addScaledVector(S, L * a).addScaledVector(T, L * f); return proj([q.x, q.y, q.z]); };
+    const pts = [[b.x, b.y, b.z], at(0.3, 0.25), at(0.62, 0.5), at(0.9, 0.7)];
+    const rb = Math.max(0.018, (typeof r0 === 'function' ? r0(u) : r0 + (r1 - r0) * u) * 0.62);
+    const m = new THREE.Mesh(tubeGeo(pts, uu => rb + (0.012 - rb) * uu, 0, 20, 6), stdMat(o.color || META[id].color));
+    register(id, m, sx);
+  });
+}
+// várias partes de um mesmo vaso numa curva única (sem dobras nas junções); cortes = índices dos pontos de controle
+function partes(ids, pts, cortes, raio, pai, o) {
+  const c = new THREE.CatmullRomCurve3(pts.map(p => new THREE.Vector3(p[0], p[1], p[2])), false, 'catmullrom', 0.5);
+  const L = c.getLengths(600), uDe = j => L[Math.round(j / (pts.length - 1) * 600)] / L[600];
+  ids.forEach((id, k) => {
+    const u0 = uDe(cortes[k]), u1 = uDe(cortes[k + 1]);
+    const sub = lin(u0, u1, 24).map(u => { const v = c.getPointAt(u); return [v.x, v.y, v.z]; });
+    tube(id, sub, uu => raio(u0 + (u1 - u0) * uu), 0, Object.assign({ seg: 40, rad: 12, reto: true }, o));
+    ITEMS[id].meshes.forEach(m => { m.userData.pai = pai; itemOf(pai).meshes.push(m); });
+  });
+}
 function tube(id, pts, r0, r1, o) {
   o = o || {};
   const mk = (sx) => {
     let p = typeof pts === 'function' ? pts(sx) : pts.map(q => [q[0] * sx, q[1], q[2]]);
     p = p.filter((q, i) => i === 0 || Math.hypot(q[0] - p[i - 1][0], q[1] - p[i - 1][1], q[2] - p[i - 1][2]) > 0.02);
     if (p.length < 2) { console.warn('tubo sem pontos suficientes:', id); return; }
+    const gv = META[id] && (META[id].grp === 'art' || META[id].grp === 'ven');
+    if (gv && !o.mid && !o.reto && !SEIOS.has(id) && p.length > 2) p = ondula(p, o.tort === undefined ? 0.03 : o.tort, id.length * 0.7 + sx);
     const m = new THREE.Mesh(tubeGeo(p, r0, r1 === undefined ? r0 : r1, o.seg, o.rad), stdMat(o.color || META[id].color));
     if (o.sx) m.scale.x = o.sx;
     register(id, m, o.mid ? 0 : sx);
+    if (o.galhos && !o.mid) galhos(id, p, o, sx, r0, r1 === undefined ? r0 : r1);
   };
   if (o.mid) mk(1); else { mk(1); mk(-1); }
 }
@@ -1095,6 +1274,9 @@ const cortexMeshes = [];
   grpObj.cortex.updateMatrixWorld(true);
 })();
 
+var TEMPOS = { inicio: Math.round(performance.now()) };
+function marcaT(n) { TEMPOS[n] = Math.round(performance.now()); }
+marcaT('antes_cerebelo');
 /* ===== CEREBELO: lobos, lóbulos, fissuras e folhas (Machado, cap. 5, p. 47-49, figuras 5.4 a 5.7) =====
    A malha real do cerebelo (FreeSurfer) é lisa e grosseira. Aqui ela é subdividida, suavizada, dividida em lóbulos
    pelo ângulo em torno do fastígio (como na secção sagital mediana, figura 5.5) e recebe o relevo das fissuras e folhas.
@@ -1130,11 +1312,11 @@ const CB = (function () {
     return [new Float32Array(Q), new Uint32Array(out)];
   }
   // refina só onde precisa: divide as arestas mais longas que L, sem deixar rachaduras entre triângulos vizinhos
-  function refina(P, I, L) {
+  function refina(P, I, L, deve) {
     const Q = Array.from(P); let T = Array.from(I);
     for (let it = 0; it < 7; it++) {
       const mid = new Map(), out = []; let any = false;
-      const md = (a, b) => { const key = a < b ? a * K + b : b * K + a; let r = mid.get(key); if (r === undefined) { const d = Math.hypot(Q[a * 3] - Q[b * 3], Q[a * 3 + 1] - Q[b * 3 + 1], Q[a * 3 + 2] - Q[b * 3 + 2]); if (d <= L) r = -1; else { r = Q.length / 3; Q.push((Q[a * 3] + Q[b * 3]) / 2, (Q[a * 3 + 1] + Q[b * 3 + 1]) / 2, (Q[a * 3 + 2] + Q[b * 3 + 2]) / 2); any = true; } mid.set(key, r); } return r; };
+      const md = (a, b) => { const key = a < b ? a * K + b : b * K + a; let r = mid.get(key); if (r === undefined) { const d = Math.hypot(Q[a * 3] - Q[b * 3], Q[a * 3 + 1] - Q[b * 3 + 1], Q[a * 3 + 2] - Q[b * 3 + 2]); if (deve ? !deve(a, b, d, Q) : d <= L) r = -1; else { r = Q.length / 3; Q.push((Q[a * 3] + Q[b * 3]) / 2, (Q[a * 3 + 1] + Q[b * 3 + 1]) / 2, (Q[a * 3 + 2] + Q[b * 3 + 2]) / 2); any = true; } mid.set(key, r); } return r; };
       for (let i = 0; i < T.length; i += 3) {
         const a = T[i], b = T[i + 1], c = T[i + 2], m0 = md(a, b), m1 = md(b, c), m2 = md(c, a), n = (m0 >= 0) + (m1 >= 0) + (m2 >= 0);
         if (n === 0) out.push(a, b, c);
@@ -1164,7 +1346,9 @@ const CB = (function () {
     const g = src.geometry, p = g.attributes.position, n0 = p.count;
     let P = new Float32Array(n0 * 3); for (let i = 0; i < n0; i++) { v.fromBufferAttribute(p, i).applyMatrix4(src.matrix); P[i * 3] = v.x; P[i * 3 + 1] = v.y; P[i * 3 + 2] = v.z; }
     let I = new Uint32Array(g.index.array);
-    [P, I] = refina(P, I, window.matchMedia && matchMedia('(pointer: coarse)').matches ? 0.075 : 0.05);   // celular: malha mais leve
+    [P, I] = refina(P, I, window.matchMedia && matchMedia('(pointer: coarse)').matches ? 0.11 : 0.085);   // superfície lisa: só as fissuras na geometria
+    { const kc = [], kq = (Q, i) => { if (kc[i] === undefined) kc[i] = classifica(Q[i * 3], Q[i * 3 + 1], Q[i * 3 + 2]).k; return kc[i]; };
+      [P, I] = refina(P, I, 0, (a, b, d, Q) => d > 0.03 && kq(Q, a) !== kq(Q, b)); }   // afina a malha só onde passa uma fissura: borda limpa
     const n = P.length / 3, [viz, borda] = vizinhos(n, I);
     taubin(P, viz, borda, 4);
     const geo = new THREE.BufferGeometry(); geo.setAttribute('position', new THREE.BufferAttribute(P, 3)); geo.setIndex(new THREE.BufferAttribute(I, 1)); geo.computeVertexNormals();
@@ -1172,11 +1356,12 @@ const CB = (function () {
     for (let i = 0; i < n; i++) {
       const c = cls[i] = classifica(P[i * 3], P[i * 3 + 1], P[i * 3 + 2]);
       const rr = Math.hypot(P[i * 3 + 1] - F[1], P[i * 3 + 2] - F[2]);
-      let d = 0.055 * smooth(1.4, 2.8, rr) * (0.5 + 0.5 * Math.cos(2 * Math.PI * c.t / 3.0));   // folhas (mais finas perto do fastígio, onde somem)
+      const folha = smooth(1.4, 2.8, rr) * (0.5 + 0.5 * Math.cos(2 * Math.PI * c.t / 2.2));   // folhas: só no sombreado (cor), sem relevo
+      let d = 0;
       for (let f = 0; f < 8; f++) { const dt = (c.t - fisAng(c.ax, f)) / 1.5; d += FIS[f][3] * Math.exp(-dt * dt); }   // fissuras
       if (borda[i]) d = 0;
       P[i * 3] -= N[i * 3] * d; P[i * 3 + 1] -= N[i * 3 + 1] * d; P[i * 3 + 2] -= N[i * 3 + 2] * d;
-      const sh = Math.max(0.4, Math.min(1, 1.06 - d * 3.2)); cor[i * 3] = cor[i * 3 + 1] = cor[i * 3 + 2] = sh;
+      const sh = Math.max(0.4, Math.min(1, 1.04 - d * 3.2 - folha * 0.16)); cor[i * 3] = cor[i * 3 + 1] = cor[i * 3 + 2] = sh;
     }
     geo.attributes.position.needsUpdate = true; geo.computeVertexNormals(); geo.setAttribute('color', new THREE.BufferAttribute(cor, 3));
     // triângulos por lóbulo; os que cruzam uma fissura formam a própria fissura
@@ -1210,7 +1395,7 @@ const CB = (function () {
   const VR = processa(fonte.vermis, true);
 
   // secção sagital do verme: contorno da malha nova e corpo medular desenhado (figura 5.5)
-  let SAG = null;
+  let SAG = null, CORTE = null;
   (function () {
     const rmax = {};
     const polar = (y, z) => { const dy = y - F[1], dz = z - F[2]; return [Math.atan2(dy * EA[0] + dz * EA[1], dy * ED[0] + dz * ED[1]) * 180 / Math.PI, Math.hypot(dy, dz)]; };
@@ -1226,35 +1411,58 @@ const CB = (function () {
     const W = zmax - zmin, H = ymax - ymin, S = 1024 / Math.max(W, H), cv = document.createElement('canvas'); cv.width = Math.ceil(W * S); cv.height = Math.ceil(H * S);
     const cx = cv.getContext('2d'), C2 = q => [(q[1] - zmin) * S, (ymax - q[0]) * S];
     cx.beginPath(); cx.moveTo.apply(cx, C2([F[1], F[2]])); cont.forEach(q => cx.lineTo.apply(cx, C2(q))); cx.closePath();
-    cx.fillStyle = '#b97c68'; cx.fill(); cx.save(); cx.clip();
-    const rm = bins.reduce((t, b) => t + rmax[b], 0) / bins.length, centro = pt(-10, rm * 0.24), BR = '#f4ece3';
-    cx.fillStyle = BR; cx.beginPath(); const cc = C2(centro); cx.ellipse(cc[0], cc[1], rm * 0.2 * S, rm * 0.15 * S, 0, 0, Math.PI * 2); cx.fill();
-    const lam = (a, b, w0, w1) => { const A = C2(a), B = C2(b), dx = B[0] - A[0], dy = B[1] - A[1], L = Math.hypot(dx, dy) || 1, nx = -dy / L, ny = dx / L; cx.beginPath(); cx.moveTo(A[0] + nx * w0, A[1] + ny * w0); cx.lineTo(B[0] + nx * w1, B[1] + ny * w1); cx.lineTo(B[0] - nx * w1, B[1] - ny * w1); cx.lineTo(A[0] - nx * w0, A[1] - ny * w0); cx.closePath(); cx.fill(); };
+    const rm = bins.reduce((t, b) => t + rmax[b], 0) / bins.length, centro = pt(-10, rm * 0.24), BR = '#f3ece4';
     const lim = [Math.max.apply(null, bins)].concat(FIS.map(f => f[1]), [Math.min.apply(null, bins)]);
-    for (let k = 0; k < 9; k++) {
-      const hi = lim[k], lo = lim[k + 1]; if (hi - lo < 2) continue;
-      const tc = (hi + lo) / 2, meio = pt(tc, R(tc) * 0.5);
-      lam(centro, meio, rm * 0.05 * S, rm * 0.03 * S);                     // lâmina do lóbulo
-      for (let t = lo + 1.5; t < hi - 1; t += 3.0) {                         // uma lamínula por folha
-        const q = pt(t, R(t) * 0.68); lam(meio, q, rm * 0.022 * S, rm * 0.012 * S); lam(q, pt(t, R(t) * 0.9), rm * 0.012 * S, rm * 0.004 * S);
+    const NOMES_L = ['Língula', 'L. central', 'Cúlmen', 'Declive', 'Fólium', 'Túber', 'Pirâmide', 'Úvula', 'Nódulo'];
+    const LOBO_COR = k => k <= 2 ? '#e3a86e' : (k <= 7 ? '#cf8e80' : '#9fb26f');
+    const clara = (hex, f) => { const c = new THREE.Color(hex); c.lerp(new THREE.Color('#ffffff'), f); return '#' + c.getHexString(); };
+    const lam = (a, b, w0, w1) => { const A = C2(a), B = C2(b), dx = B[0] - A[0], dy = B[1] - A[1], L = Math.hypot(dx, dy) || 1, nx = -dy / L, ny = dx / L; cx.beginPath(); cx.moveTo(A[0] + nx * w0, A[1] + ny * w0); cx.lineTo(B[0] + nx * w1, B[1] + ny * w1); cx.lineTo(B[0] - nx * w1, B[1] - ny * w1); cx.lineTo(A[0] - nx * w0, A[1] - ny * w0); cx.closePath(); cx.fill(); };
+    const setor = (lo, hi, f) => { cx.beginPath(); const c0 = C2([F[1], F[2]]); cx.moveTo(c0[0], c0[1]); for (let t = hi; t >= lo; t -= 0.5) { const c = C2(pt(t, R(t) * f + 0.06)); cx.lineTo(c[0], c[1]); } cx.closePath(); };
+    function desenha(sel) {
+      cx.clearRect(0, 0, cv.width, cv.height);
+      cx.save(); cx.beginPath(); cx.moveTo.apply(cx, C2([F[1], F[2]])); cont.forEach(q => cx.lineTo.apply(cx, C2(q))); cx.closePath(); cx.clip();
+      for (let k = 0; k < 9; k++) {   // córtex de cada lóbulo do verme, na cor do lóbulo
+        const hi = lim[k], lo = lim[k + 1], id = VERME[k], lob = LOBO(k), on = sel === id || sel === lob || sel === 'vermis';
+        cx.fillStyle = on ? clara(META[id].color, 0.25) : META[id].color; setor(lo, hi, 1); cx.fill();
+        cx.fillStyle = LOBO_COR(k); setor(lo, hi, 1); cx.save(); cx.clip(); cx.globalAlpha = 0.9; cx.lineWidth = rm * 0.07 * S; cx.strokeStyle = LOBO_COR(k); cx.beginPath(); for (let t = hi; t >= lo; t -= 0.5) { const c = C2(pt(t, R(t) + 0.02)); if (t === hi) cx.moveTo(c[0], c[1]); else cx.lineTo(c[0], c[1]); } cx.stroke(); cx.restore();   // faixa da borda: cor do lobo
       }
+      cx.fillStyle = BR; cx.beginPath(); const cc = C2(centro); cx.ellipse(cc[0], cc[1], rm * 0.2 * S, rm * 0.15 * S, 0, 0, Math.PI * 2); cx.fill();
+      for (let k = 0; k < 9; k++) {   // corpo medular: lâmina do lóbulo, ramos e um ramúsculo por folha (três níveis)
+        const hi = lim[k], lo = lim[k + 1]; if (hi - lo < 2) continue;
+        const tc = (hi + lo) / 2, meio = pt(tc, R(tc) * 0.48);
+        lam(centro, meio, rm * 0.055 * S, rm * 0.032 * S);
+        const ramos = hi - lo > 14 ? [lo + (hi - lo) * 0.28, lo + (hi - lo) * 0.72] : [tc];
+        ramos.forEach(tr => {
+          const r2 = pt(tr, R(tr) * 0.66); lam(meio, r2, rm * 0.026 * S, rm * 0.016 * S);
+          for (let t = Math.max(lo + 1.2, tr - (hi - lo) / 4); t < Math.min(hi - 0.8, tr + (hi - lo) / 4); t += 2.4) { lam(r2, pt(t, R(t) * 0.86), rm * 0.012 * S, rm * 0.004 * S); }
+        });
+      }
+      cx.lineCap = 'round';
+      FIS.forEach(f => { const r = R(f[1]), forte = f[0] === 'f_prima' || f[0] === 'f_postlat'; const a = C2(pt(f[1], r * 1.05)), b = C2(pt(f[1], r * (f[3] > 0.2 ? 0.5 : 0.66))); cx.strokeStyle = sel === f[0] ? '#ffd23f' : (forte ? '#3a1a10' : '#6a3a2c'); cx.lineWidth = forte || sel === f[0] ? 5 : 2.4; cx.beginPath(); cx.moveTo(a[0], a[1]); cx.lineTo(b[0], b[1]); cx.stroke(); });
+      for (let k = 0; k < 9; k++) {   // contorno do lóbulo selecionado
+        const id = VERME[k]; if (!(sel === id || sel === LOBO(k))) continue;
+        cx.strokeStyle = '#ffd23f'; cx.lineWidth = 4; setor(lim[k + 1], lim[k], 1); cx.stroke();
+      }
+      cx.restore();
+      cx.strokeStyle = '#7a4a3c'; cx.lineWidth = 3; cx.beginPath(); cont.forEach((q, i) => { const c = C2(q); if (i) cx.lineTo(c[0], c[1]); else cx.moveTo(c[0], c[1]); }); cx.stroke();
+      cx.font = '600 ' + Math.round(Math.max(15, rm * 0.085 * S)) + 'px system-ui, sans-serif'; cx.textAlign = 'center'; cx.textBaseline = 'middle'; cx.lineJoin = 'round';
+      for (let k = 0; k < 9; k++) { const hi = lim[k], lo = lim[k + 1], tc = (hi + lo) / 2, c = C2(pt(tc, R(tc) * 0.8)); cx.lineWidth = 5; cx.strokeStyle = 'rgba(255,255,255,.85)'; cx.strokeText(NOMES_L[k], c[0], c[1]); cx.fillStyle = '#2a140c'; cx.fillText(NOMES_L[k], c[0], c[1]); }
+      if (tex) tex.needsUpdate = true;
     }
-    cx.strokeStyle = '#5a3328'; cx.lineWidth = 2.2;
-    FIS.forEach(f => { const r = R(f[1]); const a = C2(pt(f[1], r * 1.05)), b = C2(pt(f[1], r * (f[3] > 0.2 ? 0.5 : 0.66))); cx.beginPath(); cx.moveTo(a[0], a[1]); cx.lineTo(b[0], b[1]); cx.stroke(); });
-    cx.restore();
-    cx.strokeStyle = '#7a4a3c'; cx.lineWidth = 3; cx.beginPath(); cont.forEach((q, i) => { const c = C2(q); if (i) cx.lineTo(c[0], c[1]); else cx.moveTo(c[0], c[1]); }); cx.stroke();
+    let tex = null;
     const shp = new THREE.Shape([new THREE.Vector2(F[2], F[1])].concat(cont.map(q => new THREE.Vector2(q[1], q[0]))));
     const sg = new THREE.ShapeGeometry(shp), uv = sg.attributes.uv, ps = sg.attributes.position;
     for (let i = 0; i < uv.count; i++) uv.setXY(i, (ps.getX(i) - zmin) / W, (ps.getY(i) - ymin) / H);
-    const tex = new THREE.CanvasTexture(cv); tex.anisotropy = 4;
+    tex = new THREE.CanvasTexture(cv); tex.anisotropy = 4; desenha(null); CORTE = desenha;
     const m = new THREE.Mesh(sg, stdMat('#ffffff', { map: tex, roughness: 0.85 }));
     m.rotation.y = -Math.PI / 2; m.position.x = 0.004;
     register('arbvida', m, 0); m.userData.corte = true;
     SAG = (t, off) => { const q = pt(t, R(t) + (off || 0)); return [0, q[0], q[1]]; };
   })();
-  return { F, classifica, HP: HR.P, sag: (t, off) => SAG ? SAG(t, off) : [0, F[1], F[2]] };
+  return { corte: sel => CORTE && CORTE(sel), F, classifica, HP: HR.P, sag: (t, off) => SAG ? SAG(t, off) : [0, F[1], F[2]] };
 })();
 
+marcaT('cerebelo');
 /* ---- envelopes da malha: servem para apoiar vasos e nervos sobre a superfície real ---- */
 const CEL = 0.2, Y0 = -5.6, Z0 = -9.6, NY = 68, NZ = 92, NX = 40;
 function mkEnv(sx) {
@@ -1384,6 +1592,7 @@ const SYLV = {};
 function S(sx, u) { const L = SYLV[sx], f = clamp01(u) * (L.length - 1), i = Math.min(L.length - 2, Math.floor(f)); const p = mix(L[i], L[i + 1], f - i); return [p[0], p[1] + 0.12, p[2]]; }
 function sylvPerto(sx, p) { const L = SYLV[sx]; let b = L[0]; L.forEach(q => { if (Math.abs(q[2] - p[2]) < Math.abs(b[2] - p[2])) b = q; }); return [b[0], b[1] + 0.12, b[2]]; }
 
+marcaT('envelopes');
 /* ===== TRONCO ENCEFÁLICO: acidentes da superfície (Machado, cap. 5, p. 43-46, figuras 5.1 e 5.2) =====
    Mesencéfalo, ponte e bulbo da malha real são unidos numa malha só, refinada e suavizada. Cada ponto é medido
    no referencial do tronco (nível ao longo do perfil ventral, distância lateral, profundidade ventral-dorsal) e
@@ -1506,16 +1715,47 @@ function sylvPerto(sx, p) { const L = SYLV[sx]; let b = L[0]; L.forEach(q => { i
   });
 })();
 
+marcaT('tronco');
 /* ===== NÚCLEOS DA BASE, LÍMBICO, DIENCÉFALO =====
    Caudado, putame, pálido, accumbens, tálamo, amígdala, hipocampo, ventrículos, tronco e cerebelo são malhas
    reais do mesmo cérebro (Brainder/FreeSurfer aseg), carregadas junto com o córtex. O que segue abaixo são as
    estruturas que essa segmentação não traz, em formas esquemáticas posicionadas em relação a elas. */
 // núcleo caudado: cabeça e corpo vêm da malha real; a cauda (que a malha não inclui) é um tubo esquemático no teto do corno temporal
 tube('caudado', [[1.88, 2.0, -1.15], [2.45, 1.45, -2.25], [3.0, 0.5, -2.7], [3.4, -0.3, -2.4], [3.6, -0.95, -1.3], [3.3, -1.2, -0.3]], 0.17, 0.09, { seg: 60 });
-ell('claustro', [3.52, 0.3, 0.75], [0.06, 0.9, 1.5], [0, -0.3, 0]);
-ell('capsint', [1.9, 0.6, 2.05], [0.15, 0.8, 0.75], [0, 0.35, 0]);      // perna anterior
-ell('capsint', [1.75, 0.5, 1.2], [0.18, 0.7, 0.3], null);               // joelho
-ell('capsint', [2.2, 0.4, -0.15], [0.16, 0.9, 1.3], [0, -0.38, 0]);     // perna posterior
+// cápsulas e claustro: lâminas que acompanham a superfície real do núcleo lentiforme (Prometheus, p. 208)
+function envX(ids, maior, cel) {   // envoltório lateral (maior x) ou medial (menor x) das malhas reais do lado esquerdo, em células (y, z)
+  const v = new THREE.Vector3(), g = new Map();
+  ids.forEach(id => ITEMS[id].meshes.forEach(m => { if (m.userData.side !== 1 || m.matrixAutoUpdate) return; const p = m.geometry.attributes.position; for (let k = 0; k < p.count; k++) { v.fromBufferAttribute(p, k).applyMatrix4(m.matrix); const key = Math.round(v.y / cel) + ',' + Math.round(v.z / cel), c = g.get(key); if (c === undefined || (maior ? v.x > c : v.x < c)) g.set(key, v.x); } }));
+  // fecha os furos: célula vazia cercada por células cheias (a malha tem vértices mais espaçados que a grade)
+  const D8 = [[1, 0], [-1, 0], [0, 1], [0, -1], [1, 1], [-1, -1], [1, -1], [-1, 1]];
+  for (let r = 0; r < 3; r++) {
+    const novo = new Map();
+    g.forEach((x, key) => { const [iy, iz] = key.split(',').map(Number); D8.forEach(d => { const k2 = (iy + d[0]) + ',' + (iz + d[1]); if (g.has(k2) || novo.has(k2)) return; let s = 0, n = 0; D8.forEach(e => { const vv = g.get((iy + d[0] + e[0]) + ',' + (iz + d[1] + e[1])); if (vv !== undefined) { s += vv; n++; } }); if (n >= 5) novo.set(k2, s / n); }); });
+    if (!novo.size) break; novo.forEach((x, k) => g.set(k, x));
+  }
+  return g;
+}
+function laminaEnv(id, g, cel, xf, filtro, o) {
+  o = o || {}; const idx = new Map(), pos = [], cells = [];
+  g.forEach((x, key) => { const [iy, iz] = key.split(',').map(Number), y = iy * cel, z = iz * cel; if (filtro && !filtro(y, z)) return; idx.set(key, cells.length); cells.push([iy, iz, xf(x, y, z), y, z]); });
+  for (let r = 0; r < 4; r++) cells.forEach(c => { let sx = c[2], n = 1; [[1, 0], [-1, 0], [0, 1], [0, -1]].forEach(d => { const j = idx.get((c[0] + d[0]) + ',' + (c[1] + d[1])); if (j !== undefined) { sx += cells[j][2]; n++; } }); c[5] = sx / n; }), cells.forEach(c => { c[2] = c[5]; });
+  // borda arredondada: os vértices da borda (células sem algum vizinho) caminham para a média dos vizinhos, sem degraus
+  const viz = cells.map(c => [[1, 0], [-1, 0], [0, 1], [0, -1], [1, 1], [-1, -1], [1, -1], [-1, 1]].map(d => idx.get((c[0] + d[0]) + ',' + (c[1] + d[1]))).filter(j => j !== undefined));
+  const bordaC = viz.map(v => v.length < 8);
+  for (let r = 0; r < 8; r++) { const Y = cells.map(c => c[3]), Z = cells.map(c => c[4]); cells.forEach((c, i) => { if (!bordaC[i]) return; let y = Y[i], z = Z[i]; viz[i].forEach(j => { y += Y[j]; z += Z[j]; }); c[3] = y / (viz[i].length + 1); c[4] = z / (viz[i].length + 1); }); }
+  cells.forEach(c => pos.push(c[2], c[3], c[4]));
+  const tri = []; cells.forEach((c, i) => { const a = idx.get((c[0] + 1) + ',' + c[1]), b = idx.get(c[0] + ',' + (c[1] + 1)), d = idx.get((c[0] + 1) + ',' + (c[1] + 1)); if (a !== undefined && d !== undefined && b !== undefined) tri.push(i, a, d, i, d, b); });
+  const geo = new THREE.BufferGeometry(); geo.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3)); geo.setIndex(tri); geo.computeVertexNormals();
+  [1, -1].forEach(sx => { const m = new THREE.Mesh(geo, stdMat(META[id].color, { roughness: 0.85 })); if (sx < 0) m.scale.x = -1; m.userData.op0 = o.op || 0.85; register(id, m, sx); });
+}
+{
+  const CEL = 0.11, ci = cen(1, 'insula'), XI = ci[0] - 0.2, perto = (y, z) => Math.abs(y - ci[1]) < 1.5 && Math.abs(z - ci[2]) < 2.3;
+  laminaEnv('capsint', envX(['putame', 'gpe', 'gpi'], false, CEL), CEL, x => x - 0.14, (y, z) => y > -0.6, { op: 0.8 });
+  const lat = envX(['putame'], true, CEL);
+  laminaEnv('capsext', lat, CEL, x => x + 0.1, perto, { op: 0.55 });
+  laminaEnv('claustro', lat, CEL, x => x + 0.25, perto, { op: 0.95 });
+  laminaEnv('capsextr', lat, CEL, x => x + 0.4, perto, { op: 0.5 });
+}
 // corpo caloso: rostro, joelho, tronco e esplênio (linha média da malha de referência)
 // corpo caloso por partes (Machado, cap. 7, p. 61): rostro, joelho, tronco, esplênio
 const CCP = [[0, 0.5, 2.8], [0, 0.72, 3.5], [0, 1.15, 3.72], [0, 1.6, 3.2], [0, 1.9, 2.0], [0, 2.08, 0.7], [0, 1.95, -0.6], [0, 1.72, -1.6], [0, 1.3, -2.25]];
@@ -1526,36 +1766,51 @@ const CCR = u => 0.13 + 0.12 * smooth(0, 0.1, u) + 0.16 * Math.exp(-Math.pow((u 
   tube(q[0], pts, uu => CCR(q[1] + (q[2] - q[1]) * uu), 0, { mid: true, sx: 3.0, seg: 40, rad: 14 });
   ITEMS[q[0]].meshes.forEach(m => { m.userData.pai = 'cc'; itemOf('cc').meshes.push(m); });
 });
-tube('comant', [[-3.0, -1.1, 0.7], [-1.2, -0.25, 1.3], [0, -0.1, 1.35], [1.2, -0.25, 1.3], [3.0, -1.1, 0.7]], 0.13, 0.13, { mid: true });
-tube('compost', [[-0.5, -0.1, -1.6], [0, -0.05, -1.6], [0.5, -0.1, -1.6]], 0.09, 0.09, { mid: true });
-ell('laminaterm', [0, -0.7, 1.43], [0.5, 0.6, 0.04], [-0.1, 0, 0], { mid: true });
+fita('comant', [[-3.0, -1.1, 0.7], [-1.9, -0.55, 1.15], [-1.0, -0.2, 1.32], [0, -0.1, 1.36], [1.0, -0.2, 1.32], [1.9, -0.55, 1.15], [3.0, -1.1, 0.7]], u => 0.07 + 0.07 * (1 - Math.abs(2 * u - 1)), u => 0.06 + 0.05 * (1 - Math.abs(2 * u - 1)), { mid: true });
+fita('compost', [[-0.42, -0.12, -1.62], [0, -0.06, -1.6], [0.42, -0.12, -1.62]], 0.09, 0.05, { mid: true, up: [0, 0, 1] });
+fita('laminaterm', [[0, -1.25, 1.52], [0, -0.75, 1.46], [0, -0.25, 1.37]], 0.2, 0.02, { mid: true, up: [0, 0, 1], ponta: false });
 // límbico
-tube('fornice', [[2.05, 0.05, -2.95], [1.75, 0.75, -2.7], [1.1, 1.4, -2.1], [0.45, 1.68, -1.1], [0.22, 1.7, -0.1], [0.2, 1.5, 0.75], [0.22, 0.9, 1.08], [0.25, 0.2, 1.05], [0.3, -0.5, 0.6], [0.3, -0.95, 0.05]], 0.11, 0.11, { seg: 90 });
-ell('mamilar', [0.3, -1.05, -0.05], [0.25, 0.25, 0.25], null);
-ell('bulbolf', sx => [sx * 1.0, ENV[sx].inf(1.0, 5.9) - 0.2, 5.9], [0.3, 0.2, 0.8], null);
-tube('bulbolf', sx => [[sx * 1.0, ENV[sx].inf(1.0, 5.0) - 0.13, 5.0], [sx * 1.15, ENV[sx].inf(1.15, 4.0) - 0.13, 4.0], [sx * 1.35, ENV[sx].inf(1.35, 3.1) - 0.13, 3.1]], 0.11, 0.14);
+// fórnice: perna (desde a fímbria), corpo (as duas metades lado a lado sob o corpo caloso) e coluna até o corpo mamilar
+fita('fornice', [[2.05, 0.05, -2.95], [1.75, 0.75, -2.7], [1.1, 1.4, -2.1], [0.45, 1.68, -1.1], [0.22, 1.7, -0.1], [0.2, 1.5, 0.75], [0.22, 0.9, 1.08], [0.25, 0.2, 1.05], [0.3, -0.5, 0.6], [0.3, -0.95, 0.05]], u => 0.08 + 0.07 * smooth(0.2, 0.38, u) - 0.08 * smooth(0.55, 0.72, u), 0.055, { seg: 120 });
+blob('mamilar', [0.3, -1.06, -0.05], [0.22, 0.2, 0.22], null, { amp: 0.05, seed: 21 });
+blob('bulbolf', sx => [sx * 1.0, ENV[sx].inf(1.0, 5.9) - 0.2, 5.9], [0.27, 0.16, 0.75], null, { amp: 0.06, achata: [1, 0.6], seed: 23 });
+fita('bulbolf', sx => [[sx * 1.0, ENV[sx].inf(1.0, 5.2) - 0.14, 5.2], [sx * 1.15, ENV[sx].inf(1.15, 4.0) - 0.13, 4.0], [sx * 1.35, ENV[sx].inf(1.35, 3.1) - 0.13, 3.1]], 0.1, 0.06, { ponta: false });   // trato olfatório
 // diencéfalo
-ell('cgl', [2.5, -0.35, -1.75], [0.32, 0.27, 0.32], null);
-ell('cgm', [1.9, -0.4, -2.1], [0.27, 0.25, 0.27], null);
-ell('hipotal', [0.5, -0.65, 0.6], [0.42, 0.5, 0.85], null);
-ell('subtal', [1.2, -0.5, -0.7], [0.4, 0.18, 0.35], null);
-ell('pineal', [0, 0.25, -1.85], [0.22, 0.22, 0.28], null, { mid: true });
-ell('hipofise', [0, -2.2, 1.35], [0.45, 0.3, 0.4], null, { mid: true });
-tube('hipofise', [[0, -1.2, 1.15], [0, -1.6, 1.28], [0, -1.95, 1.35]], 0.09, 0.09, { mid: true });
-ell('quiasma', [0, -1.3, 1.5], [0.65, 0.12, 0.3], null, { mid: true });
-tube('nc2', sx => [[sx * 0.5, -1.3, 1.75], [sx * 1.0, Math.min(-1.45, ENV[sx].inf(1.0, 2.6) - 0.2), 2.6], [sx * 1.5, Math.min(-1.6, ENV[sx].inf(1.5, 3.6) - 0.25), 3.6]], 0.13, 0.13);   // nervo óptico
-tube('quiasma', [[0.5, -1.3, 1.3], [1.3, -1.2, 0.6], [2.0, -0.9, -0.4], [2.45, -0.5, -1.45]], 0.13, 0.13);     // trato óptico
+blob('cgl', [2.45, -0.38, -1.75], [0.27, 0.19, 0.3], [0, 0.4, 0], { amp: 0.05, achata: [0, 0.4], seed: 31 });
+blob('cgm', [1.88, -0.42, -2.1], [0.22, 0.17, 0.24], null, { amp: 0.05, achata: [0, 0.4], seed: 33 });
+blob('hipotal', [0.45, -0.68, 0.6], [0.38, 0.46, 0.85], [0.15, 0, 0], { amp: 0.1, achata: [0, 0.5], seed: 35 });
+blob('subtal', [1.2, -0.5, -0.7], [0.38, 0.12, 0.3], [0, 0.5, 0.35], { amp: 0.05, seed: 37 });   // lente biconvexa
+blob('pineal', [0, 0.22, -1.88], [0.17, 0.16, 0.3], [-0.35, 0, 0], { mid: true, amp: 0.04, seed: 39 });   // em forma de pinha, voltada para trás
+// hipófise: adeno-hipófise (anterior), neuro-hipófise (posterior) e haste (infundíbulo)
+blob('adeno', [0, -2.24, 1.47], [0.4, 0.25, 0.26], null, { mid: true, amp: 0.05, seed: 41 });
+blob('neurohip', [0, -2.2, 1.14], [0.27, 0.21, 0.17], null, { mid: true, amp: 0.05, seed: 43 });
+['adeno', 'neurohip'].forEach(id => ITEMS[id].meshes.forEach(m => { m.userData.pai = 'hipofise'; itemOf('hipofise').meshes.push(m); }));
+tube('hipofise', [[0, -1.2, 1.18], [0, -1.6, 1.2], [0, -2.0, 1.17]], u => 0.11 - 0.05 * u, 0, { mid: true, seg: 20, rad: 12 });   // haste da hipófise (infundíbulo)
+blob('quiasma', [0, -1.3, 1.5], [0.6, 0.08, 0.27], null, { mid: true, amp: 0.04, seed: 45 });
+fita('nc2', sx => [[sx * 0.5, -1.3, 1.75], [sx * 1.0, Math.min(-1.45, ENV[sx].inf(1.0, 2.6) - 0.2), 2.6], [sx * 1.5, Math.min(-1.6, ENV[sx].inf(1.5, 3.6) - 0.25), 3.6]], 0.13, 0.11, { ponta: false });   // nervo óptico
+fita('quiasma', [[0.45, -1.3, 1.32], [1.3, -1.2, 0.6], [2.0, -0.9, -0.4], [2.45, -0.5, -1.45]], u => 0.17 - 0.03 * u, 0.065, { ponta: false });     // trato óptico, achatado
 // tronco encefálico (eixo inclinado para trás, como na malha de referência)
-tube('pedunc', [[0.75, -1.35, -1.0], [1.35, -0.7, -0.55], [1.95, -0.1, -0.1]], 0.42, 0.38);
-ell('colsup', [0.42, -0.3, -2.5], [0.34, 0.32, 0.34], null);
-ell('colinf', [0.42, -0.95, -2.9], [0.34, 0.32, 0.34], null);
-ell('snegra', [0.95, -0.95, -1.2], [0.5, 0.4, 0.13], [0.42, 0, 0.5]);
-ell('rubro', [0.5, -0.6, -1.5], [0.27, 0.27, 0.27], null);
+// pedúnculos cerebrais como faixas achatadas que se abrem para o diencéfalo; colículos como eminências do teto (não esferas)
+fita('pedunc', [[0.62, -1.45, -1.05], [1.0, -1.0, -0.8], [1.45, -0.55, -0.45], [1.95, -0.1, -0.1]], u => 0.36 + 0.14 * u, u => 0.24 + 0.04 * u, { up: [0, 0.6, 0.8], ponta: false });
+blob('colsup', [0.4, -0.32, -2.42], [0.3, 0.25, 0.27], [0.35, 0, 0], { amp: 0.04, achata: [2, 0.35], seed: 11 });
+blob('colinf', [0.38, -0.95, -2.78], [0.27, 0.22, 0.24], [0.5, 0, 0], { amp: 0.04, achata: [2, 0.35], seed: 13 });
+blob('snegra', [0.95, -0.95, -1.2], [0.48, 0.36, 0.1], [0.42, 0, 0.5], { amp: 0.06, seed: 47 });   // lâmina entre a base e o tegmento do pedúnculo
+blob('rubro', [0.5, -0.6, -1.5], [0.25, 0.25, 0.27], null, { amp: 0.04, seed: 49 });
 // cerebelo
-ell('denteado', [1.7, -3.0, -4.7], [0.42, 0.38, 0.42], null);
-ell('emboliforme', [1.1, -3.0, -4.6], [0.2, 0.2, 0.2], null);
-ell('globoso', [0.75, -3.0, -4.6], [0.2, 0.2, 0.2], null);
-ell('fastigial', [0.3, -2.95, -4.6], [0.19, 0.2, 0.2], null);
+// núcleos do cerebelo (Prometheus, p. 240, fig. B; Machado, cap. 22): o denteado é uma lâmina pregueada em forma de bolsa,
+// aberta medialmente (hilo); emboliforme em faixa junto ao hilo; globosos em pequenas massas; fastigial junto à linha média
+(function () {
+  const nt = 96, nf = 40, pos = [], idx = [], hil = 150 * Math.PI / 180, ab = 42 * Math.PI / 180, Rr = [0.5, 0.36, 0.62];
+  for (let i = 0; i <= nt; i++) { const th = -Math.PI + 2 * Math.PI * i / nt; for (let j = 0; j <= nf; j++) { const ph = -1.3 + 2.6 * j / nf, rr = 1 + 0.07 * Math.sin(15 * th + 0.8 * Math.sin(3 * ph)) * (0.55 + 0.45 * Math.cos(2 * ph)) + 0.04 * Math.sin(9 * ph + 2 * th); pos.push(Math.cos(ph) * Math.cos(th) * rr * Rr[0], Math.sin(ph) * rr * Rr[1], Math.cos(ph) * Math.sin(th) * rr * Rr[2]); } }
+  const angd = (a, b) => Math.abs(Math.atan2(Math.sin(a - b), Math.cos(a - b)));
+  for (let i = 0; i < nt; i++) { const th = -Math.PI + 2 * Math.PI * (i + 0.5) / nt; if (angd(th, hil) < ab) continue; for (let j = 0; j < nf; j++) { const a = i * (nf + 1) + j, b = a + nf + 1; idx.push(a, b, a + 1, b, b + 1, a + 1); } }
+  const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3)); g.setIndex(idx); g.computeVertexNormals();
+  [1, -1].forEach(sx => { const m = new THREE.Mesh(g, stdMat(META.denteado.color, { roughness: 0.55 })); m.position.set(1.75 * sx, -3.0, -4.75); m.rotation.y = -0.35 * sx; if (sx < 0) m.scale.x = -1; register('denteado', m, sx); });
+})();
+blob('emboliforme', [1.18, -2.95, -4.45], [0.07, 0.12, 0.32], [0, 0.35, 0], { amp: 0.12, seed: 2 });
+blob('globoso', [0.82, -2.98, -4.33], [0.09, 0.09, 0.1], null, { amp: 0.1, seed: 3 });
+blob('globoso', [0.8, -3.05, -4.66], [0.08, 0.08, 0.09], null, { amp: 0.1, seed: 5 });
+blob('fastigial', [0.24, -2.86, -4.45], [0.1, 0.11, 0.2], null, { amp: 0.1, seed: 7 });
 // ventrículos
 tube('aqueduto', [[0, -0.15, -1.6], [0, -0.6, -2.25], [0, -1.2, -2.65], [0, -1.7, -2.9]], 0.1, 0.1, { mid: true });
 
@@ -1568,39 +1823,44 @@ const ventral = (i, d) => [0, TR.perfil[i][0] - 0.408 * d, TR.perfil[i][1] + 0.9
 const BAS_T = ventral(TR.iSup, 0.22), BAS_B = ventral(TR.iInf, 0.22);
 const ACI_T = [1.2, -1.3, 1.5];       // término da carótida interna, lateral ao quiasma
 const esp = (sx, p) => [p[0] * sx, p[1], p[2]];
-tube('aci', [[2.0, -6.2, -0.6], [1.8, -4.6, -0.2], [1.5, -3.3, 0.4], [1.2, -2.6, 0.9], [1.1, -2.25, 1.6], [1.15, -1.75, 1.75], ACI_T], 0.2, 0.18);
+// carótida interna (Prometheus, p. 246): cervical (sobe medial à jugular), petrosa (no canal carótico, dobra para frente e medialmente),
+// cavernosa (curva em S dentro do seio cavernoso) e cerebral (sobe até a bifurcação, lateral ao quiasma)
+partes(['aci_cerv', 'aci_petr', 'aci_cav', 'aci_cer'], [[2.35, -8.8, -1.3], [2.3, -7.4, -1.15], [2.25, -5.6, -0.95],
+  [2.2, -4.6, -0.8], [2.0, -4.15, -0.45], [1.6, -3.98, 0.05], [1.25, -3.85, 0.4],
+  [1.12, -3.2, 0.55], [1.05, -2.55, 0.78], [1.0, -2.4, 1.2], [1.0, -2.4, 1.72], [1.05, -2.18, 2.05], [1.12, -1.9, 1.95],
+  [1.15, -1.62, 1.75], ACI_T], [0, 2, 6, 12, 14], u => 0.21 - 0.03 * u, 'aci');
 tube('acm', sx => { const ci = cen(sx, 'insula'); return [esp(sx, ACI_T), [sx * 2.1, -1.4, 1.6], [sx * 2.9, -1.05, 1.6], desl(ci, sx * 0.25, -0.7, 0.4)]; }, 0.17, 0.15, { seg: 40 });
-tube('acm2', sx => { const ci = cen(sx, 'insula'); return [desl(ci, sx * 0.25, -0.7, 0.4), desl(ci, sx * 0.32, 0.2, -0.3), desl(ci, sx * 0.45, 0.65, -1.3)].concat(surf(sx, [S(sx, 0.8)], 0.08)); }, 0.15, 0.11, { seg: 50 });
-tube('a_oft', sx => [[sx * 1.12, -2.05, 1.7], [sx * 1.2, -1.95, 2.6], [sx * 1.5, Math.min(-1.95, ENV[sx].inf(1.5, 3.6) - 0.55), 3.6]], 0.07, 0.06, { seg: 24, rad: 7 });
+tube('acm2', sx => { const ci = cen(sx, 'insula'); return [desl(ci, sx * 0.25, -0.7, 0.4), desl(ci, sx * 0.32, 0.2, -0.3), desl(ci, sx * 0.45, 0.65, -1.3)].concat(surf(sx, [S(sx, 0.8)], 0.08)); }, 0.15, 0.11, { galhos: 'lat', gfr: [0.9], seg: 50 });
+tube('a_oft', sx => [[sx * 1.13, -1.8, 1.88], [sx * 1.2, -1.95, 2.6], [sx * 1.5, Math.min(-1.95, ENV[sx].inf(1.5, 3.6) - 0.55), 3.6]], 0.07, 0.06, { seg: 24, rad: 7 });
 [0, 1, 2, 3, 4].forEach(i => {
   const x1 = 1.85 + i * 0.24;
   tube('lenticulo', [[x1, -1.32, 1.55 - i * 0.03], [x1 + 0.15, -0.6, 1.35], [x1 + 0.35, 0.3, 1.1], [x1 + 0.4, 1.0 + (i % 2) * 0.2, 0.9]], 0.05, 0.035, { seg: 24, rad: 6 });
 });
-tube('a_fbl', sx => surf(sx, [S(sx, 0.03), cen(sx, 'parsorbitalis'), mix(cen(sx, 'parsorbitalis'), cen(sx, 'lateralorbitofrontal'), 0.55)]), 0.07, 0.04, { seg: 30, rad: 6 });
+tube('a_fbl', sx => surf(sx, [S(sx, 0.03), cen(sx, 'parsorbitalis'), mix(cen(sx, 'parsorbitalis'), cen(sx, 'lateralorbitofrontal'), 0.55)]), 0.07, 0.04, { galhos: 'lat', seg: 30, rad: 6 });
 function sulco(sx, n) { const b = emOrdem(bd.apply(null, [sx].concat(Array.prototype.slice.call(arguments, 2))), p => p[1], n); return [sylvPerto(sx, b[0])].concat(b.slice(0, -1)); }
-tube('a_cent', sx => surf(sx, sulco(sx, 7, 'postcentral|precentral')), 0.07, 0.04, { seg: 44, rad: 6 });
-tube('a_cent', sx => surf(sx, sulco(sx, 7, 'caudalmiddlefrontal|precentral', 'parsopercularis|precentral')), 0.06, 0.035, { seg: 44, rad: 6 });
-tube('a_par', sx => surf(sx, sulco(sx, 7, 'postcentral|supramarginal', 'postcentral|superiorparietal')), 0.06, 0.035, { seg: 44, rad: 6 });
-tube('a_par', sx => surf(sx, [S(sx, 0.93), cen(sx, 'supramarginal'), mix(cen(sx, 'supramarginal'), cen(sx, 'superiorparietal'), 0.6)]), 0.06, 0.035, { seg: 30, rad: 6 });
-tube('a_ang', sx => { const a = S(sx, 1), c = cen(sx, 'inferiorparietal'); return surf(sx, [a, mix(a, c, 0.55), c, mix(c, cen(sx, 'lateraloccipital'), 0.4)]); }, 0.07, 0.04, { seg: 34, rad: 6 });
+tube('a_cent', sx => surf(sx, sulco(sx, 7, 'postcentral|precentral')), 0.07, 0.04, { galhos: 'lat', seg: 44, rad: 6 });
+tube('a_cent', sx => surf(sx, sulco(sx, 7, 'caudalmiddlefrontal|precentral', 'parsopercularis|precentral')), 0.06, 0.035, { galhos: 'lat', seg: 44, rad: 6 });
+tube('a_par', sx => surf(sx, sulco(sx, 7, 'postcentral|supramarginal', 'postcentral|superiorparietal')), 0.06, 0.035, { galhos: 'lat', seg: 44, rad: 6 });
+tube('a_par', sx => surf(sx, [S(sx, 0.93), cen(sx, 'supramarginal'), mix(cen(sx, 'supramarginal'), cen(sx, 'superiorparietal'), 0.6)]), 0.06, 0.035, { galhos: 'lat', seg: 30, rad: 6 });
+tube('a_ang', sx => { const a = S(sx, 1), c = cen(sx, 'inferiorparietal'); return surf(sx, [a, mix(a, c, 0.55), c, mix(c, cen(sx, 'lateraloccipital'), 0.4)]); }, 0.07, 0.04, { galhos: 'lat', seg: 34, rad: 6 });
 [[0.14, 0.35, 'a_tempant'], [0.45, -0.25, 'a_tempmed'], [0.78, -0.9, 'a_temppost']].forEach(q => {
-  tube(q[2], sx => { const a = S(sx, q[0]); return surf(sx, [a, desl(a, 0, -1.2, q[1] * 0.5), desl(a, 0, -2.4, q[1])]); }, 0.06, 0.035, { seg: 24, rad: 6 });
+  tube(q[2], sx => { const a = S(sx, q[0]); return surf(sx, [a, desl(a, 0, -1.2, q[1] * 0.5), desl(a, 0, -2.4, q[1])]); }, 0.06, 0.035, { galhos: 'lat', gfr: [0.6, 0.95], seg: 24, rad: 6 });
 });
 // ACA
 tube('aca1', [ACI_T, [0.7, -1.02, 1.8], [0.14, -0.93, 1.97]], 0.13, 0.12);
 tube('acomA', [[-0.14, -0.93, 1.97], [0, -0.93, 1.99], [0.14, -0.93, 1.97]], 0.09, 0.09, { mid: true });
 const arcoCaloso = (sx, a0, a1) => arco(bd(sx, 'caudalanteriorcingulate|unknown', 'rostralanteriorcingulate|unknown', 'posteriorcingulate|unknown', 'isthmuscingulate|unknown'), a0, a1, 14).map(p => fora(p, 0.12));
 const arcoCingulo = (sx) => arco(bd(sx, 'caudalanteriorcingulate|superiorfrontal', 'rostralanteriorcingulate|superiorfrontal', 'posteriorcingulate|superiorfrontal', 'paracentral|posteriorcingulate'), 5, 130, 15);
-tube('pericalosa', sx => [[sx * 0.14, -0.93, 1.97], [sx * 0.15, -0.45, 2.45]].concat(medP(sx, arcoCaloso(sx, -60, 150))), 0.1, 0.07, { seg: 100, rad: 8 });
-tube('calmarg', sx => { const pc = arcoCaloso(sx, -10, 20); return medP(sx, pc.slice(0, 1).concat(arcoCingulo(sx))); }, 0.07, 0.05, { seg: 60, rad: 7 });
-tube('calmarg', sx => { const cg = arcoCingulo(sx), c = cen(sx, 'paracentral'); return medP(sx, [cg[cg.length - 1], c, [0, ENV[sx].topo(c[2]) - 0.35, c[2] - 0.1]]); }, 0.05, 0.035, { seg: 24, rad: 6 });   // ramo paracentral
+tube('pericalosa', sx => [[sx * 0.14, -0.93, 1.97], [sx * 0.15, -0.45, 2.45]].concat(medP(sx, arcoCaloso(sx, -60, 150))), 0.1, 0.07, { galhos: 'med', gfr: [0.45, 0.62, 0.8, 0.97], seg: 100, rad: 8 });
+tube('calmarg', sx => { const pc = arcoCaloso(sx, -10, 20); return medP(sx, pc.slice(0, 1).concat(arcoCingulo(sx))); }, 0.07, 0.05, { galhos: 'med', seg: 60, rad: 7 });
+tube('calmarg', sx => { const cg = arcoCingulo(sx), c = cen(sx, 'paracentral'); return medP(sx, [cg[cg.length - 1], c, [0, ENV[sx].topo(c[2]) - 0.35, c[2] - 0.1]]); }, 0.05, 0.035, { galhos: 'med', seg: 24, rad: 6 });   // ramo paracentral
 tube('heubner', [[0.2, -0.9, 2.05], [0.9, -0.95, 2.1], [1.5, -0.8, 2.0], [1.7, -0.2, 2.1], [1.6, 0.4, 2.3]], 0.07, 0.05, { seg: 30, rad: 7 });
-tube('a_polfront', sx => { const a = arcoCaloso(sx, -60, -20)[0] || [0, 0.2, 3.2], b = cen(sx, 'frontalpole'); return medP(sx, [a, mix(a, b, 0.5), mix(a, b, 0.9)]); }, 0.06, 0.04, { seg: 24, rad: 6 });
-tube('a_fbm', sx => { const a = [0, -0.45, 2.45], b = cen(sx, 'medialorbitofrontal'); return medP(sx, [a, mix(a, b, 0.6), desl(b, 0, -0.35, 0.7)]); }, 0.06, 0.04, { seg: 24, rad: 6 });
+tube('a_polfront', sx => { const a = arcoCaloso(sx, -60, -20)[0] || [0, 0.2, 3.2], b = cen(sx, 'frontalpole'); return medP(sx, [a, mix(a, b, 0.5), mix(a, b, 0.9)]); }, 0.06, 0.04, { galhos: 'med', gfr: [0.6, 0.95], seg: 24, rad: 6 });
+tube('a_fbm', sx => { const a = [0, -0.45, 2.45], b = cen(sx, 'medialorbitofrontal'); return medP(sx, [a, mix(a, b, 0.6), desl(b, 0, -0.35, 0.7)]); }, 0.06, 0.04, { galhos: 'med', gfr: [0.6, 0.95], seg: 24, rad: 6 });
 tube('pcom', [[1.2, -1.35, 1.4], [1.1, -1.3, 0.5], [0.9, BAS_T[1] + 0.1, BAS_T[2] + 0.2]], 0.08, 0.08);
 tube('coroant', [[1.3, -1.35, 1.35], [1.8, -1.25, 0.6], [2.4, -1.1, -0.3], [3.0, -1.2, -0.9], [3.5, -1.4, -0.7]], 0.07, 0.05, { seg: 30, rad: 7 });
 // sistema vertebrobasilar
-tube('vertebral', [[1.8, -6.8, -3.3], [1.1, BAS_B[1] - 1.2, BAS_B[2] - 0.75], [0.3, BAS_B[1] - 0.15, BAS_B[2] - 0.08]], 0.17, 0.17);
+tube('vertebral', [[2.5, -9.2, -2.55], [2.55, -7.9, -2.65], [2.6, -6.95, -2.8], [2.55, -6.62, -3.3], [2.2, -6.55, -3.95], [1.6, -6.4, -4.15], [1.15, -6.1, -3.85], [1.08, -5.95, -3.3], [1.1, BAS_B[1] - 1.2, BAS_B[2] - 0.75], [0.3, BAS_B[1] - 0.15, BAS_B[2] - 0.08]], 0.17, 0.17, { seg: 90, reto: true });
 tube('basilar', (function () { const p = []; for (let i = TR.iInf; i > TR.iSup; i -= 2) p.push(ventral(i, 0.22)); p.push(BAS_T); return p; })(), 0.2, 0.2, { mid: true, seg: 60 });
 [TR.iPonte - 3, TR.iPonte, TR.iPonte + 3].forEach(i => { const p = ventral(i, 0.2); tube('a_pont', [[0.15, p[1], p[2]], [0.9, p[1] - 0.05, p[2] - 0.25], [1.45, p[1] - 0.1, p[2] - 0.8]], 0.05, 0.035, { seg: 16, rad: 6 }); });
 (function () { const p = ventral(TR.iPonte + 2, 0.2); tube('a_labir', [[0.15, p[1], p[2]], [1.3, p[1] - 0.1, p[2] - 0.5], [2.4, p[1] - 0.05, p[2] - 0.9], [3.3, p[1] + 0.1, p[2] - 1.0]], 0.05, 0.04, { seg: 24, rad: 6 }); })();
@@ -1612,11 +1872,11 @@ tube('sca', [desl(ventral(TR.iSup + 2, 0.2), 0.15, 0, 0), [1.3, -1.45, -1.1], [1
 const calc = sx => emOrdem(bd(sx, 'cuneus|pericalcarine', 'lingual|pericalcarine'), p => -p[2], 6);
 tube('acp1', sx => [BAS_T, [sx * 0.45, BAS_T[1] + 0.06, BAS_T[2] + 0.13], [sx * 0.9, BAS_T[1] + 0.1, BAS_T[2] + 0.2]], 0.16, 0.16, { seg: 20 });
 tube('acp', sx => [[sx * 0.9, BAS_T[1] + 0.1, BAS_T[2] + 0.2], [sx * 1.7, -0.9, -1.0], [sx * 2.0, -0.8, -1.8], [sx * 1.5, -0.3, -2.7], [sx * 0.9, 0.2, -3.3]].concat(medP(sx, calc(sx).slice(0, 1))), 0.16, 0.1, { seg: 70 });
-tube('a_calc', sx => medP(sx, calc(sx)), 0.07, 0.05, { seg: 30, rad: 7 });
-tube('a_parocc', sx => medP(sx, calc(sx).slice(0, 1).concat(emOrdem(bd(sx, 'cuneus|precuneus'), p => p[1], 5))), 0.06, 0.04, { seg: 30, rad: 7 });
-tube('a_dorsalcc', sx => medP(sx, calc(sx).slice(0, 1).concat(arco(bd(sx, 'isthmuscingulate|unknown', 'posteriorcingulate|unknown'), 120, 215, 16).reverse().map(p => fora(p, 0.14)))), 0.06, 0.04, { seg: 36, rad: 7 });
-tube('a_tempinf', sx => [[sx * 2.0, -0.85, -1.6]].concat(infP(sx, [[2.5, -1.9], [3.1, -2.8], [3.5, -3.9], [3.4, -5.0]])), 0.06, 0.04, { seg: 30, rad: 7 });
-tube('a_tempinf', sx => [[sx * 2.0, -0.85, -1.4]].concat(infP(sx, [[2.6, -0.9], [3.0, 0.0], [3.3, 0.9]])), 0.06, 0.04, { seg: 30, rad: 7 });
+tube('a_calc', sx => medP(sx, calc(sx)), 0.07, 0.05, { galhos: 'med', seg: 30, rad: 7 });
+tube('a_parocc', sx => medP(sx, calc(sx).slice(0, 1).concat(emOrdem(bd(sx, 'cuneus|precuneus'), p => p[1], 5))), 0.06, 0.04, { galhos: 'med', seg: 30, rad: 7 });
+tube('a_dorsalcc', sx => medP(sx, calc(sx).slice(0, 1).concat(arco(bd(sx, 'isthmuscingulate|unknown', 'posteriorcingulate|unknown'), 120, 215, 16).reverse().map(p => fora(p, 0.14)))), 0.06, 0.04, { galhos: 'med', gfr: [0.7, 0.95], seg: 36, rad: 7 });
+tube('a_tempinf', sx => [[sx * 2.0, -0.85, -1.6]].concat(infP(sx, [[2.5, -1.9], [3.1, -2.8], [3.5, -3.9], [3.4, -5.0]])), 0.06, 0.04, { galhos: 'inf', seg: 30, rad: 7 });
+tube('a_tempinf', sx => [[sx * 2.0, -0.85, -1.4]].concat(infP(sx, [[2.6, -0.9], [3.0, 0.0], [3.3, 0.9]])), 0.06, 0.04, { galhos: 'inf', seg: 30, rad: 7 });
 tube('talamoperf', [[0.5, BAS_T[1] + 0.08, BAS_T[2] + 0.1], [0.7, -0.5, -0.7], [1.0, 0.3, -0.8]], 0.05, 0.04, { seg: 20, rad: 6 });
 tube('talamoperf', [[0.3, BAS_T[1] + 0.08, BAS_T[2] + 0.1], [0.4, -0.6, -0.3], [0.6, 0.0, -0.2]], 0.05, 0.04, { seg: 20, rad: 6 });
 tube('coropost', [[2.0, -0.8, -1.8], [2.3, 0.0, -2.3], [2.0, 1.2, -2.0], [1.3, 1.8, -1.0]], 0.05, 0.04, { seg: 30, rad: 6 });
@@ -1641,15 +1901,16 @@ tube('sinterc', [[-0.75, -2.2, 0.95], [0, -2.25, 0.88], [0.75, -2.2, 0.95]], 0.0
 tube('ssigm', [SIG0, [5.3, SIG0[1] - 1.3, SIG0[2] + 0.6], [4.4, -4.9, -2.9], [3.4, -5.7, -2.5]], 0.2, 0.22);
 tube('jugular', [[3.4, -5.7, -2.5], [3.2, -6.7, -2.2], [3.0, -8.2, -1.9]], 0.3, 0.3);
 ell('scav', [1.0, -2.2, 1.3], [0.45, 0.4, 0.9], null);
+ITEMS.scav.meshes.forEach(m => { m.userData.op0 = 0.4; });   // translúcido: deixa ver o sifão carótico dentro do seio
 tube('spsup', sx => [[sx * 1.3, -2.35, 0.5]].concat(infP(sx, [[2.6, -0.9], [3.9, -2.3]], 0.25), [esp(sx, mix(SIG0, [5.3, SIG0[1] - 1.3, SIG0[2] + 0.6], 0.3))]), 0.09, 0.09);
 tube('spinf', [[1.1, -2.6, 0.4], [1.9, -4.2, -1.2], [3.3, -5.6, -2.45]], 0.09, 0.09);
 tube('vint', [[0.25, 1.0, 0.95], [0.22, 1.25, -0.3], [0.2, 1.1, -1.3], [0.1, 0.65, -1.9]], 0.07, 0.08);
 tube('basal', [[1.3, -1.25, 1.2], [1.9, -1.2, 0.0], [2.1, -0.9, -1.3], [1.6, -0.2, -2.2], [0.6, 0.4, -2.3], [0.1, 0.5, -2.15]], 0.07, 0.09, { seg: 50 });
 tube('silv', sx => surf(sx, [S(sx, 0.9), S(sx, 0.7), S(sx, 0.5), S(sx, 0.3), S(sx, 0.1)], 0.1).concat([[sx * 3.9, -1.7, 3.3], [sx * 2.8, -2.15, 3.0], [sx * 1.8, -2.3, 2.3], [sx * 1.1, -2.25, 1.7]]), 0.08, 0.1, { seg: 70, rad: 7 });
-tube('trolard', sx => { const a = S(sx, 0.55), c = cen(sx, 'postcentral'); return surf(sx, [a, mix(a, c, 0.6), c, desl(c, -sx * 1.2, 1.6, -0.2), desl(c, -sx * 2.6, 2.8, -0.3)], 0.1).concat([desl(sssEm(c[2] - 0.3), sx * 0.3, 0, 0)]); }, 0.07, 0.06, { seg: 44, rad: 7 });
-tube('labbe', sx => { const a = S(sx, 0.7); return surf(sx, [a, desl(a, 0, -1.0, -1.0), desl(a, 0, -2.0, -2.4), desl(a, 0, -2.5, -3.6)], 0.1).concat([esp(sx, ST[3])]); }, 0.06, 0.07, { seg: 44, rad: 7 });
-[5.2, 3.2, 1.0, -1.6, -4.2].forEach(z0 => {
-  tube('vsup', sx => surf(sx, [[sx * 5.5, 2.8, z0], [sx * 4.6, 4.7, z0 - 0.1], [sx * 2.6, 6.6, z0 - 0.1]], 0.1).concat([desl(sssEm(z0 - 0.1), sx * 0.3, 0, 0)]), 0.05, 0.06, { seg: 24, rad: 6 });
+tube('trolard', sx => { const a = S(sx, 0.55), c = cen(sx, 'postcentral'); return surf(sx, [a, mix(a, c, 0.6), c, desl(c, -sx * 1.2, 1.6, -0.2), desl(c, -sx * 2.6, 2.8, -0.3)], 0.1).concat([desl(sssEm(c[2] - 0.3), sx * 0.3, 0, 0)]); }, 0.07, 0.06, { galhos: 'lat', gfr: [0.3, 0.6], seg: 44, rad: 7 });
+tube('labbe', sx => { const a = S(sx, 0.7); return surf(sx, [a, desl(a, 0, -1.0, -1.0), desl(a, 0, -2.0, -2.4), desl(a, 0, -2.5, -3.6)], 0.1).concat([esp(sx, ST[3])]); }, 0.06, 0.07, { galhos: 'lat', gfr: [0.3, 0.6], seg: 44, rad: 7 });
+[5.6, 4.2, 2.8, 1.2, -0.4, -2.0, -3.6, -5.2].forEach(z0 => {
+  tube('vsup', sx => surf(sx, [[sx * 5.5, 2.8, z0], [sx * 4.6, 4.7, z0 - 0.1], [sx * 2.6, 6.6, z0 - 0.1]], 0.1).concat([desl(sssEm(z0 - 0.1), sx * 0.3, 0, 0)]), 0.05, 0.06, { galhos: 'lat', gfr: [0.35, 0.65], seg: 24, rad: 6 });
 });
 
 /* ===== NERVOS CRANIANOS E NÚCLEOS (Machado, cap. 5, 10 e 17) =====
@@ -1761,18 +2022,18 @@ const cbSup = (sx, x, z) => [sx * x, cbY(x, z, true), z], cbInf = (sx, x, z) => 
 const Bd = (i, lat, p) => i <= 29 ? B(i, lat, p) : desl(B(29, lat, p), 0, -0.183 * (i - 29), -0.082 * (i - 29));   // abaixo do bulbo da malha
 const vnt = (i, x, p) => B(i, x, p);
 // artérias espinais posteriores: da vertebral, contornam o bulbo dorsalmente e descem pela medula
-tube('a_espost', [[1.45, -6.3, -3.0], Bd(28.6, 0.95, 0.75), Bd(28.4, 0.6, 1.3), Bd(30, 0.42, 1.25), Bd(33, 0.4, 1.2)], 0.045, 0.04, { seg: 40, rad: 7 });
+tube('a_espost', [[1.12, -6.05, -3.5], Bd(28.6, 0.95, 0.75), Bd(28.4, 0.6, 1.3), Bd(30, 0.42, 1.25), Bd(33, 0.4, 1.2)], 0.045, 0.04, { seg: 40, rad: 7 });
 // artéria hipofisária e ramos centrais
 tube('a_hipof', [[1.1, -1.95, 1.65], [0.62, -1.85, 1.5], [0.12, -1.72, 1.32]], 0.035, 0.03, { seg: 20, rad: 6 });
 [[0.14, -0.9, 1.97, 0.3, -0.25, 1.35], [0.45, -0.98, 1.88, 0.6, -0.2, 1.4], [0.7, -1.0, 1.8, 0.95, -0.15, 1.45], [0.3, -0.93, 1.93, 0.35, -0.55, 1.15]].forEach(q => tube('centrais_am', [[q[0], q[1], q[2]], [(q[0] + q[3]) / 2, (q[1] + q[4]) / 2 - 0.05, (q[2] + q[5]) / 2], [q[3], q[4], q[5]]], 0.03, 0.022, { seg: 16, rad: 6 }));
 [[1.7, -0.9, -1.0, 1.95, -0.15, -1.2], [1.85, -0.85, -1.4, 2.05, -0.1, -1.65], [2.0, -0.8, -1.8, 1.75, 0.05, -2.0]].forEach(q => tube('centrais_pl', [[q[0], q[1], q[2]], [(q[0] + q[3]) / 2 + 0.05, (q[1] + q[4]) / 2, (q[2] + q[5]) / 2], [q[3], q[4], q[5]]], 0.03, 0.022, { seg: 16, rad: 6 }));
 // ramos corticais da ACA e da ACM
-tube('a_frontmed', sx => { const cg = arcoCingulo(sx), out = []; [0, 2, 4].forEach(k => { }); return medP(sx, [cg[1] || cg[0], desl(cg[1] || cg[0], 0, 0.9, 0.2), desl(cg[1] || cg[0], 0, 1.9, 0.3)]); }, 0.05, 0.035, { seg: 24, rad: 6 });
-tube('a_frontmed', sx => { const cg = arcoCingulo(sx), a = cg[3] || cg[cg.length - 1]; return medP(sx, [a, desl(a, 0, 0.9, -0.1), desl(a, 0, 1.8, -0.2)]); }, 0.05, 0.035, { seg: 24, rad: 6 });
-tube('a_prefront', sx => { const a = S(sx, 0.2), b = cen(sx, 'parstriangularis'), c = cen(sx, 'rostralmiddlefrontal'); return surf(sx, [a, b, mix(b, c, 0.6), c]); }, 0.06, 0.035, { seg: 30, rad: 6 });
+tube('a_frontmed', sx => { const cg = arcoCingulo(sx), out = []; [0, 2, 4].forEach(k => { }); return medP(sx, [cg[1] || cg[0], desl(cg[1] || cg[0], 0, 0.9, 0.2), desl(cg[1] || cg[0], 0, 1.9, 0.3)]); }, 0.05, 0.035, { galhos: 'med', gfr: [0.7, 0.95], seg: 24, rad: 6 });
+tube('a_frontmed', sx => { const cg = arcoCingulo(sx), a = cg[3] || cg[cg.length - 1]; return medP(sx, [a, desl(a, 0, 0.9, -0.1), desl(a, 0, 1.8, -0.2)]); }, 0.05, 0.035, { galhos: 'med', gfr: [0.7, 0.95], seg: 24, rad: 6 });
+tube('a_prefront', sx => { const a = S(sx, 0.2), b = cen(sx, 'parstriangularis'), c = cen(sx, 'rostralmiddlefrontal'); return surf(sx, [a, b, mix(b, c, 0.6), c]); }, 0.06, 0.035, { galhos: 'lat', seg: 30, rad: 6 });
 // veias cerebrais superficiais inferiores: face inferior do lobo temporal para o seio transverso e para os seios da base
-tube('vinf', sx => infP(sx, [[3.0, 0.6], [3.5, -0.8], [3.8, -2.2]]).concat([esp(sx, ST[3])]), 0.06, 0.07, { seg: 30, rad: 7 });
-tube('vinf', sx => infP(sx, [[3.3, 1.6], [2.6, 1.9]]).concat([[sx * 1.6, -2.3, 1.5]]), 0.05, 0.06, { seg: 24, rad: 7 });
+tube('vinf', sx => infP(sx, [[3.0, 0.6], [3.5, -0.8], [3.8, -2.2]]).concat([esp(sx, ST[3])]), 0.06, 0.07, { galhos: 'inf', gfr: [0.4], seg: 30, rad: 7 });
+tube('vinf', sx => infP(sx, [[3.3, 1.6], [2.6, 1.9]]).concat([[sx * 1.6, -2.3, 1.5]]), 0.05, 0.06, { galhos: 'inf', gfr: [0.4], seg: 24, rad: 7 });
 // seio esfenoparietal e plexo basilar
 tube('sesfpar', [[3.5, -0.95, 2.55], [2.5, -1.45, 2.25], [1.6, -1.9, 1.95], [1.1, -2.15, 1.8]], 0.08, 0.09, { seg: 30, rad: 8 });
 tube('plexbas', (function () { const p = []; for (let i = 4; i <= 28; i += 2) p.push(ventral(i, 0.62)); return p; })(), 0.06, 0.06, { mid: true, sx: 3.5, seg: 50, rad: 10 });
@@ -1797,10 +2058,35 @@ tube('v_cerebsup', sx => [cbSup(sx, 1.5, -6.3), cbSup(sx, 2.8, -5.8), cbSup(sx, 
 tube('v_cerebsup', sx => [cbSup(sx, 2.2, -4.6), cbSup(sx, 3.4, -4.4), esp(sx, ST[3])], 0.035, 0.05, { seg: 24, rad: 6 });
 tube('v_cerebinf', sx => [cbInf(sx, 1.6, -6.0), cbInf(sx, 3.0, -5.6), cbInf(sx, 4.2, -4.4), esp(sx, mix(SIG0, [5.3, SIG0[1] - 1.3, SIG0[2] + 0.6], 0.5))], 0.04, 0.055, { seg: 30, rad: 6 });
 
+// continuação das artérias cerebelares sobre o cerebelo (Prometheus, p. 252): sobem/descem e se ramificam na superfície
+tube('sca', sx => [[sx * 2.2, -1.35, -4.8], cbSup(sx, 1.9, -5.3), cbSup(sx, 2.7, -6.0), cbSup(sx, 3.6, -6.5), cbSup(sx, 4.4, -6.7)], 0.06, 0.03, { galhos: 'cbs', gfr: [0.4, 0.7, 0.95], seg: 40, rad: 6 });
+tube('sca', sx => [[sx * 1.3, -1.45, -1.1], cbSup(sx, 0.8, -3.4), cbSup(sx, 0.45, -4.6), cbSup(sx, 0.35, -5.8)], 0.045, 0.025, { galhos: 'cbs', gfr: [0.6, 0.95], seg: 36, rad: 6 });   // ramo vermiano superior
+tube('pica', sx => [[sx * 1.6, -5.2, -6.0], cbInf(sx, 2.4, -6.4), cbInf(sx, 3.4, -6.5), cbInf(sx, 4.3, -6.1)], 0.055, 0.025, { galhos: 'cbi', gfr: [0.5, 0.95], seg: 36, rad: 6 });   // ramo hemisférico
+tube('pica', sx => [[sx * 1.6, -5.2, -6.0], cbInf(sx, 0.9, -6.6), cbInf(sx, 0.4, -7.2)], 0.045, 0.025, { seg: 30, rad: 6 });   // ramo vermiano inferior
+tube('aica', sx => [[sx * 3.5, -4.4, -2.9], cbInf(sx, 4.1, -3.7), cbInf(sx, 4.7, -4.6)], 0.055, 0.025, { galhos: 'cbi', gfr: [0.6, 0.95], seg: 30, rad: 6 });
+// veia oftálmica superior: da órbita para a parte anterior do seio cavernoso (Prometheus, p. 256)
+tube('v_oftsup', [[1.05, -2.2, 2.1], [1.3, -2.0, 2.75], [1.55, -1.9, 3.5], [1.7, -1.85, 4.2]], 0.075, 0.055, { seg: 30, rad: 7 });
+// seio marginal: anel em volta do forame magno, ligado ao plexo basilar e ao seio occipital (Prometheus, p. 254-257)
+const SMG = (function () {
+  const c0 = ventral(28, -0.55), c = [0, c0[1] - 0.913 * 0.4, c0[2] - 0.408 * 0.4], vy = -0.408, vz = 0.913, p = [];
+  for (let a = 0; a <= 360; a += 15) { const t = a * Math.PI / 180; p.push([Math.sin(t) * 1.7, c[1] + vy * Math.cos(t) * 1.45, c[2] + vz * Math.cos(t) * 1.45]); }
+  return p;
+})();
+tube('smarg', SMG, 0.065, 0.065, { mid: true, seg: 80, rad: 8 });
+tube('smarg', [ventral(28, 0.62), SMG[0]], 0.06, 0.065, { mid: true, seg: 10, rad: 7 });
+tube('socc', [desl(TORC, 0, -2.3, 1.6), [0, -4.55, -5.6], SMG[12]], 0.06, 0.065, { mid: true, seg: 24, rad: 7 });
+// veias emissárias (Prometheus, p. 256-257): parietal (do seio sagital superior), occipital (da confluência), mastóidea (do sigmóideo), condilar (do bulbo da jugular)
+tube('v_emiss', sx => { const a = sssEm(-2.4); return [a, desl(a, sx * 0.3, 0.55, 0), desl(a, sx * 0.5, 1.15, -0.05)]; }, 0.05, 0.03, { seg: 16, rad: 6 });
+tube('v_emiss', [TORC, desl(TORC, 0, -0.25, -0.6), desl(TORC, 0, -0.35, -1.2)], 0.055, 0.03, { mid: true, seg: 16, rad: 6 });
+tube('v_emiss', sx => { const a = esp(sx, [5.3, SIG0[1] - 1.3, SIG0[2] + 0.6]); return [a, desl(a, sx * 0.55, -0.1, -0.35), desl(a, sx * 1.0, -0.25, -0.75)]; }, 0.05, 0.03, { seg: 16, rad: 6 });
+tube('v_emiss', [[3.4, -5.7, -2.5], [3.15, -6.25, -3.15], [2.85, -6.85, -3.6]], 0.05, 0.03, { seg: 16, rad: 6 });
+// veia occipital interna: da região calcarina para a veia cerebral magna (Prometheus, p. 258)
+tube('v_occint', sx => medP(sx, calc(sx).slice().reverse()).concat([[sx * 0.2, 0.45, -2.85]]), 0.035, 0.055, { seg: 40, rad: 6 });
+
 // braços dos colículos e véu medular superior (Machado, cap. 5, figura 5.2; p. 46)
 tube('bracinf', [[0.68, -0.95, -2.85], [1.3, -0.75, -2.55], [1.85, -0.45, -2.15]], 0.1, 0.09, { seg: 30, rad: 10 });
 tube('bracsup', [[0.72, -0.28, -2.45], [1.55, -0.32, -2.25], [2.35, -0.35, -1.85]], 0.09, 0.08, { seg: 30, rad: 10 });
-tube('veusup', [B(6.8, 0, F(6.8) + 0.3), B(9.5, 0, F(9.5) + 0.32), B(12.2, 0, F(12.2) + 0.34)], 0.035, 0.035, { mid: true, sx: 9, seg: 30, rad: 12 });
+fita('veusup', [B(6.8, 0, F(6.8) + 0.3), B(9.5, 0, F(9.5) + 0.32), B(12.2, 0, F(12.2) + 0.34)], u => 0.2 + 0.2 * u, 0.025, { mid: true, up: [0, 0.408, -0.913], ponta: false });
 // pedúnculos cerebelares (Machado, cap. 5, p. 49): superior ao mesencéfalo, médio à ponte, inferior ao bulbo
 tube('pcm', [B(12.5, latT(12.5, 1.3) * 0.88, 1.3), B(14, latT(14, 1.7) + 0.05, 1.9), [2.25, -2.95, -3.35], [2.55, -3.3, -4.25]], 0.42, 0.3, { seg: 40, rad: 14 });
 tube('pcs', [B(5.5, 0.48, F(5.5) + 0.22), B(8.5, 0.78, F(8.5) + 0.2), [1.3, -2.65, -4.1], [1.65, -2.95, -4.6]], 0.17, 0.17, { seg: 40, rad: 12 });
@@ -1817,7 +2103,20 @@ function cItem(id, sx) {
   ITEMS[id].meshes.forEach(m => { if (m.matrixAutoUpdate !== false || (m.userData.side !== sx && m.userData.side !== 0)) return; const p = m.geometry.attributes.position; for (let k = 0; k < p.count; k += 2) { v.fromBufferAttribute(p, k).applyMatrix4(m.matrix); if (m.userData.side === 0 && v.x * sx < 0) continue; t[0] += v.x; t[1] += v.y; t[2] += v.z; n++; } });
   return n ? t.map(x => x / n) : [sx * 1.2, 0.6, -0.6];
 }
+function leque(id, ponta, dentro, r) {   // ramos curtos em leque a partir de 'dentro' até a superfície em volta de 'ponta'
+  const sx = ponta[0] >= 0 ? 1 : -1, n = new THREE.Vector3(ponta[0] - dentro[0], ponta[1] - dentro[1], ponta[2] - dentro[2]).normalize();
+  const t1 = new THREE.Vector3(0, 1, 0).cross(n); if (t1.lengthSq() < 1e-3) t1.set(1, 0, 0); t1.normalize(); const t2 = n.clone().cross(t1).normalize();
+  [[0.9, 0], [-0.9, 0], [0, 0.9], [0, -0.9], [0.65, 0.65], [-0.65, -0.65]].forEach(q => {
+    const alvo = [ponta[0] + t1.x * q[0] + t2.x * q[1], ponta[1] + t1.y * q[0] + t2.y * q[1], ponta[2] + t1.z * q[0] + t2.z * q[1]], sup = surf(sx, [alvo], 0.04)[0];
+    tube(id, [dentro, mix(dentro, sup, 0.55), sup], r * 0.9, r * 0.35, { mid: true, seg: 20, rad: 7 });
+  });
+}
 function via(id, pts, r) {
+  // chegada ao córtex: se uma ponta está na superfície, a via se abre em leque (coroa radiada)
+  [[pts[0], pts[Math.min(2, pts.length - 1)]], [pts[pts.length - 1], pts[Math.max(0, pts.length - 3)]]].forEach(q => {
+    const p = q[0], sx = p[0] >= 0 ? 1 : -1; if (Math.abs(p[0]) < 0.5) return; const sp = surf(sx, [p], 0)[0];
+    if (Math.hypot(sp[0] - p[0], sp[1] - p[1], sp[2] - p[2]) < 0.5) leque(id, p, mix(p, q[1], 0.5), r * 1.4);
+  });
   pts = pts.filter((q, i) => i === 0 || Math.hypot(q[0] - pts[i - 1][0], q[1] - pts[i - 1][1], q[2] - pts[i - 1][2]) > 0.02);
   tube(id, pts, r * 1.4, r * 1.4, { mid: true, seg: Math.max(30, pts.length * 12), rad: 8 });
   (VIAC[id] = VIAC[id] || []).push(new THREE.CatmullRomCurve3(pts.map(p => new THREE.Vector3(p[0], p[1], p[2])), false, 'catmullrom', 0.5));
@@ -1955,10 +2254,10 @@ Object.keys(SUL_DEF).forEach(id => {
 });
 // septo pelúcido: lâmina mediana entre o corpo caloso e o fórnice
 (function () {
-  const top = lin(0.02, 0.62, 18).map(u => CCC.getPointAt(u)), baixo = [[-0.6, 1.62], [-0.1, 1.6], [0.75, 1.42], [1.08, 0.95], [1.25, 0.45], [2.6, 0.42]];
+  const top = lin(0.02, 0.62, 24).map(u => CCC.getPointAt(u)), baixo = [[-0.6, 1.62], [-0.1, 1.6], [0.4, 1.53], [0.8, 1.36], [1.05, 1.06], [1.17, 0.72], [1.4, 0.48], [2.0, 0.41], [2.6, 0.43]];
   const shp = new THREE.Shape(top.map(v => new THREE.Vector2(v.z, v.y)).reverse().concat(baixo.map(q => new THREE.Vector2(q[0], q[1]))));
-  const m = new THREE.Mesh(new THREE.ShapeGeometry(shp), stdMat(META.septo.color, { roughness: 0.7 }));
-  m.rotation.y = -Math.PI / 2; m.position.x = 0.003; register('septo', m, 0);
+  const g = new THREE.ShapeGeometry(shp, 24);
+  [0.03, -0.03].forEach(x => { const m = new THREE.Mesh(g, stdMat(META.septo.color, { roughness: 0.7 })); m.rotation.y = -Math.PI / 2; m.position.x = x; m.userData.op0 = 0.9; register('septo', m, 0); });   // duas lâminas, com a cavidade do septo entre elas
 })();
 // aderência intertalâmica
 ell('aderencia', [0, TAL[1] + 0.05, TAL[2] + 0.25], [0.24, 0.17, 0.26], null, { mid: true });
@@ -2012,6 +2311,79 @@ laminaSag('foicecb', [[TORC[2], TORC[1]], [TORC[2] + 0.55, TORC[1] - 1.2], [TORC
 (function () { const g = new THREE.RingGeometry(0.12, 0.6, 32); g.rotateX(-Math.PI / 2); const m = new THREE.Mesh(g, stdMat(META.diafragma.color, { roughness: 0.75 })); m.position.set(0, -1.88, 1.35); m.userData.op0 = 0.6; register('diafragma', m, 0); })();
 // medula espinal, parte cervical (continua o bulbo da malha)
 tube('medula', [B(28.6, 0, 0.5), BE(30.5, 0, 0.5), BE(33, 0, 0.48), BE(36, 0, 0.46)], 0.62, 0.52, { mid: true, sx: 1.2, seg: 30, rad: 18 });
+// corte da medula: substância cinzenta em H (cornos anterior e posterior) no meio da branca
+(function () {
+  const cv = document.createElement('canvas'); cv.width = cv.height = 256; const c = cv.getContext('2d');
+  c.fillStyle = '#efe4d4'; c.beginPath(); c.arc(128, 128, 126, 0, Math.PI * 2); c.fill();
+  c.fillStyle = '#b98c78'; c.beginPath();
+  c.moveTo(118, 120); c.bezierCurveTo(100, 100, 70, 60, 58, 30); c.bezierCurveTo(70, 28, 92, 60, 112, 96);   // corno posterior esquerdo
+  c.lineTo(144, 96); c.bezierCurveTo(164, 60, 186, 28, 198, 30); c.bezierCurveTo(186, 60, 156, 100, 138, 120);   // corno posterior direito
+  c.bezierCurveTo(170, 140, 196, 170, 196, 200); c.bezierCurveTo(176, 214, 150, 180, 138, 150);   // corno anterior direito
+  c.lineTo(118, 150); c.bezierCurveTo(106, 180, 80, 214, 60, 200); c.bezierCurveTo(60, 170, 86, 140, 118, 120);   // corno anterior esquerdo
+  c.closePath(); c.fill();
+  c.fillStyle = '#6a8fb0'; c.beginPath(); c.arc(128, 124, 5, 0, Math.PI * 2); c.fill();   // canal central
+  c.strokeStyle = '#8f6b58'; c.lineWidth = 3; c.beginPath(); c.moveTo(128, 254); c.lineTo(128, 214); c.stroke();   // fissura mediana anterior
+  const tex = new THREE.CanvasTexture(cv), m = new THREE.Mesh(new THREE.CircleGeometry(1, 48), stdMat('#ffffff', { map: tex, roughness: 0.85 }));
+  const a = BE(35.6, 0, 0.46), b = BE(36.4, 0, 0.46), d = new THREE.Vector3(b[0] - a[0], b[1] - a[1], b[2] - a[2]).normalize();
+  m.position.set(b[0] + d.x * 0.01, b[1] + d.y * 0.01, b[2] + d.z * 0.01); m.up.set(0, 0, 1); m.lookAt(new THREE.Vector3(b[0] + d.x, b[1] + d.y, b[2] + d.z));
+  m.scale.set(0.62, 0.52, 1); register('medula', m, 0);
+})();
+
+/* ===== PARES CRANIANOS: sem, origem (ramo de 2 cm) ou trajeto inteiro ===== */
+const RAMOSET = new Set(RAMOS.map(q => q[0]));
+['nc3', 'nc6', 'nc7'].forEach(id => ITEMS[id].meshes.slice(0, 2).forEach(m => { m.userData.intra = true; }));   // fibras dentro do tronco (núcleo até a emergência)
+function nervoTubo(m) { const id = m.userData.id; return /^nc\d+$/.test(id) && m.geometry.index && !m.userData.intra; }
+function aplicaNervos() {
+  const curto = state.nervos === 'curto';
+  ALLMESH.forEach(m => {
+    if (!nervoTubo(m)) return;
+    const g = m.geometry; if (m.userData.drFull === undefined) m.userData.drFull = g.index.count;
+    if (!curto) { g.setDrawRange(0, m.userData.drFull); return; }
+    // mede o comprimento ao longo do tubo, anel por anel, e corta em 2 cm
+    const ix = g.index.array, rad = ix[1] - 1, p = g.attributes.position.array, aneis = p.length / 3 / (rad + 1); let acc = 0, ant = null, k = aneis - 1;
+    for (let i = 0; i < aneis; i++) { let x = 0, y = 0, z = 0; for (let j = 0; j <= rad; j++) { const o = (i * (rad + 1) + j) * 3; x += p[o]; y += p[o + 1]; z += p[o + 2]; } const c = [x / (rad + 1), y / (rad + 1), z / (rad + 1)]; if (ant) acc += Math.hypot(c[0] - ant[0], c[1] - ant[1], c[2] - ant[2]); ant = c; if (acc > 2.0) { k = i; break; } }
+    g.setDrawRange(0, Math.max(1, k) * rad * 6);
+  });
+  applyVisibility();
+}
+function escondeNervo(m) {
+  const id = m.userData.id;
+  if (state.nervos === 'sem') return /^nc\d+$/.test(id) || RAMOSET.has(id);
+  if (state.nervos === 'curto') return RAMOSET.has(id);
+  return false;
+}
+/* ===== TRONCO ISOLADO ===== */
+const TI_COR = { mesenc: '#e2b27c', ponte: '#c98a55', bulbo: '#a8714a', medula: '#dcc39d', pedunc: '#d9a26a', colsup: '#ebc08e', colinf: '#e3b583' };
+
+/* ===== SEPARAR O CEREBELO DO TRONCO (Prometheus, p. 242, fig. 7.3b) ===== */
+const SEP_OFF = new THREE.Vector3(0, 0.7, -2.6);
+var sepT = 0;
+const SEP_MESH = (function () {
+  const ids = Object.keys(ITEMS).filter(k => /^(cb_|f_)/.test(k)).concat(['cerebelo', 'vermis', 'arbvida', 'denteado', 'emboliforme', 'globoso', 'fastigial', 'v_vermsup', 'v_verminf', 'v_cerebsup', 'v_cerebinf']);
+  const st = new Set(); ids.forEach(k => ITEMS[k] && ITEMS[k].meshes.forEach(m => st.add(m))); return Array.from(st);
+})();
+SEP_MESH.forEach(m => { m.userData.sepAuto = m.matrixAutoUpdate; m.userData.sep0 = m.matrixAutoUpdate ? m.position.clone() : m.matrix.clone(); });
+function sepAtual() { const t = sepT * sepT * (3 - 2 * sepT); return SEP_OFF.clone().multiplyScalar(t); }
+function aplicaSep() {
+  const off = sepAtual(), M = new THREE.Matrix4().makeTranslation(off.x, off.y, off.z);
+  SEP_MESH.forEach(m => { if (m.userData.sepAuto) m.position.copy(m.userData.sep0).add(off); else m.matrix.copy(M).multiply(m.userData.sep0); });
+  if (typeof ANC !== 'undefined') { Object.keys(ANC).forEach(k => delete ANC[k]); Object.keys(centroRot).forEach(k => delete centroRot[k]); }
+}
+function stepSep(dt) { const alvo = state.separado ? 1 : 0; if (sepT === alvo) return; sepT = alvo > sepT ? Math.min(1, sepT + dt / 0.8) : Math.max(0, sepT - dt / 0.8); aplicaSep(); if (sepT === alvo) applyVisibility(); }
+const TI_FORA = { rubro: 1, snegra: 1, v4: 1, plexo: 1, abmed: 1, ablat: 1, denteado: 1, emboliforme: 1, globoso: 1, fastigial: 1 };
+function animando() { return sepT !== (state.separado ? 1 : 0); }
+// pedúnculos: os tubos somem e aparecem as superfícies de corte no tronco
+['pcs', 'pcm', 'pci'].forEach(id => ITEMS[id].meshes.forEach(m => { m.userData.tuboPed = true; }));
+function corteDisco(id, c, n, r) {
+  [1, -1].forEach(sx => {
+    const m = new THREE.Mesh(new THREE.CircleGeometry(1, 40), stdMat('#d8c3ab', { roughness: 0.9 }));
+    m.scale.set(r[0], r[1], 1); m.position.set(c[0] * sx, c[1], c[2]); m.lookAt(new THREE.Vector3(c[0] * sx + n[0] * sx, c[1] + n[1], c[2] + n[2]));
+    m.userData.cortePed = true; register(id, m, sx);
+  });
+}
+corteDisco('pcm', B(14, latT(14, 1.7) - 0.02, 1.75), [0.75, 0.05, -0.65], [0.5, 0.78]);
+corteDisco('pcs', B(8.5, latT(8.5, 2.0) * 0.8, 2.1), [0.55, 0.45, -0.7], [0.17, 0.26]);
+corteDisco('pci', B(23, latT(23, 1.4) * 0.95, 1.5), [0.7, 0.1, -0.7], [0.2, 0.3]);
 
 // pontos de lesão (lado esquerdo) e déficits (Machado, cap. 19, 29 e 30)
 const LES = {
@@ -2089,7 +2461,7 @@ function campoSVG(c) {
     '<text x="40" y="72" text-anchor="middle" font-size="10" fill="currentColor">olho esquerdo</text><text x="120" y="72" text-anchor="middle" font-size="10" fill="currentColor">olho direito</text></svg><figcaption>Campo visual; em preto, a parte perdida.</figcaption></figure>';
 }   // ficam translúcidos quando a camada dos nervos está ligada, para mostrar os núcleos
 
-const state = { sel: null, isolate: true, cortexOp: 1, groupOn: {}, hideL: false, hideR: false, quiz: null, inflada: false, fluxo: false, territ: false, avc: false, lesao: false, les: null, rotulos: false, ocultar: false, sulcos: false, licao: null, lingua: 'pt', qmodo: 'est' };
+const state = { sel: null, isolate: true, cortexOp: 1, groupOn: {}, hideL: false, hideR: false, quiz: null, inflada: false, fluxo: false, territ: false, avc: false, lesao: false, les: null, separado: false, troncoIso: false, nervos: 'inteiro', bisturi: false, removidos: new Set(), pilhaRem: [], rotulos: false, ocultar: false, sulcos: false, licao: null, lingua: 'pt', qmodo: 'est' };
 Object.keys(GROUPS).forEach(k => state.groupOn[k] = (k === 'cortex'));
 
 /* ===== LÍQUOR (Machado, cap. 8) ===== */
@@ -2154,15 +2526,19 @@ const OCULTAS = ['ginsula', 'gtt'];
 function selId(id) { return REGION_ALIAS[id] || id; }
 const BASE_FICA = { a_espost: 1, a_hipof: 1, centrais_am: 1, sesfpar: 1, plexbas: 1, v_comunpost: 1, v_pontomes: 1, v_amponte: 1, v_alponte: 1, v_ambulbo: 1, v_recesso: 1, v_cerant: 1, v_profmed: 1, aci: 1, acm: 1, aca1: 1, acomA: 1, pcom: 1, acp1: 1, acp: 1, basilar: 1, vertebral: 1, pica: 1, aica: 1, sca: 1, a_oft: 1, coroant: 1, a_pont: 1, a_labir: 1, a_espant: 1, torcula: 1, stransv: 1, ssigm: 1, jugular: 1, scav: 1, spsup: 1, spinf: 1, socc: 1, sinterc: 1, sreto: 1 };
 function applyVisibility() {
+  marca();
   const viaSel = state.sel && META[state.sel] && META[state.sel].grp === 'vias' ? state.sel : null;
   Object.keys(grpObj).forEach(k => grpObj[k].visible = !!state.groupOn[k] && (!state.inflada || k === 'cortex'));
   ALLMESH.forEach(m => {
     const s = m.userData.side;
-    m.visible = !((s === 1 && state.hideL) || (s === -1 && state.hideR)) && !(state.vistaBase && (META[m.userData.id].grp === 'art' || META[m.userData.id].grp === 'ven') && !BASE_FICA[m.userData.id]) && (!m.userData.sulco || state.sulcos || m.userData.id === state.sel || (state.licao && state.licao.set[m.userData.id])) && (!m.userData.corte || state.hideR || state.hideL) && (m.userData.les === undefined || (state.lesao && (!viaSel || m.userData.id === viaSel)));
+    m.visible = !((s === 1 && state.hideL) || (s === -1 && state.hideR)) && !escondeNervo(m) && !(state.troncoIso && (SEP_MESH.indexOf(m) >= 0 || TI_FORA[m.userData.id] || /^nu/.test(m.userData.id) || m.userData.intra)) && !(m.userData.tuboPed && (state.separado || state.troncoIso)) && (!m.userData.cortePed || state.separado || state.troncoIso) && !(state.removidos.has(m.userData.id + '|' + m.userData.side) || state.removidos.has(m.userData.id + '|0')) && !(state.vistaBase && (META[m.userData.id].grp === 'art' || META[m.userData.id].grp === 'ven') && !BASE_FICA[m.userData.id]) && (!m.userData.sulco || state.sulcos || m.userData.id === state.sel || (state.licao && state.licao.set[m.userData.id])) && (!m.userData.corte || state.hideR || state.hideL) && (m.userData.les === undefined || (state.lesao && (!viaSel || m.userData.id === viaSel)));
   });
 }
 const tmpC = new THREE.Color();
+var ultimoCorte = '';
 function applyAppearance() {
+  marca();
+  if (typeof CB !== 'undefined' && CB.corte && (state.sel || '') !== ultimoCorte) { ultimoCorte = state.sel || ''; CB.corte(state.sel); }
   const sel = state.sel, target = sel ? selId(sel) : null;
   const iso = state.isolate && !!sel;
   const selCortex = !!sel && (REGIONS.indexOf(sel) >= 0 || /^s_/.test(sel));   // sulco selecionado: o córtex continua opaco
@@ -2184,15 +2560,16 @@ function applyAppearance() {
     }
     let op = m.userData.op0 || 1;
     if (m.userData.les !== undefined) { const ativo = state.les && state.les.via === id && state.les.k === m.userData.les; mat.color.set(ativo ? '#e0362c' : '#202020'); mat.opacity = 1; mat.depthWrite = true; mat.emissive.set(ativo ? '#e0362c' : '#000000'); mat.emissiveIntensity = ativo ? 0.5 : 0; return; }
-    if ((state.groupOn.nc || state.groupOn.vias) && (TRANSL[id] || TRANSL[m.userData.pai]) && !isSel) op = Math.min(op, 0.3);
+    if ((state.groupOn.nc || state.groupOn.vias) && !state.troncoIso && (TRANSL[id] || TRANSL[m.userData.pai]) && !isSel) op = Math.min(op, 0.3);
     if (state.licao && !isSel && !state.licao.set[id] && !state.licao.set[m.userData.pai] && !state.licao.set[m.userData.lobo]) op = Math.min(op, 0.13);   // lição: o que não é da lição fica apagado
     if (iso && !isSel && !(state.realce && (state.realce[id] || state.realce[m.userData.pai]))) op = 0.1;
     const lesado = !!(oc && oc.deep && oc.deep.indexOf(id) >= 0);   // estrutura profunda no território ocluído
     if (lesado) op = 1;
+    if (state.troncoIso && (TI_COR[id] || TI_COR[m.userData.pai]) && !lesado && !state.territ) { mat.color.set(TI_COR[id] || META[id].color); if (!TI_COR[id]) mat.color.lerp(new THREE.Color(TI_COR[m.userData.pai]), 0.35); } else
     mat.color.set(lesado ? '#2e2a2a' : (state.territ && (T_PROF[id] || T_PROF[m.userData.pai]) ? TCOL[T_PROF[id] || T_PROF[m.userData.pai]] : META[id].color));
     mat.opacity = op; mat.depthWrite = op > 0.95;
     mat.emissive.setHex(isSel ? parseInt(META[id].color.slice(1), 16) : 0x000000);
-    mat.emissiveIntensity = isSel ? 0.55 : 0;
+    if (isSel) { tmpC.set(META[id].color); const lum = tmpC.r * 0.3 + tmpC.g * 0.59 + tmpC.b * 0.11; mat.emissiveIntensity = lum > 0.72 ? 0.1 : (lum > 0.5 ? 0.25 : 0.45); } else mat.emissiveIntensity = 0;
     if (m.userData.fis && isSel && id === target) { mat.color.set('#ffd23f'); mat.emissive.set('#ffb000'); mat.emissiveIntensity = 0.6; }   // fissura selecionada: acende em amarelo
   });
   pintarCortex();
@@ -2379,7 +2756,7 @@ function rayAt(e) {
   const list = ALLMESH.filter(m => m.visible && m.parent && m.parent.visible && m.material.opacity > 0.3);
   const hits = ray.intersectObjects(list, false);
   if (!hits.length) return null;
-  return { id: hits[0].object.userData.id, mesh: hits[0].object };
+  return { id: hits[0].object.userData.id, mesh: hits[0].object, point: hits[0].point };
 }
 const tip = document.getElementById('tip');
 let lastHover = 0;
@@ -2389,13 +2766,20 @@ function hover(e) {
   const h = rayAt(e);
   if (!h) { tip.hidden = true; canvas.style.cursor = 'grab'; return; }
   const meta = META[h.id];
-  tip.textContent = h.mesh.userData.les !== undefined ? 'Lesão: ' + LES[h.id][h.mesh.userData.les].nome : (nomeVisivel(h.id) ? nomeL(h.id) : '?'); tip.hidden = false; canvas.style.cursor = 'pointer';
+  const hid = loboDoCorte(h);
+  tip.textContent = state.bisturi ? 'Remover: ' + nomeL(h.id) : (h.mesh.userData.les !== undefined ? 'Lesão: ' + LES[h.id][h.mesh.userData.les].nome : (nomeVisivel(hid) ? nomeL(hid) : '?')); tip.hidden = false; canvas.style.cursor = state.bisturi ? 'crosshair' : 'pointer';
   const r = stageEl.getBoundingClientRect();
   tip.style.left = Math.min(r.width - 20, e.clientX - r.left + 14) + 'px'; tip.style.top = (e.clientY - r.top + 14) + 'px';
 }
 canvas.addEventListener('pointerleave', () => { tip.hidden = true; });
+function loboDoCorte(h) {   // no corte sagital do verme, devolve o lóbulo sob o cursor
+  if (!h || h.id !== 'arbvida' || !h.point) return h ? h.id : null;
+  const o = sepAtual(), c = CB.classifica(0, h.point.y - o.y, h.point.z - o.z); return c && c.L ? c.L : h.id;
+}
 function pick(e) {
   const h = rayAt(e);
+  if (state.bisturi && h && !(state.quiz && !state.quiz.revealed)) { const k = h.id + '|' + (h.mesh.userData.side || 0); state.removidos.add(k); state.pilhaRem.push(k); if (state.sel === h.id) state.sel = null; applyVisibility(); applyAppearance(); renderBisturi(); renderInfo(); return; }
+  if (h && h.id === 'arbvida' && !(state.quiz && !state.quiz.revealed)) h.id = loboDoCorte(h);
   if (state.quiz && !state.quiz.revealed) {
     if (state.quiz.modo === 'clique' && h) { const t = state.quiz.target, u = h.mesh.userData; responderClique(h.id, h.id === t || u.pai === t || u.lobo === t || selId(h.id) === t); }
     return;
@@ -2546,20 +2930,28 @@ function legenda() {
 
 /* ===== LOOP ===== */
 function resize() {
+  marca();
   const w = stageEl.clientWidth, h = stageEl.clientHeight;
   renderer.setSize(w, h, false); camera.aspect = w / h;
   camera.fov = w / h < 0.9 ? 52 : 35; camera.updateProjectionMatrix();
 }
 new ResizeObserver(resize).observe(stageEl); resize();
 let tPrev = performance.now();
+// Desenha só quando algo muda: câmera em movimento, animação (girar, inflar, líquor, setas) ou interação.
+let camAnt = '';
 function frame(t) {
   const dt = Math.min(0.05, (t - tPrev) / 1000); tPrev = t;
   if (auto) camGoal.theta += dt * 0.5, cam.theta = camGoal.theta;
-  stepInflada(dt); stepFluxo(dt); stepSetas(dt); stepCamera(dt); placeCamera(); renderer.render(scene, camera); stepRotulos(); legenda();
+  stepInflada(dt); stepFluxo(dt); stepSetas(dt); stepSep(dt); stepCamera(dt);
+  const ch = cam.theta.toFixed(4) + ',' + cam.phi.toFixed(4) + ',' + cam.dist.toFixed(3) + ',' + cam.target.x.toFixed(3) + ',' + cam.target.y.toFixed(3) + ',' + cam.target.z.toFixed(3);
+  const mexeu = ch !== camAnt; camAnt = ch;
+  const anima = auto || inflT !== (state.inflada ? 1 : 0) || fluxoGrp.visible || setaGrp.visible || (typeof animando === 'function' && animando());
+  if (mexeu || anima || sujo > 0) { placeCamera(); renderer.render(scene, camera); stepRotulos(); legenda(); if (sujo > 0) sujo--; }
   requestAnimationFrame(frame);
 }
+['click', 'input', 'change', 'wheel', 'keydown', 'pointerup'].forEach(ev => document.addEventListener(ev, marca, true));
 applyVisibility(); applyAppearance(); placeCamera();
-if (/debug/.test(location.hash)) window.atlasDebug = { THREE, scene, camera, cam, camGoal, state, ITEMS, ALLMESH, ENV, CONT, SYLV, MARCOS, cortexMeshes, select, setView, setInflada, applyVisibility, applyAppearance, syncLayerUI: () => syncLayerUI() };
+if (/debug/.test(location.hash)) window.atlasDebug = { TEMPOS: () => TEMPOS, THREE, scene, camera, cam, camGoal, state, ITEMS, ALLMESH, ENV, CONT, SYLV, MARCOS, cortexMeshes, select, setView, setInflada, applyVisibility, applyAppearance, syncLayerUI: () => syncLayerUI() };
 
 /* ===== INTERFACE ===== */
 const $ = (s, r) => (r || document).querySelector(s);
@@ -2643,6 +3035,44 @@ $('#op').addEventListener('input', e => { state.cortexOp = +e.target.value; $('#
 $('#allOn').addEventListener('click', () => { Object.keys(GROUPS).forEach(k => state.groupOn[k] = true); syncLayerUI(); applyVisibility(); applyAppearance(); });
 $('#allOff').addEventListener('click', () => { Object.keys(GROUPS).forEach(k => state.groupOn[k] = false); state.sel = null; syncLayerUI(); applyVisibility(); applyAppearance(); renderInfo(); markList(); });
 $('#sulcosOn').addEventListener('change', e => { state.sulcos = e.target.checked; applyVisibility(); });
+function renderBisturi() {
+  const bar = $('#bistbar'), n = state.removidos.size;
+  bar.hidden = !state.bisturi && !n;
+  $('#bistTxt').textContent = state.bisturi ? 'Bisturi: clique para remover' + (n ? ' · ' + n + ' removida' + (n > 1 ? 's' : '') : '') : n + ' estrutura' + (n > 1 ? 's' : '') + ' removida' + (n > 1 ? 's' : '');
+  $('#bistDesf').hidden = !state.pilhaRem.length; $('#bistTudo').hidden = !n;
+  const L = $('#bistLista');
+  L.innerHTML = n ? '<span class="muted" style="font-size:12.5px">Removidas (clique para devolver):</span>' + Array.from(state.removidos).map(k => { const [id, sd] = k.split('|'); return '<button type="button" data-rem="' + esc(k) + '">' + esc(nomeL(id)) + (sd === '1' ? ' (E)' : sd === '-1' ? ' (D)' : '') + ' ↺</button>'; }).join('') : '';
+  $$('[data-rem]', L).forEach(b => b.addEventListener('click', () => { state.removidos.delete(b.dataset.rem); state.pilhaRem = state.pilhaRem.filter(x => x !== b.dataset.rem); applyVisibility(); renderBisturi(); }));
+}
+$('#bisturiBtn').addEventListener('click', () => { state.bisturi = !state.bisturi; $('#bisturiBtn').setAttribute('aria-pressed', state.bisturi ? 'true' : 'false'); renderBisturi(); });
+$('#bistDesf').addEventListener('click', () => { const k = state.pilhaRem.pop(); if (k) state.removidos.delete(k); applyVisibility(); renderBisturi(); });
+$('#bistTudo').addEventListener('click', () => { state.removidos.clear(); state.pilhaRem = []; applyVisibility(); renderBisturi(); });
+function setNervos(modo) {
+  state.nervos = modo; $$('[data-nm]').forEach(b => b.setAttribute('aria-pressed', b.dataset.nm === modo ? 'true' : 'false'));
+  if (modo !== 'sem' && !state.groupOn.nc) { state.groupOn.nc = true; syncLayerUI(); }
+  aplicaNervos(); applyAppearance();
+}
+$$('[data-nm]').forEach(b => b.addEventListener('click', () => setNervos(b.dataset.nm)));
+// o tronco é inclinado para trás: as vistas ventral e dorsal olham perpendicularmente à sua face (eixo do perfil ventral)
+const TI_VISTA = { ventral: ['anterior', [0, -3.1, -1.5], 15, 0, 1.99], dorsal: ['posterior', [0, -3.0, -2.5], 14, Math.PI, 1.15], lateral: ['lateral', [0, -3.1, -1.9], 16, Math.PI / 2, 1.57] };
+function vistaTronco(v) { const q = TI_VISTA[v]; const hl = state.hideL, hr = state.hideR; setView(q[0]); state.hideL = hl; state.hideR = hr; camGoal.target.set(q[1][0], q[1][1], q[1][2]); camGoal.dist = q[2]; camGoal.theta = q[3]; camGoal.phi = q[4]; $$('[data-tiv]').forEach(b => b.setAttribute('aria-pressed', b.dataset.tiv === v ? 'true' : 'false')); applyVisibility(); }
+function setTroncoIso(on) {
+  state.troncoIso = !!on; $('#tiBtn').setAttribute('aria-pressed', on ? 'true' : 'false'); $('#tipainel').hidden = !on;
+  if (on) {
+    state.licao = null; renderLicao(); state.sel = null;
+    Object.keys(GROUPS).forEach(k => state.groupOn[k] = (k === 'stem' || k === 'nc')); syncLayerUI();
+    if (state.nervos === 'inteiro') setNervos('curto');
+    state.hideL = state.hideR = false; syncHemiUI(); vistaTronco('ventral');
+  } else { Object.keys(GROUPS).forEach(k => state.groupOn[k] = (k === 'cortex' || k === 'art')); syncLayerUI(); setNervos('inteiro'); setView('lateral'); }
+  applyVisibility(); applyAppearance(); renderInfo(); markList();
+}
+$('#tiBtn').addEventListener('click', () => setTroncoIso(!state.troncoIso));
+$('#tiBtn2').addEventListener('click', () => setTroncoIso(true));
+$('#tiSair').addEventListener('click', () => setTroncoIso(false));
+$$('[data-tiv]').forEach(b => b.addEventListener('click', () => vistaTronco(b.dataset.tiv)));
+$$('[data-tip]').forEach(b => b.addEventListener('click', () => select(b.dataset.tip, { focus: false })));
+function setSeparado(on) { state.separado = !!on; $('#sepBtn').textContent = on ? 'Juntar o cerebelo ao tronco' : 'Separar o cerebelo do tronco'; if (on) { state.groupOn.stem = true; syncLayerUI(); } applyVisibility(); marca(); }
+$('#sepBtn').addEventListener('click', () => setSeparado(!state.separado));
 $('#rotOn').addEventListener('change', e => { state.rotulos = e.target.checked; });
 $('#rotOcultar').addEventListener('change', e => { state.ocultar = e.target.checked; Object.keys(REVELADO).forEach(k => delete REVELADO[k]); renderInfo(); renderLicao(); });
 $('#cavernoso').addEventListener('click', () => {
@@ -2670,7 +3100,7 @@ $('#lesao').addEventListener('change', e => {
   applyVisibility(); applyAppearance(); renderInfo();
 });
 $('#reset').addEventListener('click', () => {
-  state.licao = null; renderLicao();
+  state.licao = null; renderLicao(); if (state.troncoIso) setTroncoIso(false); setNervos('inteiro'); state.removidos.clear(); state.pilhaRem = []; state.bisturi = false; $('#bisturiBtn').setAttribute('aria-pressed', 'false'); renderBisturi(); setSeparado(false);
   state.sel = null; state.cortexOp = 1; state.hideL = state.hideR = false; $('#op').value = 1; $('#opv').textContent = '100%'; state.fluxo = false; $('#fluxo').checked = false; state.territ = state.avc = false; state.lesao = false; state.les = null; $('#lesao').checked = false; $('#territ').checked = $('#avc').checked = false; $('#legenda').hidden = true; $('#passos').hidden = true; setInflada(false);
   Object.keys(GROUPS).forEach(k => state.groupOn[k] = (k === 'cortex' || k === 'art')); syncLayerUI(); syncHemiUI();
   applyVisibility(); applyAppearance(); renderInfo(); markList(); setView('lateral'); camGoal.dist = 40;
@@ -2848,7 +3278,7 @@ const LICOES = [
     { n: 'Face superior: lóbulos', v: 'superior', a: [0, -3, -5], d: 15, g: ['stem'], i: ['cb_culmen', 'cb_declive', 'cb_folium', 'cb_asa', 'cb_quadant', 'cb_quadpost', 'cb_semisup', 'f_posclival', 'f_horiz'], x: 'A cada lóbulo do verme correspondem dois nos hemisférios (figura 5.6).' },
     { n: 'Face inferior: lóbulos', v: 'inferior', a: [0, -3.5, -4.5], d: 16, g: ['stem'], i: ['cb_semiinf', 'cb_biventre', 'cb_tonsila', 'cb_floculo', 'cb_nodulo', 'cb_uvula', 'cb_piramide', 'cb_tuber', 'f_postlat'], x: 'Os que devem ser identificados nas peças: nódulo, flóculo e tonsila (figura 5.4).' },
     { n: 'Verme em corte sagital', v: 'medial', a: [0, -3.2, -4.5], d: 13, g: ['stem'], i: ['arbvida', 'cb_lingula', 'cb_central', 'cb_culmen', 'cb_declive', 'cb_folium', 'cb_tuber', 'cb_piramide', 'cb_uvula', 'cb_nodulo', 'f_prima', 'f_postlat'], x: 'Na secção sagital mediana aparecem o corpo medular e os lóbulos do verme, da língula ao nódulo (figura 5.5).' },
-    { n: 'Pedúnculos cerebelares', v: 'lateral', a: [0, -3, -3.5], d: 16, g: ['stem'], i: ['pcs', 'pcm', 'pci', 'veusup'], x: 'O superior liga o cerebelo ao mesencéfalo, o médio à ponte e o inferior à medula.' }] },
+    { n: 'Pedúnculos cerebelares (cerebelo separado)', sep: true, v: 'lateral', th: 1.95, ph: 1.35, a: [0, -3, -3.6], d: 17, g: ['stem'], i: ['pcs', 'pcm', 'pci', 'veusup', 'denteado', 'emboliforme', 'globoso', 'fastigial'], x: 'Com o cerebelo afastado, veem-se no tronco os cortes dos três pedúnculos: o superior liga o cerebelo ao mesencéfalo, o médio à ponte e o inferior à medula. No cerebelo, os quatro núcleos: denteado, emboliforme, globosos e fastigial (de lateral para medial).' }] },
   { t: 'Pares cranianos', l: [
     { n: 'Origens aparentes', v: 'inferior', a: [0, -3, -0.5], d: 19, g: ['stem', 'nc', 'dien'], i: ['nc1', 'nc2', 'nc3', 'nc4', 'nc5', 'nc6', 'nc7', 'nc8', 'nc9', 'nc10', 'nc11', 'nc12'], x: 'Do sulco bulbopontino emergem, a partir da linha média, o VI, o VII e o VIII; do sulco lateral anterior do bulbo, o XII; do lateral posterior, o IX, o X e a raiz craniana do XI.' },
     { n: 'Seio cavernoso', v: 'anterior', th: 0.75, ph: 1.25, a: [1.2, -2.2, 1.6], d: 15, g: ['nc', 'art', 'ven', 'dien', 'stem'], i: ['scav', 'aci', 'nc3', 'nc4', 'n_oft', 'nc6', 'sinterc', 'hipofise'], x: 'É atravessado pela carótida interna e pelo abducente; junto à parede lateral passam o troclear, o oculomotor e o ramo oftálmico do trigêmeo (cap. 8, p. 73).' },
@@ -2858,8 +3288,9 @@ const LICOES = [
     { n: 'Núcleos por colunas', v: 'posterior', ph: 0.9, a: [0, -3, -2.5], d: 10, g: ['stem', 'nc'], i: ['nu3', 'nu4', 'nu6', 'nu12', 'nuew', 'nudx', 'nusals', 'nusali', 'numot5', 'nu7', 'nuamb', 'numes5', 'nusp5', 'nuesp5', 'nuvest', 'nucocl', 'nusol'], x: 'Os núcleos dos nervos cranianos dispõem-se em seis colunas funcionais (cap. 17). A cor de cada um segue a legenda da coluna.' }] },
   { t: 'Vascularização', l: [
     { n: 'Polígono de Willis', v: 'inferior', a: [0, -1.6, -0.3], d: 16, g: ['art', 'stem'], i: ['aci', 'acm', 'aca1', 'acomA', 'pcom', 'acp1', 'acp', 'basilar', 'coroant', 'a_oft'], x: 'Circunda o quiasma óptico e o túber cinéreo; formado pelas carótidas internas, cerebrais anteriores e posteriores e comunicantes (cap. 18, p. 162).' },
+    { n: 'Carótida interna: quatro partes', v: 'lateral', a: [1.4, -4.6, 0.3], d: 15, g: ['art', 'ven'], i: ['aci_cerv', 'aci_petr', 'aci_cav', 'aci_cer', 'scav', 'a_oft', 'pcom', 'coroant'], x: 'Parte cervical (sem ramos), petrosa (no canal carótico), cavernosa (curva em S no seio cavernoso) e cerebral (dá oftálmica, comunicante posterior e corióidea anterior). Os segmentos C2-C4 formam o sifão carótico (Prometheus, p. 246).' },
     { n: 'Sistema vertebrobasilar', v: 'anterior', a: [0, -3.5, -1.5], d: 16, g: ['art', 'stem'], i: ['vertebral', 'basilar', 'pica', 'aica', 'sca', 'a_pont', 'a_labir', 'a_espant', 'a_espost'], x: 'As vertebrais fundem-se perto do sulco bulbopontino para formar a basilar, que percorre o sulco basilar e se bifurca nas cerebrais posteriores.' },
-    { n: 'Seios da dura-máter', v: 'lateral', th: 2.3, ph: 1.1, a: [0, -1, -1], d: 32, g: ['ven'], i: ['sss', 'sinf', 'sreto', 'torcula', 'stransv', 'ssigm', 'jugular', 'socc', 'scav', 'spsup', 'spinf', 'galeno'], x: 'O sangue venoso do encéfalo converge para os seios e daí para as veias jugulares internas (cap. 8 e 18).' },
+    { n: 'Seios da dura-máter', v: 'lateral', th: 2.3, ph: 1.1, a: [0, -1, -1], d: 32, g: ['ven'], i: ['sss', 'sinf', 'sreto', 'torcula', 'stransv', 'ssigm', 'jugular', 'socc', 'scav', 'spsup', 'spinf', 'galeno', 'smarg', 'v_emiss', 'v_oftsup'], x: 'O sangue venoso do encéfalo converge para os seios e daí para as veias jugulares internas (cap. 8 e 18). Vias acessórias: veias emissárias, oftálmica superior e seio marginal, todas sem válvulas (Prometheus, p. 256-257).' },
     { n: 'Sistema venoso profundo', v: 'medial', a: [0, 0.6, -0.5], d: 16, g: ['ven', 'dien'], i: ['vint', 'galeno', 'basal', 'v_talest', 'v_coroid', 'v_septo', 'sreto', 'sinf'], x: 'Drena corpo estriado, cápsula interna, diencéfalo e centro branco medular; converge para a veia cerebral magna (cap. 18, p. 168).' }] },
   { t: 'Telencéfalo e envoltórios', l: [
     { n: 'Face lateral: sulcos', v: 'lateral', d: 34, g: ['cortex'], i: ['s_lateral', 's_central', 's_precentral', 's_poscentral', 's_fronsup', 's_froninf', 's_tempsup', 's_tempinf', 's_intrapar'], x: 'Os dois sulcos mais importantes são o lateral (de Sylvius) e o central (de Rolando) (cap. 7, p. 55).' },
@@ -2872,7 +3303,7 @@ function abrirLicao(ti, li) {
   const L = LICOES[ti].l[li];
   state.licao = { ti, li, ids: L.i.filter(id => ITEMS[id] && ITEMS[id].meshes.length), set: {} }; state.licao.ids.forEach(id => state.licao.set[id] = 1);
   state.sel = null; state.realce = null; state.les = null; state.lesao = false; $('#lesao').checked = false;
-  setView(L.v);
+  setView(L.v); setSeparado(!!L.sep);
   Object.keys(GROUPS).forEach(k => state.groupOn[k] = L.g.indexOf(k) >= 0);
   state.cortexOp = 1; $('#op').value = 1; $('#opv').textContent = '100%'; syncLayerUI();
   if (L.a) camGoal.target.set(L.a[0], L.a[1], L.a[2]);
@@ -2914,6 +3345,7 @@ function setLingua(l) {
 $$('#linguaSeg button').forEach(b => b.addEventListener('click', () => setLingua(b.dataset.l)));
 renderLicao();
 
+marcaT('fim');
 /* ---- início ---- */
 renderInfo(); markList(); setView('lateral');
 loadEl.hidden = true;

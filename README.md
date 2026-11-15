@@ -10,14 +10,17 @@ Ou baixe `atlas-3d-neuroanatomia.html` e abra com duplo clique (precisa de inter
 
 ## O que tem
 - Córtex real (malha de um cérebro, parcelação Desikan-Killiany), vista inflada e 19 sulcos selecionáveis.
-- Núcleos da base, diencéfalo, sistema límbico e ventrículos (malhas reais), com o ventrículo lateral por partes.
-- Tronco encefálico com 32 acidentes de superfície, inclusive o assoalho do IV ventrículo.
-- Cerebelo com 3 lobos, 17 lóbulos, 8 fissuras, folhas, pedúnculos e corte sagital do verme.
-- Vascularização: polígono de Willis, ramos corticais e centrais, territórios, modo AVC, seios e veias superficiais, profundas e da fossa posterior.
+- Núcleos da base, diencéfalo, sistema límbico e ventrículos (malhas reais), com o ventrículo lateral por partes; cápsulas interna, externa e extrema e claustro em lâminas; fórnice, hipófise (adeno e neuro) e vias ópticas em formas orgânicas.
+- Tronco encefálico com 32 acidentes de superfície, inclusive o assoalho do IV ventrículo; modo Tronco isolado, com os pares cranianos sem ramos, com ramo de 2 cm ou com o trajeto inteiro.
+- Cerebelo com 3 lobos, 17 lóbulos, 8 fissuras, pedúnculos, árvore da vida com lóbulos e lobos no corte sagital, núcleos na forma real (denteado em bolsa pregueada) e opção de separar o cerebelo do tronco.
+- Vascularização: carótida interna em quatro partes (sifão), vertebral com a alça sobre o atlas, polígono de Willis, ramos corticais que se dividem até a periferia, ramos centrais, territórios, modo AVC, seios (inclusive marginal), veias emissárias e veias superficiais, profundas e da fossa posterior.
 - 12 pares cranianos, núcleos por colunas funcionais, ramos e gânglios, vista do seio cavernoso.
 - 11 grandes vias com setas de sentido e modo Lesão (déficits e campo visual).
 - Pregas da dura-máter e medula cervical.
-- Estudo: 26 lições guiadas com pinos numerados, nomes em português, latim e inglês, teste de identificação (estrutura, clique no modelo, artéria e lesão), rótulos ocultáveis.
+- Bisturi: clique para remover estruturas e ver o que está por baixo, com desfazer.
+- Estudo: 27 lições guiadas com pinos numerados, nomes em português, latim e inglês, teste de identificação (estrutura, clique no modelo, artéria e lesão), rótulos ocultáveis.
+
+Fontes: Ângelo Machado, *Neuroanatomia Funcional*, 4ª ed. (texto) e Prometheus, *Cabeça e Neuroanatomia* (conferência e referência visual; nenhuma figura dos livros está no atlas).
 
 Itens que não puderam ser conferidos no livro estão marcados "a confirmar" no painel e listados em [REVISAR.md](REVISAR.md). Modelo idealizado e simétrico: serve para posição e relações, não para medidas.
 

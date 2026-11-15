@@ -32,6 +32,11 @@ Base: Ângelo Machado, Neuroanatomia Funcional, 4ª ed. (Atheneu). No atlas, est
 - Trajeto da parte inferior da radiação óptica pelo lobo temporal: o livro só diz que a quadrantanopsia superior ocorre em tumores do lobo temporal (p. 282); o nome alça de Meyer não aparece e não foi usado.
 - Corticonuclear: os feixes desenhados vão aos núcleos motores do V e do VII e ao ambíguo dos dois lados e ao hipoglosso do lado oposto; os do III, IV e VI (p. 288) não foram desenhados.
 
+## Remodelagem 2-B: cerebelo
+- Prometheus (p. 240, 242) conferido para forma e sinônimos dos núcleos e para os pedúnculos cortados. As figuras são só referência; as formas foram desenhadas.
+- Denteado: bolsa pregueada com hilo medial, tamanho e pregas aproximados. Globosos: duas massas (o livro diz "núcleos globosos", número variável).
+- Corte sagital: cores por lóbulo e faixa por lobo são convenção do atlas, não do livro.
+
 ## Remodelagem 6: interface
 - Nomes em latim e inglês (cerca de 250 itens): escritos pela Terminologia Anatômica, de memória, sem conferência em fonte impressa. Conferir em especial: Sulcus medialis cruris cerebri, Lobulus quadrangularis anterior/posterior, Fissura secunda (= pós-piramidal), Arteria striata medialis distalis (Heubner), Arteriae centrales anterolaterales (lenticuloestriadas), Arbor vitae.
 - Itens sem nome em latim/inglês mostram o nome em português.
@@ -111,3 +116,15 @@ Base: Ângelo Machado, Neuroanatomia Funcional, 4ª ed. (Atheneu). No atlas, est
 ## Não lido ainda
 - Duus, Diagnóstico Topográfico em Neurologia: o PDF não abriu nesta máquina.
 - Machado: cap. 5 (parte do cerebelo), 6, 7, 12, 14 a 16, 19 (medula, p. 173-176), 20, 23, 25, 26, 28, restante dos caps. 21, 22, 27 e 30.
+
+## Remodelagem 2-D: núcleos da base, límbico, diencéfalo
+- Distâncias da cápsula externa (1 mm), claustro (2,5 mm) e cápsula extrema (4 mm) a partir da face lateral do putame: escolhidas para ficarem visíveis, não medidas (Prometheus, p. 208, só mostra a ordem das camadas).
+- Cápsula interna: lâmina a 1,4 mm medial ao lentiforme; o joelho e as pernas seguem a forma do lentiforme, sem conferência fina com caudado e tálamo.
+- Formas de hipotálamo, subtalâmico, corpos geniculados, pineal, adeno e neuro-hipófise: aproximadas (blob), posição mantida da versão anterior.
+
+## Remodelagem 2-E: vasos
+- Alça da vertebral sobre o arco posterior do atlas: trajeto aproximado; nem o Machado nem o Prometheus a detalham.
+- Ramos terminais finos das artérias corticais e das veias superficiais: ilustrativos (mostram a divisão até a periferia, não o número real de ramos).
+- Veia occipital interna: desembocadura (magna ou basal) não descrita no texto do Prometheus (aparece na figura da p. 258).
+- Seio marginal e veias emissárias: posição esquemática (Prometheus, p. 254-257).
+- Confirmados no Prometheus (p. 254-259) e retirados do "a confirmar": veias anastomóticas superior (Trolard) e inferior (Labbé), veia basal (Rosenthal), seios petrosos superior e inferior, veias cerebrais superiores e veia cerebral média superficial.
