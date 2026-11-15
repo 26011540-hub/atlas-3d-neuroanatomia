@@ -128,3 +128,38 @@ Base: Ângelo Machado, Neuroanatomia Funcional, 4ª ed. (Atheneu). No atlas, est
 - Veia occipital interna: desembocadura (magna ou basal) não descrita no texto do Prometheus (aparece na figura da p. 258).
 - Seio marginal e veias emissárias: posição esquemática (Prometheus, p. 254-257).
 - Confirmados no Prometheus (p. 254-259) e retirados do "a confirmar": veias anastomóticas superior (Trolard) e inferior (Labbé), veia basal (Rosenthal), seios petrosos superior e inferior, veias cerebrais superiores e veia cerebral média superficial.
+
+## Remodelagem 3, Fase 1: gabarito Unicamp × Notas
+- Correspondência entre as páginas das Notas e os 12 cortes da Unicamp (coluna "Notas" do GABARITO.md): feita pelas estruturas rotuladas, não por medida; os níveis das fatias de aula podem cair entre dois cortes da Unicamp.
+- Notas, rótulos com dúvida (transcrição em `notas/notas-rotulos.json`, privada):
+  - p. 7: "Comissura das habênulas???" (dúvida do próprio autor);
+  - p. 8: texto ao lado de "Fórnix" ("já repostado?") ilegível; pulvinar e comissura posterior no mesmo corte do núcleo subtalâmico, conferir o nível;
+  - p. 9: "Tronco do corpo caloso" num corte posterior ao aqueduto, conferir se é o esplênio;
+  - p. 10: "Começo de um tálamo";
+  - p. 12: "Pró cá" junto do núcleo rubro;
+  - p. 15: "Tálamo" num corte só com o corno anterior aberto, conferir se é lentiforme ou caudado; "recesso supraquiasmático": conferir o nome no Machado (cap. 6, III ventrículo: recesso óptico);
+  - p. 6: rótulo "Ponto cortado(?)" ilegível; p. 1: rótulo sem texto.
+- Nomenclatura das Notas que difere do Machado: "lobo quadrangular / semilunar" (Machado: lóbulo); "pilar do cérebro" (Machado: base do pedúnculo cerebral); conferir.
+- Notas p. 18: "cornos posteriores e laterais só de T1 a L2" vale para o corno lateral; o corno posterior existe em toda a medula (Machado, cap. 4: conferir a página).
+- Notas p. 21 é uma figura escaneada de livro (cisternas): não usada.
+
+## Remodelagem 3, Fase 2: lobos e sistema límbico
+- Páginas do Machado a confirmar: lobo límbico, giro subcaloso, partes do hipocampo, álveo, subículo, fascículos do cíngulo e mamilotalâmico, estria terminal (cap. 27); trígono e comissura das habênulas (cap. 6).
+- Substância inominada e núcleo basal de Meynert: não conferidos no Machado; posição pela Unicamp (corte 4, detalhe 4a1).
+- Formas esquemáticas, posição aproximada: giro subcaloso, álveo, subículo, os três feixes, substância inominada, Meynert, trígono e comissura das habênulas.
+- Limite entre o pé e o corpo do hipocampo: plano coronal aproximado (z = -0,6).
+- Lobos: o lóbulo paracentral (frontal e parietal) ficou sem lobo; o giro para-hipocampal conta como temporal e como límbico; o giro fusiforme da parcelação foi posto no lobo temporal e o lingual no occipital.
+- Visto na revisão: na vista medial, a borda do corte do corpo caloso (malha da face medial) aparece serrilhada quando o corpo caloso fica apagado; corrigir junto com as bolachas.
+
+## Remodelagem 3, Fase 3: bolachas
+- Planos dos cortes (`BOL_Z` em `src/js/14-bolachas.js`): escolhidos para passar pelas estruturas-chave de cada corte da Unicamp; as fatias do modelo não têm a espessura nem a inclinação exatas das da Unicamp. Por isso algumas estruturas do gabarito não caem no plano do modelo (listadas no painel como "fora deste plano no modelo").
+- O tronco do modelo é inclinado para a frente; os cortes coronais o atravessam obliquamente (no corte 5 ele aparece só de raspão).
+- Faixa de córtex com espessura fixa de 2,5 mm (cerebelo 1,3 mm), medida da superfície; o córtex real varia de 2 a 4 mm e o cerebelo não tem as folhas modeladas.
+- Paleta "peça real": cores aproximadas de peça fixada, não medidas.
+- O rótulo de cada ponto da faixa cinzenta é o giro da parcelação mais próximo; nas bordas entre giros pode haver pequenos erros.
+
+## Remodelagem 3, Fase 4: tronco e medula
+- Núcleos e feixes novos com forma esquemática e posição tirada da superfície real: núcleo olivar inferior, núcleos grácil e cuneiforme, núcleos pontinos (granulado), formação reticular, corpo trapezoide, fascículo longitudinal medial. Páginas do Machado (cap. 16 e 17) a confirmar.
+- Níveis dos cortes do tronco (`f` em `TC_NIVEIS`) escolhidos pelas estruturas que o plano pega no modelo; o tronco do modelo não é perfeitamente reto e os planos são perpendiculares a um eixo suavizado. No nível do colículo superior o plano não pega o núcleo rubro.
+- Núcleos dos nervos cranianos já existentes (colunas, cap. 17) entram nos cortes com a posição que já tinham.
+- Medula: os três cortes (cervical, torácico, lombar) são esquemas desenhados, não cortes do modelo; proporções aproximadas. Tratos representados por setores; os limites reais se sobrepõem.

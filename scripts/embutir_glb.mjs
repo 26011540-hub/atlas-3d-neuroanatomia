@@ -1,11 +1,24 @@
-// Gera ../atlas-3d-neuroanatomia.html a partir de atlas.modelo.html,
-// embutindo dados_brainder/cortex.glb (base64) e dados_brainder/marcos.json.
-// Uso: node embutir_glb.mjs
+// Monta ../atlas-3d-neuroanatomia.html a partir das partes em ../src/
+// (cabeca.html, estilo.css, corpo.html, js/*.js em ordem numérica, fim.html),
+// confere a sintaxe do JavaScript e embute dados_brainder/cortex.glb (base64) e dados_brainder/marcos.json.
+// Uso: node scripts/embutir_glb.mjs
 import fs from 'node:fs';
+import os from 'node:os';
 import path from 'node:path';
+import { execFileSync } from 'node:child_process';
 
 const RAIZ = path.resolve(import.meta.dirname, '..');
-const modelo = fs.readFileSync(path.join(import.meta.dirname, 'atlas.modelo.html'), 'utf8');
+const SRC = path.join(RAIZ, 'src');
+const ler = f => fs.readFileSync(path.join(SRC, f), 'utf8').replace(/\r\n/g, '\n');
+const js = fs.readdirSync(path.join(SRC, 'js')).filter(f => /^\d\d-.*\.js$/.test(f)).sort().map(f => ler('js/' + f)).join('');
+
+// sintaxe: falha aqui, antes de gerar um atlas quebrado
+const tmp = path.join(os.tmpdir(), 'mimir-chk.js');
+fs.writeFileSync(tmp, js);
+try { execFileSync(process.execPath, ['--check', tmp], { stdio: 'pipe' }); }
+catch (e) { console.error(String(e.stderr || e.message)); process.exit(1); }
+
+const modelo = ler('cabeca.html') + '<style>\n' + ler('estilo.css') + '</style>\n' + ler('corpo.html') + '<script>\n' + js + '</script>\n' + ler('fim.html');
 const glb = fs.readFileSync(path.join(RAIZ, 'dados_brainder', 'cortex.glb')).toString('base64');
 const marcos = fs.readFileSync(path.join(RAIZ, 'dados_brainder', 'marcos.json'), 'utf8').replace(/</g, '\\u003c');
 for (const m of ['/*@@MARCOS@@*/', '/*@@GLB@@*/']) if (!modelo.includes(m)) throw new Error('marcador ausente no modelo: ' + m);

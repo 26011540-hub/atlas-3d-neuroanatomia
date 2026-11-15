@@ -19,6 +19,8 @@ Ou baixe `atlas-3d-neuroanatomia.html` e abra com duplo clique (precisa de inter
 - 12 pares cranianos, núcleos por colunas funcionais, ramos e gânglios, vista do seio cavernoso.
 - 11 grandes vias com setas de sentido e modo Lesão (déficits e campo visual).
 - Pregas da dura-máter e medula cervical.
+- Bolachas: os 12 cortes coronais do atlas da Unicamp em 3D, separados ou em foco, com as estruturas de cada face numeradas pelo gabarito, cores do atlas ou de peça real, teste por bolacha e link para a peça real no site da Unicamp.
+- Cortes transversais do tronco (7 níveis, do mesencéfalo ao bulbo fechado) em 3D com esquema 2D ao lado, e cortes esquemáticos da medula cervical, torácica e lombar.
 - Bisturi: clique para remover estruturas e ver o que está por baixo, com desfazer.
 - Estudo: 27 lições guiadas com pinos numerados, nomes em português, latim e inglês, teste de identificação (estrutura, clique no modelo, artéria e lesão), rótulos ocultáveis.
 
@@ -27,7 +29,7 @@ Fontes: Ângelo Machado, *Neuroanatomia Funcional*, 4ª ed. (texto) e Prometheus
 Itens que não puderam ser conferidos no livro estão marcados "a confirmar" no painel e listados em [REVISAR.md](REVISAR.md). Modelo idealizado e simétrico: serve para posição e relações, não para medidas.
 
 ## Como editar
-A fonte é `scripts/atlas.modelo.html`; o arquivo final é gerado com:
+A fonte fica em `src/` (HTML, CSS e o JavaScript dividido em partes numeradas); o arquivo final é gerado com:
 
 ```bash
 cd scripts && npm install && cd ..

@@ -6,7 +6,7 @@ Nota de passagem para quem continuar o trabalho (atualizada em 14/11/2026). Leia
 Atlas 3D em arquivo único (`atlas-3d-neuroanatomia.html`, three.js r128 + GLTFLoader r128 via CDN) para estudo de Medicina (UEPG), com base em Ângelo Machado, Neuroanatomia Funcional, 4ª ed. O roteiro do trabalho está em `prompts-claude-code-atlas-neuroanatomia.md` (Prompt A feito; Prompt B em andamento, por fases aprovadas uma a uma).
 
 ## Como editar e gerar
-- **Nunca edite `atlas-3d-neuroanatomia.html` direto.** A fonte é `scripts/atlas.modelo.html` (cerca de 1.400 linhas, sem os dados pesados).
+- **Nunca edite `atlas-3d-neuroanatomia.html` direto.** A fonte é `src/` (partes) (cerca de 1.400 linhas, sem os dados pesados).
 - Gerar o atlas: `node scripts/embutir_glb.mjs` (junta modelo + `dados_brainder/cortex.glb` em base64 + `dados_brainder/marcos.json`).
 - Refazer as malhas: `node scripts/converter_brainder.mjs 150000` (só é preciso se mudar a conversão).
 - Ver no navegador: servidor em `.claude/launch.json` (nome `atlas`, porta 8765). Abrir `http://localhost:8765/#debug` expõe `window.atlasDebug` (state, ITEMS, select, setView, camGoal etc.) para testes.
@@ -97,3 +97,17 @@ Prometheus: `Atlas de Anatomia  PrometheusPDF_261114_205537.pdf`, 352 p., texto 
 - Não inventar anatomia: o que não estiver no Machado vai como "a confirmar" e para o `REVISAR.md`. Citar capítulo e página.
 - Trabalhar uma fase por vez, testar no navegador com capturas e mostrar antes de seguir. Capturas ficam em `capturas/faseN-.../`.
 - Crédito obrigatório: Brain for Blender, Anderson M. Winkler (brainder.org), CC BY-SA 3.0.
+
+## Remodelagem 3 (Unicamp como gabarito e modelo; bolachas em 3D)
+Plano aprovado: 0 organizar, otimizar e design; 1 gabarito (12 cortes coronais da Unicamp x Notas x Machado); 2 giros, sulcos e límbico completos; 3 bolachas em 3D; 4 tronco e medula em fatias; 5 revisão e publicação.
+
+Unicamp (anatpat.unicamp.br: atlas de cortes coronais e séries axial, sagital, superfície e medula): direitos dos autores, vedado uso comercial e reprodução em bloco. Usar como gabarito e modelo de forma e posição; nunca copiar fotos ou desenhos; botão "ver a peça real na Unicamp" por nível. Notas do Gustavo (Notas_261115_110255.pdf): só leitura, nada publicado.
+
+| Fase | Estado |
+|---|---|
+| 0. Organizar, otimizar, design | Feita: fonte dividida em `src/` (16 partes JS em ordem; o build confere a sintaxe e gerou HTML idêntico ao anterior); acidentes da medula retirados (cilindro com ponta lisa); `refina` do cerebelo reexamina só os triângulos novos (carga de 2,8 s para 1,8 s, mesma geometria); barra do palco em três grupos (Modo: Explorar ou Tronco e medula; Vista; Ferramentas), vistas rolam de lado no celular |
+| 1. Gabarito | Feita: `GABARITO.md` e `gabarito/unicamp-coronal.json` (gerados por `gabarito/montar_gabarito.cjs`): 12 cortes, 171 estruturas da Unicamp, 136 já no Mímir, 32 faltam, 10 sem a parte; transcrição das Notas em `notas/notas-rotulos.json` (21 p., 377 rótulos, 15 dúvidas; pasta fora do Git); `FONTES.md` com licenças; dúvidas no REVISAR |
+| 2. Giros, sulcos e límbico | Feita: `src/js/10-sistema-limbico.js`: lobos frontal, parietal, temporal, occipital e límbico (`LOBO_DK`, pintados por lobo em `applyAppearance`), istmo do cíngulo, fissura longitudinal, giro subcaloso, hipocampo dividido em pé e corpo, álveo, subículo, fascículos do cíngulo e mamilotalâmico, estria terminal, substância inominada e Meynert, trígono e comissura das habênulas; lições "Lobos do cérebro" e "Sistema límbico" (29 lições); gabarito: 150 de 171 |
+| 3. Bolachas em 3D | Feita: `src/js/14-bolachas.js` (+ `01-gabarito.js`, gerado do gabarito). 12 planos `BOL_Z` calibrados pelas estruturas-chave de cada corte da Unicamp; face calculada por interseção malha × plano e preenchimento par-ímpar por linha (córtex e cerebelo: faixa cinzenta por distância à superfície, rótulo do giro mais próximo; tronco: contornos abertos fechados por `fecha()`; lâminas como traços); "Todas separadas" (cartões com as duas faces e borda) e "Fatia em foco" (malhas cortadas por `renderer.clippingPlanes` + faces por cima); números do gabarito, lista no painel, clique e passagem do mouse, cores "do atlas" e "peça real", teste por bolacha, link para a peça na Unicamp; ~0,25 s por face, preparadas aos poucos |
+| 4. Tronco e medula em fatias | Feita: `bolSecao(z, G)` aceita qualquer plano (O, n, u, v); `src/js/10-tronco-interno.js`: `eixoTronco(f)` (eixo suavizado do perfil), núcleo olivar inferior, grácil, cuneiforme, núcleos pontinos, formação reticular, corpo trapezoide, FLM; `src/js/14-cortes-tronco.js`: 7 cortes do tronco (`TC_NIVEIS`, gabarito Unicamp série axial + Machado) no modo Tronco e medula, com o tronco cortado em 3D (plano de recorte) e face calculada, esquema 2D ao lado (clique e passagem do mouse), lista, teste; 3 cortes esquemáticos da medula (C, T, L) desenhados (`tcMedula`). Tronco e cerebelo preenchidos por inundação após `fecha()`; regiões da superfície do tronco viram faixa de borda |
+| 5. Revisão e publicação | Feita: créditos na página (Prometheus e Unicamp como gabarito), 29 lições, teste, temas e modos sem erros; enviado ao GitHub e link do Claude republicado. Carga: 1,8 s medida na Fase 0; na revisão o painel do navegador estava escondido e tudo rodou ~2× mais lento por igual (3,4 a 3,9 s) |

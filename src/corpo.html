@@ -1,0 +1,157 @@
+
+<div class="app">
+  <section class="stage" id="stage" aria-label="Modelo 3D do encéfalo">
+    <canvas id="gl" aria-label="Encéfalo em 3D. Arraste para girar, role para aproximar."></canvas>
+    <div class="views" role="toolbar" aria-label="Modo, vistas e ferramentas">
+      <div class="grupo" role="group" aria-label="Modo">
+        <button class="chipbtn" type="button" id="modoExplorar" aria-pressed="true" title="Encéfalo inteiro, com camadas, lições e teste">Explorar</button>
+        <button class="chipbtn" type="button" id="bolBtn" aria-pressed="false" title="Os 12 cortes coronais (bolachas) em 3D, com as estruturas de cada face pelo gabarito da Unicamp">Bolachas</button>
+        <button class="chipbtn" type="button" id="tiBtn" aria-pressed="false" title="Só o tronco encefálico e a medula, organizados, com a origem dos pares cranianos">Tronco e medula</button>
+      </div>
+      <div class="grupo" role="group" aria-label="Vista" id="grpVistas">
+        <span class="vrot">Vista</span>
+        <button class="chipbtn" type="button" data-view="lateral" aria-pressed="true">Lateral</button>
+        <button class="chipbtn" type="button" data-view="medial" aria-pressed="false" title="Corte sagital mediano">Medial</button>
+        <button class="chipbtn" type="button" data-view="superior" aria-pressed="false">Superior</button>
+        <button class="chipbtn" type="button" data-view="inferior" aria-pressed="false">Inferior</button>
+        <button class="chipbtn" type="button" data-view="anterior" aria-pressed="false">Anterior</button>
+        <button class="chipbtn" type="button" data-view="posterior" aria-pressed="false">Posterior</button>
+        <button class="chipbtn" type="button" data-view="base" aria-pressed="false" title="Vista de cima, sem os hemisférios: tronco, nervos cranianos, artérias da base e seios">Base do crânio</button>
+      </div>
+      <div class="grupo" role="group" aria-label="Ferramentas">
+        <button class="chipbtn" type="button" id="bisturiBtn" aria-pressed="false" title="Clique numa estrutura para removê-la e ver o que está por baixo">✂ Bisturi</button>
+        <button class="chipbtn" type="button" id="btnInfl" aria-pressed="false" title="Infla o córtex para mostrar os giros e os sulcos sem dobras">Vista inflada</button>
+      </div>
+    </div>
+    <div class="tip" id="tip" hidden></div>
+    <div class="tipainel" id="tipainel" hidden>
+      <b>Tronco encefálico</b>
+      <div class="lin"><button type="button" data-tip="mesenc"><i style="background:#e2b27c"></i>Mesencéfalo</button><button type="button" data-tip="ponte"><i style="background:#c98a55"></i>Ponte</button><button type="button" data-tip="bulbo"><i style="background:#a8714a"></i>Bulbo</button><button type="button" data-tip="medula"><i style="background:#dcc39d"></i>Medula</button></div>
+      <div class="lin">Vista: <button type="button" data-tiv="ventral">Ventral</button><button type="button" data-tiv="dorsal">Dorsal</button><button type="button" data-tiv="lateral">Lateral</button></div>
+      <div class="lin">Pares cranianos: <span class="seg-ti"><button type="button" data-nm="sem">Sem</button> <button type="button" data-nm="curto">Origem (2 cm)</button> <button type="button" data-nm="inteiro">Inteiro</button></span></div>
+      <div class="lin">Cortes do tronco: <button type="button" data-tc="cs" title="Mesencéfalo, nível do colículo superior">Mes. CS</button><button type="button" data-tc="ci" title="Mesencéfalo, nível do colículo inferior">Mes. CI</button><button type="button" data-tc="ps" title="Ponte, terço superior">Ponte sup.</button><button type="button" data-tc="pm" title="Ponte, terço médio">Ponte média</button><button type="button" data-tc="pi" title="Ponte, terço inferior (colículo facial)">Ponte inf.</button><button type="button" data-tc="ba" title="Bulbo aberto (oliva)">Bulbo aberto</button><button type="button" data-tc="bf" title="Bulbo fechado (grácil e cuneiforme)">Bulbo fechado</button></div>
+      <div class="lin">Medula: <button type="button" data-tc="mc">Cervical</button><button type="button" data-tc="mt">Torácica</button><button type="button" data-tc="ml">Lombar</button><button type="button" data-tc="" aria-pressed="true">Sem corte</button></div>
+      <div class="lin"><button type="button" id="tiSair">Voltar a explorar</button></div>
+    </div>
+    <div class="tipainel bolpainel" id="bolpainel" hidden>
+      <div class="lin"><b>Bolachas</b><span id="bolN"></span><span id="bolStatus" class="bolst"></span><button type="button" id="bolMais" class="bolmais" aria-expanded="true">Opções ▾</button></div>
+      <div class="lin bolnivel" id="bolNivel"></div>
+      <div class="lin"><button type="button" id="bolAnt" aria-label="Corte anterior">◀</button><input type="range" id="bolRange" min="1" max="12" step="1" value="3" aria-label="Corte"><button type="button" id="bolProx" aria-label="Próximo corte">▶</button></div>
+      <div class="lin extra">Ver: <button type="button" data-bv="todas">Todas separadas</button><button type="button" data-bv="foco">Fatia em foco</button></div>
+      <div class="lin">Face: <button type="button" data-bf="a">Anterior (a)</button><button type="button" data-bf="b">Posterior (b)</button></div>
+      <div class="lin extra">Cores: <button type="button" data-bp="atlas">Do atlas</button><button type="button" data-bp="real">Peça real</button><button type="button" id="bolNum">Números</button></div>
+      <div class="lin extra"><button type="button" id="bolTeste">Testar esta bolacha</button><a id="bolUni" class="bolbtn" href="#" target="_blank" rel="noopener">Ver a peça na Unicamp ↗</a><button type="button" id="bolSair">Voltar a explorar</button></div>
+    </div>
+    <div class="tc2d" id="tc2d" hidden><div class="tct"></div><div class="tcimg"></div><div class="tcdica"></div><div class="tcs"></div></div>
+    <div class="bistbar" id="bistbar" hidden><span id="bistTxt"></span><button type="button" id="bistDesf">Desfazer</button><button type="button" id="bistTudo">Devolver tudo</button></div>
+    <svg class="pinos" id="pinos" aria-hidden="true"></svg>
+    <div class="legtec" id="legtec" aria-label="Legenda por tecido"></div>
+    <div class="rotulos" id="rotulos" aria-hidden="true"></div>
+    <div class="load" id="load">Carregando a malha do córtex…</div>
+    <div class="hint">Arraste para girar, role para aproximar, botão direito ou Shift para mover. Clique em uma estrutura.</div>
+  </section>
+
+  <aside class="side">
+    <div class="marca"><span class="marca-nome">Mímir<i>.</i></span><span class="marca-sub">Atlas 3D de Neuroanatomia</span></div>
+    <div class="info" id="info" aria-live="polite"></div>
+    <p class="aviso">Modelo idealizado: na prática há variação individual.</p>
+    <div class="card">
+      <div class="tabs" role="tablist">
+        <button class="tab" role="tab" type="button" data-panel="layersP" aria-selected="true">Camadas</button>
+        <button class="tab" role="tab" type="button" data-panel="licP" aria-selected="false">Lições</button>
+        <button class="tab" role="tab" type="button" data-panel="listP" aria-selected="false">Estruturas</button>
+        <button class="tab" role="tab" type="button" data-panel="quizP" aria-selected="false">Teste</button>
+        <button class="tab" role="tab" type="button" data-panel="credP" aria-selected="false">Créditos</button>
+      </div>
+      <div class="panel" id="licP" role="tabpanel" hidden><div id="licBody"></div></div>
+      <div class="panel" id="layersP" role="tabpanel">
+        <div id="layers">
+          <div class="layer-groups"></div>
+          <div class="sect">Vascularização</div>
+          <label class="row"><input type="checkbox" id="territ"><span class="lbl">Territórios arteriais</span></label>
+          <p class="legenda" id="legenda" hidden><span><i style="background:#f0942e"></i>ACA</span><span><i style="background:#e0362c"></i>ACM</span><span><i style="background:#3f8fe0"></i>ACP</span><span><i style="background:#9a62d0"></i>corióidea anterior</span><span><i style="background:#3aa66a"></i>vertebrobasilar</span></p>
+          <label class="row"><input type="checkbox" id="avc"><span class="lbl">Modo AVC: clicar numa artéria mostra o território e o déficit</span></label>
+          <div class="btnrow" style="margin-top:4px"><button class="btn" type="button" id="willis">Ver o polígono de Willis</button></div>
+          <div class="sect">Nervos cranianos</div>
+          <div class="btnrow" style="margin-top:4px"><button class="btn" type="button" id="nervos">Ver tronco, nervos e núcleos</button> <button class="btn" type="button" id="tiBtn2">Tronco e medula</button>
+          <div class="row" style="gap:8px;margin-top:6px"><span class="lbl">Pares cranianos</span><span class="seg" id="nervSeg"><button type="button" data-nm="sem" aria-pressed="false">Sem</button><button type="button" data-nm="curto" aria-pressed="false">Origem (2 cm)</button><button type="button" data-nm="inteiro" aria-pressed="true">Inteiro</button></span></div> <button class="btn" type="button" id="cavernoso">Ver o seio cavernoso</button></div>
+          <p class="legenda" id="legendaNC" style="margin:6px 0 4px 0"><span><i style="background:#e3c044"></i>nervo</span><span><i style="background:#d94f4f"></i>eferente somática</span><span><i style="background:#e89a3c"></i>eferente visceral geral</span><span><i style="background:#c95fb0"></i>eferente visceral especial</span><span><i style="background:#4f86d9"></i>aferente somática geral</span><span><i style="background:#4fae7a"></i>aferente somática especial</span><span><i style="background:#35b3b3"></i>aferente visceral</span></p>
+          <div class="sect">Grandes vias</div>
+          <div class="btnrow" style="margin-top:4px"><button class="btn" type="button" id="verVias">Ver as grandes vias</button></div>
+          <label class="row"><input type="checkbox" id="lesao"><span class="lbl">Modo Lesão: clicar num ponto preto da via mostra o déficit</span></label>
+          <div class="sect">Líquor</div>
+          <label class="row"><input type="checkbox" id="fluxo"><span class="lbl">Mostrar o caminho do líquor</span></label>
+          <ol class="passos" id="passos" hidden></ol>
+          <div class="sect">Hemisférios</div>
+          <label class="row"><input type="checkbox" id="hideL"><span class="lbl">Ocultar hemisfério esquerdo</span></label>
+          <label class="row"><input type="checkbox" id="hideR"><span class="lbl">Ocultar hemisfério direito (mostra a face medial do esquerdo)</span></label>
+          <div class="sect">Transparência do córtex</div>
+          <div class="slider"><input type="range" id="op" min="0.05" max="1" step="0.05" value="1" aria-label="Opacidade do córtex"><span id="opv" class="cnt">100%</span></div>
+          <label class="row"><input type="checkbox" id="iso" checked><span class="lbl">Esmaecer o resto ao selecionar</span></label>
+          <label class="row"><input type="checkbox" id="auto"><span class="lbl">Girar automaticamente</span></label>
+          <div class="sect">Estudo</div>
+          <div class="row" style="gap:8px"><span class="lbl">Idioma dos nomes</span><span class="seg" id="linguaSeg"><button type="button" data-l="pt" aria-pressed="true">PT</button><button type="button" data-l="la" aria-pressed="false">Latim</button><button type="button" data-l="en" aria-pressed="false">EN</button></span></div>
+          <div class="btnrow" style="margin:2px 0 6px"><button class="btn" type="button" id="sepBtn">Separar o cerebelo do tronco</button></div>
+          <div id="bistLista" class="bist-lista"></div>
+          <label class="row"><input type="checkbox" id="sulcosOn"><span class="lbl">Mostrar os sulcos (linhas sobre o córtex)</span></label>
+          <label class="row"><input type="checkbox" id="rotOn"><span class="lbl">Mostrar rótulos no modelo</span></label>
+          <label class="row"><input type="checkbox" id="rotOcultar"><span class="lbl">Ocultar os nomes e revelar ao clicar (rótulos, dica e painel)</span></label>
+          <div class="btnrow">
+            <button class="btn" type="button" id="allOn">Ligar tudo</button>
+            <button class="btn" type="button" id="allOff">Desligar tudo</button>
+            <button class="btn" type="button" id="reset">Restaurar</button>
+          </div>
+        </div>
+      </div>
+      <div class="panel" id="listP" role="tabpanel" hidden>
+        <input id="search" type="search" placeholder="Buscar estrutura (ex.: cíngulo, ACM, seio)" autocomplete="off" aria-label="Buscar estrutura">
+        <div id="list"></div>
+      </div>
+      <div class="panel" id="quizP" role="tabpanel" hidden><div id="quizBody"></div></div>
+      <div class="panel creditos" id="credP" role="tabpanel" hidden>
+        <h3>Autoria</h3>
+        <ul>
+          <li><b>Gustavo de Castro</b>, criador e autor do atlas (2026). Concepção, roteiro didático, escolha e revisão do conteúdo, a partir dos estudos de Medicina. Código escrito com o auxílio de inteligência artificial (Claude, da Anthropic).</li>
+          <li>Código-fonte e histórico de versões: <a href="https://github.com/26011540-hub/atlas-3d-neuroanatomia" target="_blank" rel="noopener">github.com/26011540-hub/atlas-3d-neuroanatomia</a>.</li>
+          <li>© 2026 Gustavo de Castro. Distribuído sob a licença <a href="https://creativecommons.org/licenses/by-sa/3.0/deed.pt_BR" target="_blank" rel="noopener">CC BY-SA 3.0</a>, a mesma das malhas: quem reutilizar deve citar o autor e manter a licença.</li>
+        </ul>
+        <h3>Malhas 3D</h3>
+        <ul>
+          <li><b>Brain for Blender</b>, de Anderson M. Winkler (<a href="https://brainder.org/brain-for-blender/" target="_blank" rel="noopener">brainder.org</a>). Licença <a href="https://creativecommons.org/licenses/by-sa/3.0/" target="_blank" rel="noopener">CC BY-SA 3.0</a>. Superfícies pial e inflada do córtex, parcelação Desikan-Killiany e estruturas subcorticais (segmentação FreeSurfer) de um único indivíduo. Neste atlas: só o hemisfério esquerdo, decimado, recolorido e espelhado para formar o direito. O atlas segue a mesma licença.</li>
+          <li><b>Parcelação Desikan-Killiany</b> (FreeSurfer), automática: os limites dos giros são aproximados.</li>
+        </ul>
+        <h3>Texto e conteúdo</h3>
+        <ul>
+          <li>Ângelo Machado e Lucia Machado Haertel, <i>Neuroanatomia Funcional</i>, 4ª ed. Cada item cita capítulo e página no painel.</li>
+          <li>Schünke, Schulte e Schumacher, <i>Prometheus: Cabeça e Neuroanatomia</i>: segunda fonte, citada por página para conferência (sobretudo vasos, cerebelo e núcleos). Nenhuma figura do livro está no atlas.</li>
+          <li>Itens marcados "a confirmar" não foram conferidos no livro; a lista completa fica no arquivo REVISAR.md, junto do atlas.</li>
+        </ul>
+        <h3>Gabarito dos cortes</h3>
+        <ul>
+          <li><b>Neupatimagem, Departamento de Anatomia Patológica, FCM-UNICAMP</b>: <a href="https://anatpat.unicamp.br/bineucerebrocoronalindice.html" target="_blank" rel="noopener">atlas de cortes coronais</a> (12 cortes) e <a href="https://anatpat.unicamp.br/bineucerebelotronco.html" target="_blank" rel="noopener">série axial de cerebelo e tronco</a>. Usados como gabarito dos níveis e dos nomes das estruturas e como modelo de forma e posição. As fotos pertencem aos autores e não foram copiadas; cada corte tem um link para a peça real no site deles.</li>
+        </ul>
+        <h3>Formas esquemáticas</h3>
+        <ul>
+          <li>Artérias, veias e seios, nervos cranianos e seus núcleos, grandes vias, cápsula interna, fórnice, comissuras, hipotálamo, hipófise, vias ópticas e núcleos pequenos do tronco e do cerebelo foram desenhados à mão sobre as malhas, a partir das descrições e figuras do Machado. Servem para posição e relações, não para medidas.</li>
+          <li>O modelo não tem crânio. Das meninges, só as pregas da dura-máter; da medula, só a parte cervical (um cilindro). Os cortes da medula são esquemas desenhados.</li>
+          <li>As faces das bolachas e dos cortes do tronco são calculadas a partir das malhas (interseção com o plano); a faixa de córtex tem espessura fixa.</li>
+        </ul>
+        <h3>Programas</h3>
+        <ul>
+          <li><a href="https://threejs.org" target="_blank" rel="noopener">three.js</a> r128 e GLTFLoader (licença MIT).</li>
+          <li><a href="https://github.com/zeux/meshoptimizer" target="_blank" rel="noopener">meshoptimizer</a>, de Arseny Kapoulkine (licença MIT), usado na conversão das malhas.</li>
+        </ul>
+      </div>
+    </div>
+    <p class="foot"><b>Mímir: Atlas 3D de Neuroanatomia</b> · © 2026 Gustavo de Castro · licença <a href="https://creativecommons.org/licenses/by-sa/3.0/deed.pt_BR" target="_blank" rel="noopener">CC BY-SA 3.0</a> · <a href="https://github.com/26011540-hub/atlas-3d-neuroanatomia" target="_blank" rel="noopener">código-fonte</a></p>
+    <p class="foot">Superfícies corticais (pial e inflada), divisão em giros e estruturas subcorticais: <a href="https://brainder.org/brain-for-blender/" target="_blank" rel="noopener">Brain for Blender</a>, de Anderson M. Winkler (brainder.org), licença <a href="https://creativecommons.org/licenses/by-sa/3.0/" target="_blank" rel="noopener">CC BY-SA 3.0</a>; malhas decimadas e recoloridas para este atlas, que segue a mesma licença. Modelo idealizado e simétrico: só o lado esquerdo desse cérebro (de um único indivíduo) é usado, e o direito é a sua imagem espelhada no plano mediano. A parcelação Desikan-Killiany (FreeSurfer) é automática: os limites dos giros são aproximados.</p>
+    <p class="foot">Caudado, putame, globo pálido, accumbens, tálamo, amígdala, hipocampo, ventrículos, tronco encefálico e cerebelo também são malhas do mesmo cérebro, da mesma fonte e licença (segmentação FreeSurfer). Artérias, veias, cápsula interna, fórnix, comissuras, hipotálamo, hipófise, vias ópticas e os núcleos pequenos do tronco e do cerebelo são formas esquemáticas, posicionadas sobre essas malhas. Textos baseados em Ângelo Machado, Neuroanatomia Funcional; itens marcados como "a confirmar" não foram conferidos no livro. Serve para estudar posição e relações, não medidas.</p>
+  </aside>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<!-- GLTFLoader da mesma versão do three.js (r128); versões novas não funcionam com o three.min.js antigo -->
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+<!-- Dados gerados por scripts/converter_brainder.mjs e gravados aqui por scripts/embutir_glb.mjs. Não editar à mão. -->
+<script id="marcos" type="application/json">/*@@MARCOS@@*/</script>
+<script id="glb64" type="application/octet-stream">/*@@GLB@@*/</script>

@@ -1,0 +1,1341 @@
+{
+ "fonte": "Atlas de anatomia do cérebro humano em cortes coronais, Neupatimagem, Departamento de Anatomia Patológica, FCM-UNICAMP. https://anatpat.unicamp.br/bineucerebrocoronalindice.html",
+ "aviso": "Só os nomes das estruturas por corte; nenhuma imagem copiada. As fotos são dos autores (uso comercial e reprodução em bloco vedados).",
+ "mapa": {
+  "Fissura longitudinal do cérebro": {
+   "id": "fis_long",
+   "obs": ""
+  },
+  "Giro do cíngulo": {
+   "id": "gcing",
+   "obs": ""
+  },
+  "Giro do cíngulo, istmo": {
+   "id": "gistmo",
+   "obs": ""
+  },
+  "Giro frontal superior": {
+   "id": "gfs",
+   "obs": ""
+  },
+  "Giro frontal médio": {
+   "id": "gfm",
+   "obs": ""
+  },
+  "Giro frontal inferior": {
+   "id": "gfi_tr",
+   "obs": "partes opercular, triangular e orbital"
+  },
+  "Giros orbitários": {
+   "id": "gor",
+   "obs": ""
+  },
+  "Giro reto": {
+   "id": "greto",
+   "obs": ""
+  },
+  "Lobo frontal": {
+   "id": "lobo_front",
+   "obs": ""
+  },
+  "Lobo temporal": {
+   "id": "lobo_temp",
+   "obs": ""
+  },
+  "Lobo parietal": {
+   "id": "lobo_par",
+   "obs": ""
+  },
+  "Lobo occipital": {
+   "id": "lobo_occ",
+   "obs": ""
+  },
+  "Trato olfatório": {
+   "id": "bulbolf",
+   "obs": ""
+  },
+  "Artéria cerebral anterior": {
+   "id": "aca1",
+   "obs": ""
+  },
+  "Artéria cerebral média": {
+   "id": "acm",
+   "obs": ""
+  },
+  "Artéria cerebral posterior": {
+   "id": "acp",
+   "obs": ""
+  },
+  "Artéria basilar": {
+   "id": "basilar",
+   "obs": ""
+  },
+  "Artéria vertebral": {
+   "id": "vertebral",
+   "obs": ""
+  },
+  "Artérias lentículo-estriadas": {
+   "id": "lenticulo",
+   "obs": ""
+  },
+  "Corpo caloso, joelho": {
+   "id": "cc_joelho",
+   "obs": ""
+  },
+  "Corpo caloso, corpo": {
+   "id": "cc_tronco",
+   "obs": ""
+  },
+  "Corpo caloso, esplênio": {
+   "id": "cc_esplenio",
+   "obs": ""
+  },
+  "Corpo caloso": {
+   "id": "cc",
+   "obs": ""
+  },
+  "Corpo caloso, radiação posterior (fórceps maior)": {
+   "id": null,
+   "obs": "falta: fórceps maior"
+  },
+  "Tapetum": {
+   "id": null,
+   "obs": "falta: tapete (fibras do corpo caloso)"
+  },
+  "Ventrículo lateral, corno anterior": {
+   "id": "vlat_ant",
+   "obs": ""
+  },
+  "Ventrículo lateral, corpo": {
+   "id": "vlat_cent",
+   "obs": ""
+  },
+  "Ventrículo lateral, corno inferior": {
+   "id": "vlat_inf",
+   "obs": ""
+  },
+  "Ventrículo lateral, corno posterior": {
+   "id": "vlat_post",
+   "obs": ""
+  },
+  "Ventrículo lateral, átrio": {
+   "id": "vlat",
+   "obs": "falta o átrio como parte"
+  },
+  "Ventrículo, terceiro (III)": {
+   "id": "v3",
+   "obs": ""
+  },
+  "Ventrículo, quarto": {
+   "id": "v4",
+   "obs": ""
+  },
+  "Ventrículo, quarto, assoalho": {
+   "id": "fossarom",
+   "obs": ""
+  },
+  "Ventrículo, quarto, teto": {
+   "id": "v4",
+   "obs": "falta o teto como parte"
+  },
+  "Ventrículo, quarto, recesso lateral": {
+   "id": "v4",
+   "obs": "falta o recesso lateral como parte"
+  },
+  "Abertura lateral do IV ventrículo (Luschka)": {
+   "id": "ablat",
+   "obs": ""
+  },
+  "Abertura mediana do IV ventrículo (Magendie)": {
+   "id": "abmed",
+   "obs": ""
+  },
+  "Forâmen interventricular (Monro)": {
+   "id": "fmonro",
+   "obs": ""
+  },
+  "Aqueduto cerebral": {
+   "id": "aqueduto",
+   "obs": ""
+  },
+  "Núcleo caudado, cabeça": {
+   "id": "caudado",
+   "obs": ""
+  },
+  "Núcleo caudado, corpo": {
+   "id": "caudado",
+   "obs": ""
+  },
+  "Núcleo caudado, cauda": {
+   "id": "caudado",
+   "obs": ""
+  },
+  "Núcleo caudado": {
+   "id": "caudado",
+   "obs": ""
+  },
+  "Sulco lateral (Sylvius)": {
+   "id": "s_lateral",
+   "obs": ""
+  },
+  "Cápsula interna": {
+   "id": "capsint",
+   "obs": ""
+  },
+  "Cápsula interna, ramo anterior": {
+   "id": "capsint",
+   "obs": "falta a perna anterior como parte"
+  },
+  "Cápsula externa": {
+   "id": "capsext",
+   "obs": ""
+  },
+  "Cápsula extrema": {
+   "id": "capsextr",
+   "obs": ""
+  },
+  "Claustrum": {
+   "id": "claustro",
+   "obs": ""
+  },
+  "Cíngulo (fascículo)": {
+   "id": "f_cingulo",
+   "obs": ""
+  },
+  "Giro subcaloso": {
+   "id": "gsubcal",
+   "obs": ""
+  },
+  "Ínsula": {
+   "id": "ginsula",
+   "obs": ""
+  },
+  "Núcleo accumbens": {
+   "id": "accumbens",
+   "obs": ""
+  },
+  "Putâmen": {
+   "id": "putame",
+   "obs": ""
+  },
+  "Septo pelúcido": {
+   "id": "septo",
+   "obs": ""
+  },
+  "Nervo óptico": {
+   "id": "nc2",
+   "obs": ""
+  },
+  "Quiasma óptico": {
+   "id": "quiasma",
+   "obs": ""
+  },
+  "Trato óptico": {
+   "id": "quiasma",
+   "obs": ""
+  },
+  "Striatum": {
+   "id": "caudado",
+   "obs": "estriado = caudado + putame (+ accumbens)"
+  },
+  "Comissura anterior": {
+   "id": "comant",
+   "obs": ""
+  },
+  "Fórnix, colunas": {
+   "id": "fornice",
+   "obs": ""
+  },
+  "Fórnix, corpo": {
+   "id": "fornice",
+   "obs": ""
+  },
+  "Fórnix, fímbria": {
+   "id": "fimbria",
+   "obs": ""
+  },
+  "Fímbria do hipocampo": {
+   "id": "fimbria",
+   "obs": ""
+  },
+  "Globo pálido": {
+   "id": "gpe",
+   "obs": "segmentos externo e interno"
+  },
+  "Núcleo lentiforme": {
+   "id": "putame",
+   "obs": "lentiforme = putame + globo pálido"
+  },
+  "Núcleo amigdaloide": {
+   "id": "amigdala",
+   "obs": ""
+  },
+  "Uncus": {
+   "id": "unco",
+   "obs": ""
+  },
+  "Hipotálamo": {
+   "id": "hipotal",
+   "obs": ""
+  },
+  "Coroa radiada": {
+   "id": null,
+   "obs": "falta: coroa radiada"
+  },
+  "Formação hipocampal": {
+   "id": "hipocampo",
+   "obs": ""
+  },
+  "Pé do hipocampo": {
+   "id": "pehipo",
+   "obs": ""
+  },
+  "Subículo": {
+   "id": "subiculo",
+   "obs": ""
+  },
+  "Álveo": {
+   "id": "alveo",
+   "obs": ""
+  },
+  "Ponte, base": {
+   "id": "baseponte",
+   "obs": ""
+  },
+  "Ponte, tegmento": {
+   "id": "ponte",
+   "obs": "falta o tegmento da ponte como parte"
+  },
+  "Ponte": {
+   "id": "ponte",
+   "obs": ""
+  },
+  "Bulbo": {
+   "id": "bulbo",
+   "obs": ""
+  },
+  "Mesencéfalo": {
+   "id": "mesenc",
+   "obs": ""
+  },
+  "Cisterna supraselar": {
+   "id": null,
+   "obs": "falta: cisternas"
+  },
+  "Cisterna perimesencefálica (ambiens)": {
+   "id": null,
+   "obs": "falta: cisternas"
+  },
+  "Cisterna magna": {
+   "id": null,
+   "obs": "falta: cisternas"
+  },
+  "Cisterna supracerebelar": {
+   "id": null,
+   "obs": "falta: cisternas"
+  },
+  "Núcleo basal de Meynert": {
+   "id": "meynert",
+   "obs": ""
+  },
+  "Substância inominada": {
+   "id": "subst_inom",
+   "obs": ""
+  },
+  "Giros occípito-temporais": {
+   "id": "gfus",
+   "obs": ""
+  },
+  "Giro occípito-temporal lateral": {
+   "id": "gfus",
+   "obs": ""
+  },
+  "Giro occípito-temporal medial": {
+   "id": "gling",
+   "obs": ""
+  },
+  "Giro temporal superior": {
+   "id": "gts",
+   "obs": ""
+  },
+  "Giro temporal médio": {
+   "id": "gtm",
+   "obs": ""
+  },
+  "Giro temporal inferior": {
+   "id": "gti",
+   "obs": ""
+  },
+  "Giro para-hipocampal": {
+   "id": "gparahip",
+   "obs": ""
+  },
+  "Nervo oculomotor (III)": {
+   "id": "nc3",
+   "obs": ""
+  },
+  "Nervo trigêmeo (V)": {
+   "id": "nc5",
+   "obs": ""
+  },
+  "Nervo facial (VII)": {
+   "id": "nc7",
+   "obs": ""
+  },
+  "Nervo vestibulococlear (VIII)": {
+   "id": "nc8",
+   "obs": ""
+  },
+  "Sulco colateral": {
+   "id": "s_colateral",
+   "obs": ""
+  },
+  "Sulco occípito-temporal": {
+   "id": "s_occtemp",
+   "obs": ""
+  },
+  "Sulco temporal superior": {
+   "id": "s_tempsup",
+   "obs": ""
+  },
+  "Sulco temporal inferior": {
+   "id": "s_tempinf",
+   "obs": ""
+  },
+  "Sulco bulbo-pontino": {
+   "id": "sulbp",
+   "obs": ""
+  },
+  "Sulco central (Rolando)": {
+   "id": "s_central",
+   "obs": ""
+  },
+  "Sulco do cíngulo": {
+   "id": "s_cingulo",
+   "obs": ""
+  },
+  "Sulco parieto-occipital": {
+   "id": "s_parocc",
+   "obs": ""
+  },
+  "Sulco pós-central": {
+   "id": "s_poscentral",
+   "obs": ""
+  },
+  "Fissura calcarina": {
+   "id": "s_calcarino",
+   "obs": ""
+  },
+  "Fissura transversa do cérebro": {
+   "id": null,
+   "obs": "falta: fissura transversa"
+  },
+  "Aderência intertalâmica": {
+   "id": "aderencia",
+   "obs": ""
+  },
+  "Fossa interpeduncular": {
+   "id": "fossaip",
+   "obs": ""
+  },
+  "Núcleo subtalâmico": {
+   "id": "subtal",
+   "obs": ""
+  },
+  "Substância negra": {
+   "id": "snegra",
+   "obs": ""
+  },
+  "Núcleo rubro": {
+   "id": "rubro",
+   "obs": ""
+  },
+  "Tálamo": {
+   "id": "talamo",
+   "obs": ""
+  },
+  "Tálamo, pulvinar": {
+   "id": "talamo",
+   "obs": "falta o pulvinar como parte"
+  },
+  "Lâmina medular interna (tálamo)": {
+   "id": null,
+   "obs": "falta: lâmina medular interna"
+  },
+  "Plexo coroide do ventrículo lateral": {
+   "id": "plexo",
+   "obs": ""
+  },
+  "Plexo coroide do IV ventrículo": {
+   "id": "plexo",
+   "obs": ""
+  },
+  "Tela coroide": {
+   "id": null,
+   "obs": "falta: tela coroide"
+  },
+  "Pedúnculo cerebral": {
+   "id": "pedunc",
+   "obs": ""
+  },
+  "Pirâmides bulbares": {
+   "id": "piramide",
+   "obs": ""
+  },
+  "Trato córtico-espinal": {
+   "id": "v_cs",
+   "obs": ""
+  },
+  "Fascículo mamilotalâmico": {
+   "id": "f_mamtal",
+   "obs": ""
+  },
+  "Substância perfurada posterior": {
+   "id": null,
+   "obs": "falta: substância perfurada posterior"
+  },
+  "Centro branco medular (centro semioval)": {
+   "id": "cbm",
+   "obs": ""
+  },
+  "Cerebelo, hemisfério": {
+   "id": "cerebelo",
+   "obs": ""
+  },
+  "Cerebelo, vermis": {
+   "id": "vermis",
+   "obs": ""
+  },
+  "Cerebelo, flóculo": {
+   "id": "cb_floculo",
+   "obs": ""
+  },
+  "Cerebelo, tonsila": {
+   "id": "cb_tonsila",
+   "obs": ""
+  },
+  "Cerebelo, nódulo": {
+   "id": "cb_nodulo",
+   "obs": ""
+  },
+  "Cerebelo, língula": {
+   "id": "cb_lingula",
+   "obs": ""
+  },
+  "Cerebelo, núcleo denteado": {
+   "id": "denteado",
+   "obs": ""
+  },
+  "Cerebelo, núcleos": {
+   "id": "denteado",
+   "obs": "denteado, emboliforme, globosos e fastigial"
+  },
+  "Cerebelo, centro branco medular": {
+   "id": "cb_cbm",
+   "obs": ""
+  },
+  "Cerebelo, valécula": {
+   "id": null,
+   "obs": "falta: valécula"
+  },
+  "Córtex cerebelar": {
+   "id": "cerebelo",
+   "obs": ""
+  },
+  "Cerebelo, véu medular superior": {
+   "id": "veusup",
+   "obs": ""
+  },
+  "Pedúnculo cerebelar superior": {
+   "id": "pcs",
+   "obs": ""
+  },
+  "Pedúnculo cerebelar superior, decussação": {
+   "id": null,
+   "obs": "falta: decussação dos pedúnculos cerebelares superiores"
+  },
+  "Pedúnculo cerebelar médio": {
+   "id": "pcm",
+   "obs": ""
+  },
+  "Pedúnculo cerebelar inferior (corpo restiforme)": {
+   "id": "pci",
+   "obs": ""
+  },
+  "Núcleo olivar inferior": {
+   "id": "oliva",
+   "obs": "a oliva é a saliência; falta o núcleo olivar"
+  },
+  "Corpo geniculado lateral": {
+   "id": "cgl",
+   "obs": ""
+  },
+  "Estria terminal": {
+   "id": "estria_t",
+   "obs": ""
+  },
+  "Veia terminal (talamoestriada)": {
+   "id": "v_talest",
+   "obs": ""
+  },
+  "Glândula pineal": {
+   "id": "pineal",
+   "obs": ""
+  },
+  "Placa quadrigêmea (teto)": {
+   "id": "colsup",
+   "obs": "colículos superiores e inferiores"
+  },
+  "Colículo superior": {
+   "id": "colsup",
+   "obs": ""
+  },
+  "Colículo inferior": {
+   "id": "colinf",
+   "obs": ""
+  },
+  "Locus ceruleus": {
+   "id": "locus",
+   "obs": ""
+  },
+  "Trígono das habênulas": {
+   "id": "trighab",
+   "obs": ""
+  },
+  "Foice do cérebro": {
+   "id": "foice",
+   "obs": ""
+  },
+  "Tenda do cerebelo": {
+   "id": "tentorio",
+   "obs": ""
+  },
+  "Aracnoide": {
+   "id": null,
+   "obs": "fora do escopo por enquanto (meninges finas)"
+  },
+  "Pia-máter": {
+   "id": null,
+   "obs": "fora do escopo por enquanto (meninges finas)"
+  },
+  "Eminência colateral": {
+   "id": null,
+   "obs": "falta: eminência colateral"
+  },
+  "Trígono colateral": {
+   "id": null,
+   "obs": "falta: trígono colateral"
+  },
+  "Radiação óptica": {
+   "id": "v_opt",
+   "obs": ""
+  },
+  "Óbex": {
+   "id": "obex",
+   "obs": ""
+  },
+  "Tubérculo grácil": {
+   "id": "tubgrac",
+   "obs": ""
+  },
+  "Tubérculo cuneiforme": {
+   "id": "tubcun",
+   "obs": ""
+  },
+  "Veia cerebral magna (Galeno)": {
+   "id": "galeno",
+   "obs": ""
+  },
+  "Córtex cerebral": {
+   "id": "cx_cinza",
+   "obs": ""
+  },
+  "Calcar avis": {
+   "id": null,
+   "obs": "falta: calcar avis"
+  },
+  "Lóbulo paracentral": {
+   "id": "gpara",
+   "obs": ""
+  },
+  "Lóbulo parietal inferior": {
+   "id": "gsm",
+   "obs": "giros supramarginal e angular"
+  },
+  "Lóbulo parietal superior": {
+   "id": "gps",
+   "obs": ""
+  },
+  "Pré-cúneo": {
+   "id": "gprec",
+   "obs": ""
+  },
+  "Cúneo": {
+   "id": "gcun",
+   "obs": ""
+  },
+  "Córtex visual primário (área 17)": {
+   "id": "gcalc",
+   "obs": ""
+  },
+  "Estria de Gennari": {
+   "id": "gcalc",
+   "obs": "falta a estria como detalhe"
+  },
+  "Espaços de Virchow-Robin": {
+   "id": null,
+   "obs": "fora do escopo (microscópico)"
+  }
+ },
+ "cortes": [
+  {
+   "n": 1,
+   "url": "https://anatpat.unicamp.br/bineucerebrocoronal1.html",
+   "nivel": "polo frontal até o joelho do corpo caloso",
+   "a": [
+    "Fissura longitudinal do cérebro",
+    "Giro do cíngulo",
+    "Giro frontal superior",
+    "Giro frontal médio",
+    "Giro frontal inferior",
+    "Giros orbitários",
+    "Giro reto",
+    "Lobo frontal",
+    "Trato olfatório"
+   ],
+   "b": [
+    "Artéria cerebral anterior",
+    "Corpo caloso, joelho",
+    "Giro do cíngulo",
+    "Giro reto",
+    "Ventrículo lateral, corno anterior"
+   ],
+   "notas": [
+    "p. 14 (alto, face A)"
+   ]
+  },
+  {
+   "n": 2,
+   "url": "https://anatpat.unicamp.br/bineucerebrocoronal2.html",
+   "nivel": "cabeça do caudado, accumbens e perna anterior da cápsula interna",
+   "a": [
+    "Corpo caloso, joelho",
+    "Fissura longitudinal do cérebro",
+    "Giro do cíngulo",
+    "Lobo frontal",
+    "Lobo temporal",
+    "Núcleo caudado, cabeça",
+    "Sulco lateral (Sylvius)",
+    "Ventrículo lateral, corno anterior"
+   ],
+   "b": [
+    "Artéria cerebral média",
+    "Cápsula interna, ramo anterior",
+    "Cíngulo (fascículo)",
+    "Claustrum",
+    "Corpo caloso, corpo",
+    "Giro do cíngulo",
+    "Giro subcaloso",
+    "Ínsula",
+    "Lobo temporal",
+    "Núcleo accumbens",
+    "Núcleo caudado, cabeça",
+    "Putâmen",
+    "Septo pelúcido",
+    "Sulco lateral (Sylvius)",
+    "Ventrículo lateral, corno anterior",
+    "Espaços de Virchow-Robin"
+   ],
+   "notas": [
+    "p. 14 (baixo, face P)",
+    "p. 11 (baixo, face A)"
+   ]
+  },
+  {
+   "n": 3,
+   "url": "https://anatpat.unicamp.br/bineucerebrocoronal3.html",
+   "nivel": "quiasma óptico e comissura anterior",
+   "a": [
+    "Artéria cerebral anterior",
+    "Artéria cerebral média",
+    "Cápsula externa",
+    "Cápsula extrema",
+    "Claustrum",
+    "Giro subcaloso",
+    "Ínsula",
+    "Lobo frontal",
+    "Nervo óptico",
+    "Núcleo caudado, cabeça",
+    "Putâmen",
+    "Quiasma óptico",
+    "Septo pelúcido",
+    "Striatum",
+    "Sulco lateral (Sylvius)",
+    "Ventrículo lateral, corno anterior"
+   ],
+   "b": [
+    "Artéria cerebral média",
+    "Cápsula interna",
+    "Claustrum",
+    "Comissura anterior",
+    "Corpo caloso",
+    "Fórnix, colunas",
+    "Globo pálido",
+    "Núcleo amigdaloide",
+    "Núcleo caudado, cabeça",
+    "Putâmen",
+    "Ventrículo, terceiro (III)",
+    "Trato óptico",
+    "Uncus",
+    "Ventrículo lateral, corno inferior",
+    "Ventrículo lateral, corpo",
+    "Artérias lentículo-estriadas",
+    "Cápsula externa",
+    "Cápsula extrema",
+    "Hipotálamo",
+    "Ínsula",
+    "Artéria cerebral anterior"
+   ],
+   "notas": [
+    "p. 15 (A e P)"
+   ]
+  },
+  {
+   "n": 4,
+   "url": "https://anatpat.unicamp.br/bineucerebrocoronal4.html",
+   "nivel": "amígdala, início do tálamo e núcleo subtalâmico",
+   "a": [
+    "Artéria basilar",
+    "Cápsula interna",
+    "Claustrum",
+    "Comissura anterior",
+    "Coroa radiada",
+    "Corpo caloso",
+    "Fissura longitudinal do cérebro",
+    "Formação hipocampal",
+    "Globo pálido",
+    "Ínsula",
+    "Núcleo amigdaloide",
+    "Ponte, base",
+    "Putâmen",
+    "Sulco lateral (Sylvius)",
+    "Trato óptico",
+    "Ventrículo lateral, corno inferior",
+    "Ventrículo lateral, corpo",
+    "Ventrículo, terceiro (III)",
+    "Artérias lentículo-estriadas",
+    "Artéria cerebral média",
+    "Cápsula externa",
+    "Cápsula extrema",
+    "Cisterna supraselar",
+    "Fórnix, colunas",
+    "Hipotálamo",
+    "Núcleo basal de Meynert",
+    "Núcleo caudado",
+    "Septo pelúcido",
+    "Substância inominada",
+    "Espaços de Virchow-Robin",
+    "Artéria cerebral posterior",
+    "Forâmen interventricular (Monro)",
+    "Giros occípito-temporais",
+    "Giro temporal inferior",
+    "Giro temporal médio",
+    "Giro temporal superior",
+    "Nervo oculomotor (III)",
+    "Pé do hipocampo",
+    "Sulco colateral",
+    "Uncus"
+   ],
+   "b": [
+    "Aderência intertalâmica",
+    "Cápsula interna",
+    "Coroa radiada",
+    "Formação hipocampal",
+    "Fórnix, corpo",
+    "Fossa interpeduncular",
+    "Núcleo caudado",
+    "Núcleo lentiforme",
+    "Núcleo subtalâmico",
+    "Plexo coroide do ventrículo lateral",
+    "Ponte, base",
+    "Substância negra",
+    "Tálamo",
+    "Ventrículo lateral, corno inferior",
+    "Ventrículo lateral, corpo",
+    "Ventrículo, terceiro (III)",
+    "Artéria cerebral média",
+    "Artéria cerebral posterior",
+    "Forâmen interventricular (Monro)",
+    "Pedúnculo cerebral",
+    "Septo pelúcido"
+   ],
+   "notas": [
+    "p. 12 (baixo, face A)"
+   ]
+  },
+  {
+   "n": 5,
+   "url": "https://anatpat.unicamp.br/bineucerebrocoronal5.html",
+   "nivel": "tálamo, núcleo subtalâmico, substância negra e núcleo rubro, com o tronco no plano do corte",
+   "a": [
+    "Centro branco medular (centro semioval)",
+    "Corpo caloso, corpo",
+    "Cápsula interna",
+    "Fórnix, corpo",
+    "Fossa interpeduncular",
+    "Formação hipocampal",
+    "Forâmen interventricular (Monro)",
+    "Nervo trigêmeo (V)",
+    "Núcleo caudado, corpo",
+    "Núcleo lentiforme",
+    "Núcleo subtalâmico",
+    "Pedúnculo cerebral",
+    "Pirâmides bulbares",
+    "Plexo coroide do ventrículo lateral",
+    "Ponte, base",
+    "Substância negra",
+    "Tálamo",
+    "Trato córtico-espinal",
+    "Ventrículo lateral, corpo",
+    "Ventrículo, terceiro (III)",
+    "Artéria cerebral anterior",
+    "Artéria cerebral média",
+    "Artéria cerebral posterior",
+    "Claustrum",
+    "Fascículo mamilotalâmico",
+    "Sulco lateral (Sylvius)",
+    "Giro para-hipocampal",
+    "Giro temporal inferior",
+    "Giro temporal médio",
+    "Giro temporal superior",
+    "Ínsula",
+    "Cisterna perimesencefálica (ambiens)",
+    "Fímbria do hipocampo",
+    "Subículo",
+    "Sulco colateral",
+    "Sulco temporal inferior",
+    "Sulco temporal superior",
+    "Trato óptico",
+    "Uncus",
+    "Ventrículo lateral, corno inferior"
+   ],
+   "b": [
+    "Artéria cerebral anterior",
+    "Artéria cerebral média",
+    "Artéria cerebral posterior",
+    "Cápsula interna",
+    "Centro branco medular (centro semioval)",
+    "Corpo caloso, corpo",
+    "Formação hipocampal",
+    "Fórnix, corpo",
+    "Ínsula",
+    "Mesencéfalo",
+    "Núcleo caudado, corpo",
+    "Pedúnculo cerebral",
+    "Pirâmides bulbares",
+    "Ponte, base",
+    "Putâmen",
+    "Sulco lateral (Sylvius)",
+    "Tálamo",
+    "Ventrículo lateral, corno inferior",
+    "Ventrículo lateral, corpo",
+    "Ventrículo, terceiro (III)",
+    "Cápsula externa",
+    "Cápsula extrema",
+    "Claustrum",
+    "Forâmen interventricular (Monro)",
+    "Núcleo caudado, cauda",
+    "Núcleo rubro",
+    "Plexo coroide do ventrículo lateral",
+    "Substância negra",
+    "Substância perfurada posterior",
+    "Trato óptico",
+    "Trato córtico-espinal"
+   ],
+   "notas": [
+    "p. 8 (baixo, face A)",
+    "p. 12 (baixo)"
+   ]
+  },
+  {
+   "n": 6,
+   "url": "https://anatpat.unicamp.br/bineucerebrocoronal6.html",
+   "nivel": "tálamo com núcleo rubro e substância negra; ponte e bulbo no plano",
+   "a": [
+    "Cápsula interna",
+    "Centro branco medular (centro semioval)",
+    "Cerebelo, hemisfério",
+    "Fissura longitudinal do cérebro",
+    "Forâmen interventricular (Monro)",
+    "Formação hipocampal",
+    "Giro do cíngulo",
+    "Ínsula",
+    "Mesencéfalo",
+    "Nervo facial (VII)",
+    "Nervo vestibulococlear (VIII)",
+    "Núcleo caudado, corpo",
+    "Núcleo lentiforme",
+    "Núcleo rubro",
+    "Pedúnculo cerebral",
+    "Pirâmides bulbares",
+    "Ponte",
+    "Substância negra",
+    "Sulco bulbo-pontino",
+    "Tálamo",
+    "Ventrículo lateral, corpo",
+    "Ventrículo, terceiro (III)",
+    "Cápsula externa",
+    "Cápsula extrema",
+    "Claustrum",
+    "Fórnix, corpo",
+    "Lâmina medular interna (tálamo)",
+    "Putâmen",
+    "Septo pelúcido",
+    "Trato córtico-espinal",
+    "Álveo",
+    "Artéria cerebral posterior",
+    "Fímbria do hipocampo",
+    "Giro para-hipocampal",
+    "Giro occípito-temporal lateral",
+    "Giro temporal inferior",
+    "Núcleo caudado, cauda",
+    "Plexo coroide do ventrículo lateral",
+    "Sulco colateral",
+    "Sulco occípito-temporal",
+    "Trato óptico",
+    "Ventrículo lateral, corno inferior"
+   ],
+   "b": [
+    "Bulbo",
+    "Cápsula interna",
+    "Cisterna perimesencefálica (ambiens)",
+    "Corpo caloso, corpo",
+    "Corpo geniculado lateral",
+    "Fórnix, corpo",
+    "Formação hipocampal",
+    "Mesencéfalo",
+    "Pedúnculo cerebelar médio",
+    "Ponte",
+    "Putâmen",
+    "Núcleo caudado, corpo",
+    "Tálamo",
+    "Ventrículo lateral, corno inferior",
+    "Ventrículo lateral, corpo",
+    "Ventrículo, terceiro (III)",
+    "Artéria cerebral anterior",
+    "Artéria cerebral média",
+    "Artéria cerebral posterior",
+    "Forâmen interventricular (Monro)",
+    "Ínsula",
+    "Núcleo caudado, cauda",
+    "Pedúnculo cerebelar superior, decussação",
+    "Pedúnculo cerebral",
+    "Trato córtico-espinal",
+    "Veia terminal (talamoestriada)"
+   ],
+   "notas": [
+    "p. 10 (alto, face A)",
+    "p. 10 (baixo, face P)"
+   ]
+  },
+  {
+   "n": 7,
+   "url": "https://anatpat.unicamp.br/bineucerebrocoronal7.html",
+   "nivel": "pineal, colículos, corpo geniculado lateral e aqueduto",
+   "a": [
+    "Cápsula interna",
+    "Centro branco medular (centro semioval)",
+    "Cerebelo, flóculo",
+    "Cerebelo, hemisfério",
+    "Corpo caloso, corpo",
+    "Corpo geniculado lateral",
+    "Estria terminal",
+    "Formação hipocampal",
+    "Fórnix, corpo",
+    "Fórnix, fímbria",
+    "Giro do cíngulo",
+    "Ínsula",
+    "Mesencéfalo",
+    "Núcleo caudado, corpo",
+    "Núcleo olivar inferior",
+    "Pedúnculo cerebelar médio",
+    "Pedúnculo cerebelar superior, decussação",
+    "Pedúnculo cerebral",
+    "Pirâmides bulbares",
+    "Putâmen",
+    "Tálamo",
+    "Veia terminal (talamoestriada)",
+    "Ventrículo lateral, corpo",
+    "Ventrículo, terceiro (III)",
+    "Artéria cerebral posterior",
+    "Cisterna perimesencefálica (ambiens)",
+    "Giro occípito-temporal lateral",
+    "Giro para-hipocampal",
+    "Núcleo caudado, cauda",
+    "Plexo coroide do ventrículo lateral",
+    "Subículo",
+    "Trato córtico-espinal",
+    "Ventrículo lateral, corno inferior",
+    "Abertura lateral do IV ventrículo (Luschka)",
+    "Aracnoide",
+    "Artéria vertebral",
+    "Bulbo",
+    "Ponte, base",
+    "Sulco bulbo-pontino"
+   ],
+   "b": [
+    "Aqueduto cerebral",
+    "Bulbo",
+    "Cerebelo, hemisfério",
+    "Corpo caloso, corpo",
+    "Foice do cérebro",
+    "Formação hipocampal",
+    "Fórnix, fímbria",
+    "Glândula pineal",
+    "Mesencéfalo",
+    "Pedúnculo cerebelar médio",
+    "Placa quadrigêmea (teto)",
+    "Plexo coroide do ventrículo lateral",
+    "Ponte, tegmento",
+    "Sulco lateral (Sylvius)",
+    "Tálamo",
+    "Tenda do cerebelo",
+    "Ventrículo lateral, corpo",
+    "Ventrículo, terceiro (III)",
+    "Artéria cerebral posterior",
+    "Colículo inferior",
+    "Colículo superior",
+    "Fissura transversa do cérebro",
+    "Locus ceruleus",
+    "Núcleo caudado, cauda",
+    "Tela coroide",
+    "Trígono das habênulas",
+    "Veia terminal (talamoestriada)"
+   ],
+   "notas": [
+    "p. 7 (alto)",
+    "p. 8 (alto, face P)",
+    "p. 12 (alto, face P)"
+   ]
+  },
+  {
+   "n": 8,
+   "url": "https://anatpat.unicamp.br/bineucerebrocoronal8.html",
+   "nivel": "pulvinar e esplênio; IV ventrículo aberto no plano",
+   "a": [
+    "Aqueduto cerebral",
+    "Cápsula interna",
+    "Cerebelo, hemisfério",
+    "Cisterna perimesencefálica (ambiens)",
+    "Corpo caloso, corpo",
+    "Bulbo",
+    "Fissura transversa do cérebro",
+    "Formação hipocampal",
+    "Fórnix, fímbria",
+    "Giro do cíngulo",
+    "Glândula pineal",
+    "Locus ceruleus",
+    "Núcleo caudado, cauda",
+    "Núcleo caudado, corpo",
+    "Pedúnculo cerebelar médio",
+    "Placa quadrigêmea (teto)",
+    "Plexo coroide do ventrículo lateral",
+    "Ponte, tegmento",
+    "Tálamo, pulvinar",
+    "Veia terminal (talamoestriada)",
+    "Ventrículo lateral, corno inferior",
+    "Ventrículo lateral, corpo",
+    "Artéria cerebral anterior",
+    "Artéria cerebral posterior",
+    "Eminência colateral",
+    "Fórnix, corpo",
+    "Pia-máter",
+    "Striatum",
+    "Sulco colateral",
+    "Tela coroide",
+    "Cerebelo, tonsila",
+    "Colículo inferior",
+    "Colículo superior",
+    "Pedúnculo cerebelar inferior (corpo restiforme)",
+    "Ventrículo, quarto, assoalho",
+    "Ventrículo, quarto, recesso lateral"
+   ],
+   "b": [
+    "Bulbo",
+    "Cerebelo, centro branco medular",
+    "Cerebelo, hemisfério",
+    "Cerebelo, vermis",
+    "Cisterna supracerebelar",
+    "Corpo caloso, esplênio",
+    "Formação hipocampal",
+    "Pia-máter",
+    "Plexo coroide do ventrículo lateral",
+    "Radiação óptica",
+    "Trígono colateral",
+    "Ventrículo lateral, átrio",
+    "Ventrículo lateral, corno inferior",
+    "Ventrículo lateral, corpo",
+    "Ventrículo, quarto",
+    "Cerebelo, nódulo",
+    "Cerebelo, núcleos",
+    "Cisterna magna",
+    "Plexo coroide do IV ventrículo",
+    "Ventrículo, quarto, assoalho",
+    "Abertura mediana do IV ventrículo (Magendie)",
+    "Aracnoide",
+    "Cerebelo, língula",
+    "Tenda do cerebelo",
+    "Óbex",
+    "Tubérculo cuneiforme",
+    "Tubérculo grácil",
+    "Veia cerebral magna (Galeno)",
+    "Ventrículo, quarto, recesso lateral"
+   ],
+   "notas": [
+    "p. 7 (baixo)",
+    "p. 9 (alto, face A)",
+    "p. 13 (baixo, face A)"
+   ]
+  },
+  {
+   "n": 9,
+   "url": "https://anatpat.unicamp.br/bineucerebrocoronal9.html",
+   "nivel": "esplênio do corpo caloso e átrio; núcleo denteado",
+   "a": [
+    "Cerebelo, tonsila",
+    "Cerebelo, centro branco medular",
+    "Cerebelo, vermis",
+    "Cisterna magna",
+    "Corpo caloso, esplênio",
+    "Formação hipocampal",
+    "Giro do cíngulo",
+    "Lobo parietal",
+    "Plexo coroide do ventrículo lateral",
+    "Radiação óptica",
+    "Tapetum",
+    "Veia cerebral magna (Galeno)",
+    "Ventrículo lateral, átrio",
+    "Ventrículo, quarto, recesso lateral",
+    "Ventrículo, quarto, teto",
+    "Aracnoide",
+    "Córtex cerebelar",
+    "Cisterna supracerebelar",
+    "Córtex cerebral",
+    "Fórnix, fímbria",
+    "Pia-máter",
+    "Cerebelo, língula",
+    "Cerebelo, nódulo",
+    "Cerebelo, véu medular superior",
+    "Pedúnculo cerebelar superior",
+    "Abertura lateral do IV ventrículo (Luschka)"
+   ],
+   "b": [
+    "Cisterna supracerebelar",
+    "Corpo caloso, esplênio",
+    "Corpo caloso, radiação posterior (fórceps maior)",
+    "Giro do cíngulo",
+    "Giro do cíngulo, istmo",
+    "Giro occípito-temporal lateral",
+    "Giro occípito-temporal medial",
+    "Giro temporal inferior",
+    "Giro temporal médio",
+    "Giro temporal superior",
+    "Lóbulo paracentral",
+    "Lóbulo parietal inferior",
+    "Pré-cúneo",
+    "Radiação óptica",
+    "Sulco central (Rolando)",
+    "Sulco lateral (Sylvius)",
+    "Veia cerebral magna (Galeno)",
+    "Ventrículo lateral, corno posterior",
+    "Cerebelo, núcleo denteado",
+    "Cerebelo, vermis",
+    "Plexo coroide do ventrículo lateral",
+    "Ventrículo, quarto, teto"
+   ],
+   "notas": [
+    "p. 13 (alto, face P)",
+    "p. 9 (baixo, face P)"
+   ]
+  },
+  {
+   "n": 10,
+   "url": "https://anatpat.unicamp.br/bineucerebrocoronal10.html",
+   "nivel": "corno posterior e calcar avis",
+   "a": [
+    "Calcar avis",
+    "Cerebelo, núcleo denteado",
+    "Tenda do cerebelo",
+    "Cerebelo, vermis",
+    "Corpo caloso, radiação posterior (fórceps maior)",
+    "Fissura longitudinal do cérebro",
+    "Foice do cérebro",
+    "Giro do cíngulo",
+    "Giro do cíngulo, istmo",
+    "Giro occípito-temporal lateral",
+    "Giro occípito-temporal medial",
+    "Giro temporal inferior",
+    "Giro temporal médio",
+    "Giro temporal superior",
+    "Plexo coroide do ventrículo lateral",
+    "Radiação óptica",
+    "Ventrículo lateral, corno posterior",
+    "Aracnoide",
+    "Cerebelo, tonsila",
+    "Cisterna magna",
+    "Córtex cerebelar",
+    "Córtex cerebral",
+    "Ventrículo, quarto, teto"
+   ],
+   "b": [],
+   "notas": []
+  },
+  {
+   "n": 11,
+   "url": "https://anatpat.unicamp.br/bineucerebrocoronal11.html",
+   "nivel": "lobos parietais e occipitais; cerebelo com o denteado",
+   "a": [
+    "Cerebelo, centro branco medular",
+    "Cerebelo, hemisfério",
+    "Cerebelo, núcleo denteado",
+    "Cerebelo, valécula",
+    "Cerebelo, vermis",
+    "Fissura longitudinal do cérebro",
+    "Giro temporal inferior",
+    "Giro temporal superior",
+    "Lóbulo paracentral",
+    "Lóbulo parietal inferior",
+    "Lóbulo parietal superior",
+    "Pré-cúneo",
+    "Radiação óptica",
+    "Tapetum",
+    "Ventrículo lateral, corno posterior"
+   ],
+   "b": [],
+   "notas": []
+  },
+  {
+   "n": 12,
+   "url": "https://anatpat.unicamp.br/bineucerebrocoronal12.html",
+   "nivel": "polo occipital: cúneo, fissura calcarina e área 17",
+   "a": [
+    "Cerebelo, hemisfério",
+    "Cerebelo, vermis",
+    "Cúneo",
+    "Fissura calcarina",
+    "Lobo occipital",
+    "Lóbulo paracentral",
+    "Lóbulo parietal inferior",
+    "Pré-cúneo",
+    "Sulco do cíngulo",
+    "Sulco parieto-occipital",
+    "Sulco pós-central",
+    "Córtex visual primário (área 17)",
+    "Estria de Gennari",
+    "Ventrículo lateral, corno posterior"
+   ],
+   "b": [],
+   "notas": []
+  }
+ ]
+}

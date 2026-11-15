@@ -42,6 +42,14 @@ body { background: var(--bg); color: var(--ink); font-family: var(--f-body); fon
 #gl { position: absolute; inset: 0; width: 100%; height: 100%; display: block; cursor: grab; touch-action: none; }
 .views { position: absolute; top: 10px; left: 10px; right: 10px; display: flex; flex-wrap: wrap; gap: 6px; pointer-events: none; }
 .views button { pointer-events: auto; }
+/* barra do palco: grupos em pílula (modo, vista, ferramentas) */
+.views .grupo { pointer-events: auto; display: flex; flex-wrap: wrap; align-items: center; gap: 2px; padding: 3px; border-radius: 999px; background: var(--glass); border: 1px solid var(--line); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
+.views .grupo .chipbtn { background: transparent; border-color: transparent; padding: 5px 11px; backdrop-filter: none; -webkit-backdrop-filter: none; }
+.views .grupo .chipbtn:hover { border-color: var(--line); }
+.views .grupo .chipbtn[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+.views .grupo .vrot { font-size: 11px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); padding: 0 6px 0 9px; }
+.views .grupo[hidden] { display: none; }
+@media (max-width: 600px) { .views .grupo .chipbtn { padding: 5px 9px; font-size: 12.5px; white-space: nowrap; } .views .grupo .vrot { display: none; } #grpVistas { flex-wrap: nowrap; overflow-x: auto; max-width: 100%; scrollbar-width: none; } #grpVistas::-webkit-scrollbar { display: none; } }
 .chipbtn { font: 600 13px var(--f-body); color: var(--ink); background: var(--glass); border: 1px solid var(--line); border-radius: 999px; padding: 6px 12px; cursor: pointer; backdrop-filter: blur(6px); }
 .chipbtn:hover { border-color: var(--accent); }
 .chipbtn[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
@@ -176,22 +184,56 @@ details.grp li button.on { background: var(--accent); color: var(--accent-ink); 
 .passos button { font: inherit; color: var(--accent); background: none; border: 0; padding: 2px 0; cursor: pointer; text-align: left; text-decoration: underline; text-underline-offset: 2px; }
 .passos span { color: var(--muted); }
 .aviso { margin: 0; padding: 8px 12px; border: 1px dashed var(--line); border-radius: 10px; font-size: 13.5px; font-weight: 600; color: var(--muted); }
+/* modo Bolachas */
+.bolpainel { max-width: min(430px, calc(100% - 20px)); }
+.bolpainel #bolN { font-weight: 600; margin-left: 6px; }
+.bolpainel .bolst { color: #9fd9df; margin-left: 6px; }
+.bolpainel .bolnivel { color: #c9dde2; font-size: 12px; }
+.bolpainel input[type=range] { flex: 1; min-width: 120px; accent-color: #00a9b4; }
+.bolpainel button:disabled { opacity: .4; cursor: default; }
+.bolpainel .bolbtn { font: 600 12px var(--f-body); color: #eaf7f9; background: rgba(255, 255, 255, .08); border: 1px solid rgba(255, 255, 255, .18); border-radius: 6px; padding: 3px 8px; text-decoration: none; }
+.bollista { margin: 6px 0 4px; padding-left: 26px; font-size: 13.5px; max-height: 260px; overflow-y: auto; }
+.bollista li { break-inside: avoid; margin: 1px 0; }
+.bollista button { background: none; border: 0; padding: 1px 0; font: inherit; color: var(--ink); cursor: pointer; text-align: left; }
+.bollista button:hover { color: var(--accent); text-decoration: underline; }
+.bolopc { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin: 8px 0; }
+.bolpainel .bolmais { margin-left: auto; }
+.bolpainel.compacto .extra { display: none; }
+@media (max-width: 600px) { .bollista { max-height: none; } .bolpainel { font-size: 12px; left: 6px; bottom: 6px; padding: 7px 8px; } .bolpainel .bolnivel { display: none; } }
+#bolpainel:not([hidden]) ~ .legtec { display: none; }
+/* cortes do tronco e da medula: esquema 2D ao lado do 3D */
+.tc2d { position: absolute; right: 10px; top: 56px; width: min(40%, 430px); padding: 8px 9px; border-radius: 10px; background: rgba(8, 14, 18, .88); color: #eaf7f9; z-index: 5; font-size: 12px; }
+.tc2d[hidden] { display: none; }
+.tc2d .tct { font-weight: 600; font-size: 13px; margin-bottom: 5px; }
+.tc2d .tcimg canvas { width: 100%; max-height: 52vh; object-fit: contain; height: auto; display: block; cursor: pointer; border-radius: 6px; background: #0b1216; }
+.tc2d .tcdica { min-height: 16px; margin-top: 4px; color: #ffd23f; font-weight: 600; }
+.tc2d .tcs { color: #9fb2bc; font-size: 11.5px; }
+@media (max-width: 600px) { .tc2d { width: 52%; top: auto; bottom: 8px; right: 6px; padding: 5px; } .tc2d .tcs { display: none; } }
 </style>
 
 <div class="app">
   <section class="stage" id="stage" aria-label="Modelo 3D do encéfalo">
     <canvas id="gl" aria-label="Encéfalo em 3D. Arraste para girar, role para aproximar."></canvas>
-    <div class="views" role="toolbar" aria-label="Vistas">
-      <button class="chipbtn" type="button" data-view="lateral" aria-pressed="true">Lateral</button>
-      <button class="chipbtn" type="button" data-view="medial" aria-pressed="false">Medial (corte sagital)</button>
-      <button class="chipbtn" type="button" data-view="superior" aria-pressed="false">Superior</button>
-      <button class="chipbtn" type="button" data-view="inferior" aria-pressed="false">Inferior</button>
-      <button class="chipbtn" type="button" data-view="anterior" aria-pressed="false">Anterior</button>
-      <button class="chipbtn" type="button" data-view="posterior" aria-pressed="false">Posterior</button>
-      <button class="chipbtn" type="button" id="tiBtn" aria-pressed="false" title="Mostra só o tronco encefálico, organizado, com a origem dos pares cranianos">Tronco isolado</button>
-      <button class="chipbtn" type="button" id="bisturiBtn" aria-pressed="false" title="Clique numa estrutura para removê-la e ver o que está por baixo">✂ Bisturi</button>
-      <button class="chipbtn" type="button" data-view="base" aria-pressed="false" title="Vista de cima, sem os hemisférios: tronco, nervos cranianos, artérias da base e seios">Base do crânio</button>
-      <button class="chipbtn" type="button" id="btnInfl" aria-pressed="false">Vista inflada</button>
+    <div class="views" role="toolbar" aria-label="Modo, vistas e ferramentas">
+      <div class="grupo" role="group" aria-label="Modo">
+        <button class="chipbtn" type="button" id="modoExplorar" aria-pressed="true" title="Encéfalo inteiro, com camadas, lições e teste">Explorar</button>
+        <button class="chipbtn" type="button" id="bolBtn" aria-pressed="false" title="Os 12 cortes coronais (bolachas) em 3D, com as estruturas de cada face pelo gabarito da Unicamp">Bolachas</button>
+        <button class="chipbtn" type="button" id="tiBtn" aria-pressed="false" title="Só o tronco encefálico e a medula, organizados, com a origem dos pares cranianos">Tronco e medula</button>
+      </div>
+      <div class="grupo" role="group" aria-label="Vista" id="grpVistas">
+        <span class="vrot">Vista</span>
+        <button class="chipbtn" type="button" data-view="lateral" aria-pressed="true">Lateral</button>
+        <button class="chipbtn" type="button" data-view="medial" aria-pressed="false" title="Corte sagital mediano">Medial</button>
+        <button class="chipbtn" type="button" data-view="superior" aria-pressed="false">Superior</button>
+        <button class="chipbtn" type="button" data-view="inferior" aria-pressed="false">Inferior</button>
+        <button class="chipbtn" type="button" data-view="anterior" aria-pressed="false">Anterior</button>
+        <button class="chipbtn" type="button" data-view="posterior" aria-pressed="false">Posterior</button>
+        <button class="chipbtn" type="button" data-view="base" aria-pressed="false" title="Vista de cima, sem os hemisférios: tronco, nervos cranianos, artérias da base e seios">Base do crânio</button>
+      </div>
+      <div class="grupo" role="group" aria-label="Ferramentas">
+        <button class="chipbtn" type="button" id="bisturiBtn" aria-pressed="false" title="Clique numa estrutura para removê-la e ver o que está por baixo">✂ Bisturi</button>
+        <button class="chipbtn" type="button" id="btnInfl" aria-pressed="false" title="Infla o córtex para mostrar os giros e os sulcos sem dobras">Vista inflada</button>
+      </div>
     </div>
     <div class="tip" id="tip" hidden></div>
     <div class="tipainel" id="tipainel" hidden>
@@ -199,8 +241,20 @@ details.grp li button.on { background: var(--accent); color: var(--accent-ink); 
       <div class="lin"><button type="button" data-tip="mesenc"><i style="background:#e2b27c"></i>Mesencéfalo</button><button type="button" data-tip="ponte"><i style="background:#c98a55"></i>Ponte</button><button type="button" data-tip="bulbo"><i style="background:#a8714a"></i>Bulbo</button><button type="button" data-tip="medula"><i style="background:#dcc39d"></i>Medula</button></div>
       <div class="lin">Vista: <button type="button" data-tiv="ventral">Ventral</button><button type="button" data-tiv="dorsal">Dorsal</button><button type="button" data-tiv="lateral">Lateral</button></div>
       <div class="lin">Pares cranianos: <span class="seg-ti"><button type="button" data-nm="sem">Sem</button> <button type="button" data-nm="curto">Origem (2 cm)</button> <button type="button" data-nm="inteiro">Inteiro</button></span></div>
-      <div class="lin"><button type="button" id="tiSair">Sair do tronco isolado</button></div>
+      <div class="lin">Cortes do tronco: <button type="button" data-tc="cs" title="Mesencéfalo, nível do colículo superior">Mes. CS</button><button type="button" data-tc="ci" title="Mesencéfalo, nível do colículo inferior">Mes. CI</button><button type="button" data-tc="ps" title="Ponte, terço superior">Ponte sup.</button><button type="button" data-tc="pm" title="Ponte, terço médio">Ponte média</button><button type="button" data-tc="pi" title="Ponte, terço inferior (colículo facial)">Ponte inf.</button><button type="button" data-tc="ba" title="Bulbo aberto (oliva)">Bulbo aberto</button><button type="button" data-tc="bf" title="Bulbo fechado (grácil e cuneiforme)">Bulbo fechado</button></div>
+      <div class="lin">Medula: <button type="button" data-tc="mc">Cervical</button><button type="button" data-tc="mt">Torácica</button><button type="button" data-tc="ml">Lombar</button><button type="button" data-tc="" aria-pressed="true">Sem corte</button></div>
+      <div class="lin"><button type="button" id="tiSair">Voltar a explorar</button></div>
     </div>
+    <div class="tipainel bolpainel" id="bolpainel" hidden>
+      <div class="lin"><b>Bolachas</b><span id="bolN"></span><span id="bolStatus" class="bolst"></span><button type="button" id="bolMais" class="bolmais" aria-expanded="true">Opções ▾</button></div>
+      <div class="lin bolnivel" id="bolNivel"></div>
+      <div class="lin"><button type="button" id="bolAnt" aria-label="Corte anterior">◀</button><input type="range" id="bolRange" min="1" max="12" step="1" value="3" aria-label="Corte"><button type="button" id="bolProx" aria-label="Próximo corte">▶</button></div>
+      <div class="lin extra">Ver: <button type="button" data-bv="todas">Todas separadas</button><button type="button" data-bv="foco">Fatia em foco</button></div>
+      <div class="lin">Face: <button type="button" data-bf="a">Anterior (a)</button><button type="button" data-bf="b">Posterior (b)</button></div>
+      <div class="lin extra">Cores: <button type="button" data-bp="atlas">Do atlas</button><button type="button" data-bp="real">Peça real</button><button type="button" id="bolNum">Números</button></div>
+      <div class="lin extra"><button type="button" id="bolTeste">Testar esta bolacha</button><a id="bolUni" class="bolbtn" href="#" target="_blank" rel="noopener">Ver a peça na Unicamp ↗</a><button type="button" id="bolSair">Voltar a explorar</button></div>
+    </div>
+    <div class="tc2d" id="tc2d" hidden><div class="tct"></div><div class="tcimg"></div><div class="tcdica"></div><div class="tcs"></div></div>
     <div class="bistbar" id="bistbar" hidden><span id="bistTxt"></span><button type="button" id="bistDesf">Desfazer</button><button type="button" id="bistTudo">Devolver tudo</button></div>
     <svg class="pinos" id="pinos" aria-hidden="true"></svg>
     <div class="legtec" id="legtec" aria-label="Legenda por tecido"></div>
@@ -231,7 +285,7 @@ details.grp li button.on { background: var(--accent); color: var(--accent-ink); 
           <label class="row"><input type="checkbox" id="avc"><span class="lbl">Modo AVC: clicar numa artéria mostra o território e o déficit</span></label>
           <div class="btnrow" style="margin-top:4px"><button class="btn" type="button" id="willis">Ver o polígono de Willis</button></div>
           <div class="sect">Nervos cranianos</div>
-          <div class="btnrow" style="margin-top:4px"><button class="btn" type="button" id="nervos">Ver tronco, nervos e núcleos</button> <button class="btn" type="button" id="tiBtn2">Tronco isolado</button>
+          <div class="btnrow" style="margin-top:4px"><button class="btn" type="button" id="nervos">Ver tronco, nervos e núcleos</button> <button class="btn" type="button" id="tiBtn2">Tronco e medula</button>
           <div class="row" style="gap:8px;margin-top:6px"><span class="lbl">Pares cranianos</span><span class="seg" id="nervSeg"><button type="button" data-nm="sem" aria-pressed="false">Sem</button><button type="button" data-nm="curto" aria-pressed="false">Origem (2 cm)</button><button type="button" data-nm="inteiro" aria-pressed="true">Inteiro</button></span></div> <button class="btn" type="button" id="cavernoso">Ver o seio cavernoso</button></div>
           <p class="legenda" id="legendaNC" style="margin:6px 0 4px 0"><span><i style="background:#e3c044"></i>nervo</span><span><i style="background:#d94f4f"></i>eferente somática</span><span><i style="background:#e89a3c"></i>eferente visceral geral</span><span><i style="background:#c95fb0"></i>eferente visceral especial</span><span><i style="background:#4f86d9"></i>aferente somática geral</span><span><i style="background:#4fae7a"></i>aferente somática especial</span><span><i style="background:#35b3b3"></i>aferente visceral</span></p>
           <div class="sect">Grandes vias</div>
@@ -281,12 +335,18 @@ details.grp li button.on { background: var(--accent); color: var(--accent-ink); 
         <h3>Texto e conteúdo</h3>
         <ul>
           <li>Ângelo Machado e Lucia Machado Haertel, <i>Neuroanatomia Funcional</i>, 4ª ed. Cada item cita capítulo e página no painel.</li>
+          <li>Schünke, Schulte e Schumacher, <i>Prometheus: Cabeça e Neuroanatomia</i>: segunda fonte, citada por página para conferência (sobretudo vasos, cerebelo e núcleos). Nenhuma figura do livro está no atlas.</li>
           <li>Itens marcados "a confirmar" não foram conferidos no livro; a lista completa fica no arquivo REVISAR.md, junto do atlas.</li>
+        </ul>
+        <h3>Gabarito dos cortes</h3>
+        <ul>
+          <li><b>Neupatimagem, Departamento de Anatomia Patológica, FCM-UNICAMP</b>: <a href="https://anatpat.unicamp.br/bineucerebrocoronalindice.html" target="_blank" rel="noopener">atlas de cortes coronais</a> (12 cortes) e <a href="https://anatpat.unicamp.br/bineucerebelotronco.html" target="_blank" rel="noopener">série axial de cerebelo e tronco</a>. Usados como gabarito dos níveis e dos nomes das estruturas e como modelo de forma e posição. As fotos pertencem aos autores e não foram copiadas; cada corte tem um link para a peça real no site deles.</li>
         </ul>
         <h3>Formas esquemáticas</h3>
         <ul>
           <li>Artérias, veias e seios, nervos cranianos e seus núcleos, grandes vias, cápsula interna, fórnice, comissuras, hipotálamo, hipófise, vias ópticas e núcleos pequenos do tronco e do cerebelo foram desenhados à mão sobre as malhas, a partir das descrições e figuras do Machado. Servem para posição e relações, não para medidas.</li>
-          <li>O modelo não tem crânio, meninges nem medula espinal.</li>
+          <li>O modelo não tem crânio. Das meninges, só as pregas da dura-máter; da medula, só a parte cervical (um cilindro). Os cortes da medula são esquemas desenhados.</li>
+          <li>As faces das bolachas e dos cortes do tronco são calculadas a partir das malhas (interseção com o plano); a faixa de córtex tem espessura fixa.</li>
         </ul>
         <h3>Programas</h3>
         <ul>
@@ -964,7 +1024,6 @@ NOTA('bracinf', 'Trajeto esquemático, do colículo inferior ao corpo geniculado
 NOTA('veusup', 'Lâmina esquemática no teto do IV ventrículo, entre os pedúnculos cerebelares superiores.');
 CONF(['sullatmes'], 'Posição na face lateral do mesencéfalo aproximada: a figura 5.3 (secção do mesencéfalo) não foi conferida.');
 
-NOTA('medula', META.medula.nota + ' No corte da ponta, a substância cinzenta em H (cornos anterior e posterior) e o canal central, desenho esquemático.');
 NOTA('pedunc', 'Faixa achatada esquemática sobre a face ventral do mesencéfalo, abrindo-se para o diencéfalo.');
 /* ---- substância branca do corpo estriado e hipófise (Prometheus, p. 208 e 222; Machado, cap. 21) ---- */
 M('capsext', 'Cápsula externa', 'deep', '#efe6dc', 'Lâmina de substância branca entre o putame e o claustro. De medial para lateral: cápsula interna, núcleo lentiforme (globo pálido e putame), cápsula externa, claustro, cápsula extrema e córtex da ínsula.', '', '');
@@ -1028,6 +1087,48 @@ CONF(['vertebral'], 'Alça sobre o arco posterior do atlas: trajeto aproximado (
 ['trolard', 'labbe', 'basal', 'spsup', 'spinf', 'vsup', 'silv'].forEach(id => { META[id].conf = ''; META[id].ref = (META[id].ref ? META[id].ref + ' ' : '') + 'Confirmado no Prometheus, Cabeça e Neuroanatomia, p. 254-259 (o trajeto das veias varia entre indivíduos).'; });
 CONF(['a_fbl','a_fbm','a_cent','a_par','a_ang','a_temp','calmarg','a_calc','a_parocc','a_dorsalcc','a_tempinf','pericalosa','a_frontmed','a_prefront'], 'Os ramos terminais finos são ilustrativos: mostram que a artéria se divide até a periferia do território, não o número real de ramos.');
 
+/* ---- remodelagem 3, fase 2: lobos, giros e sistema límbico (gabarito Unicamp; texto Machado) ---- */
+M('lobo_front', 'Lobo frontal', 'cortex', '#4f8fe0', 'À frente do sulco central e acima do sulco lateral. Na face lateral: giros pré-central, frontal superior, médio e inferior; na face inferior, giro reto e giros orbitários.', 'ACA (face medial) e ACM (face lateral).', 'Lesão do giro pré-central: paresia do lado oposto. Lesão do giro frontal inferior do hemisfério dominante: afasia de expressão (Broca).');
+M('lobo_par', 'Lobo parietal', 'cortex', '#e0a640', 'Atrás do sulco central, até a linha entre o sulco parietoccipital e a incisura pré-occipital. Giro pós-central, lóbulos parietais superior e inferior (giros supramarginal e angular) e, na face medial, pré-cúneo.', 'ACM (face lateral) e ACA (face medial).', 'Lesão do giro pós-central: perda da sensibilidade do lado oposto.');
+M('lobo_temp', 'Lobo temporal', 'cortex', '#45b07a', 'Abaixo do sulco lateral. Giros temporais superior, médio e inferior; na face inferior, giros occipitotemporais e para-hipocampal; no assoalho do sulco lateral, giros temporais transversos (área auditiva).', 'ACM (face lateral) e ACP (face inferior).', '');
+M('lobo_occ', 'Lobo occipital', 'cortex', '#d65f8f', 'Atrás da linha parietoccipital. Na face medial, o sulco calcarino separa o cúneo do giro lingual; as suas margens formam a área visual primária.', 'ACP.', 'Lesão da área visual de um lado: hemianopsia do lado oposto.');
+M('lobo_limb', 'Lobo límbico', 'cortex', '#9a6fd0', 'Anel de córtex na face medial do hemisfério, em volta do corpo caloso e do diencéfalo: giro do cíngulo, istmo do giro do cíngulo e giro para-hipocampal, com o unco. Faz parte do sistema límbico.', 'ACA (giro do cíngulo) e ACP (istmo e giro para-hipocampal).', 'Lesões do sistema límbico: alterações de memória e do comportamento emocional.');
+M('gistmo', 'Istmo do giro do cíngulo', 'cortex', '#d9a3d3', 'Parte estreita do giro do cíngulo, atrás e abaixo do esplênio do corpo caloso; por ela o giro do cíngulo continua-se com o giro para-hipocampal.', 'ACP.', '');
+M('fis_long', 'Fissura longitudinal do cérebro', 'cortex', '#3a2a24', 'Fenda mediana profunda que separa os dois hemisférios. Nela fica a foice do cérebro; no fundo dela está o corpo caloso.', '', '');
+M('gsubcal', 'Giro subcaloso (área septal)', 'limbic', '#b48ad8', 'Pequena área de córtex na face medial, abaixo do rostro do corpo caloso e à frente da lâmina terminal. Pertence à área septal, ligada ao sistema límbico.', 'ACA.', '');
+M('pehipo', 'Pé do hipocampo (cabeça)', 'limbic', '#c99be6', 'Extremidade anterior, alargada, do hipocampo, no assoalho do corno inferior do ventrículo lateral, junto do corpo amigdaloide. As saliências da superfície lembram os dedos de uma pata.', 'Coroídea anterior e ACP.', '');
+M('hipo_corpo', 'Hipocampo: corpo e cauda', 'limbic', '#b07fdb', 'Eminência alongada no assoalho do corno inferior do ventrículo lateral. Atrás, a fímbria continua-se com o pilar do fórnice.', 'ACP e coroídea anterior.', 'Lesão bilateral: perda da capacidade de formar memórias novas.');
+M('alveo', 'Álveo', 'limbic', '#efe6f7', 'Fina camada de substância branca que cobre a face ventricular do hipocampo. Suas fibras convergem para a fímbria e daí para o fórnice.', '', '');
+M('subiculo', 'Subículo', 'limbic', '#8f63c4', 'Zona de transição entre o hipocampo e o giro para-hipocampal. Forma a formação hipocampal junto com o hipocampo e o giro denteado.', 'ACP.', '');
+M('f_cingulo', 'Fascículo do cíngulo', 'limbic', '#e9d8f5', 'Feixe de fibras de associação dentro do giro do cíngulo, em arco sobre o corpo caloso; liga o giro do cíngulo ao giro para-hipocampal.', '', '');
+M('f_mamtal', 'Fascículo mamilotalâmico', 'limbic', '#f2e4ff', 'Liga o corpo mamilar ao núcleo anterior do tálamo. É uma das etapas do circuito de Papez.', '', '');
+M('estria_t', 'Estria terminal', 'limbic', '#e6d2fa', 'Feixe fino que sai do corpo amigdaloide, acompanha a cauda do núcleo caudado e corre no sulco entre o caudado e o tálamo, junto da veia talamoestriada, até a região da comissura anterior e do hipotálamo. É uma das vias eferentes da amígdala.', '', '');
+M('subst_inom', 'Substância inominada', 'deep', '#d7c08a', 'Região abaixo do globo pálido e acima da substância perfurada anterior, no nível da comissura anterior. Contém o núcleo basal de Meynert.', 'Lenticuloestriadas e ramos centrais da ACA.', '');
+M('meynert', 'Núcleo basal de Meynert', 'deep', '#a8873e', 'Grupo de neurônios grandes, colinérgicos, dentro da substância inominada. Projeta-se para todo o córtex cerebral.', '', 'Degenera na doença de Alzheimer.');
+M('trighab', 'Trígono das habênulas', 'dien', '#e5a3b3', 'Pequena área triangular na parte dorsal e posterior do tálamo, à frente da glândula pineal. Contém os núcleos habenulares (epitálamo).', 'Coroídeas posteriores.', '');
+M('comhab', 'Comissura das habênulas', 'dien', '#f0c7d1', 'Une os núcleos habenulares dos dois lados, logo acima da raiz da glândula pineal.', '', '');
+REF(['lobo_front', 'lobo_par', 'lobo_temp', 'lobo_occ', 'gistmo', 'fis_long'], 'Machado, Neuroanatomia Funcional, 4ª ed., cap. 7 (Telencéfalo), p. 55-62. Gabarito: Unicamp, cortes coronais.');
+REF(['lobo_limb', 'gsubcal', 'pehipo', 'hipo_corpo', 'alveo', 'subiculo', 'f_cingulo', 'f_mamtal', 'estria_t'], 'Machado, Neuroanatomia Funcional, 4ª ed., cap. 27 (Sistema Límbico). Gabarito: Unicamp, cortes coronais 2 a 9.');
+REF(['subst_inom', 'meynert'], 'Gabarito: Unicamp, corte coronal 4 (detalhe 4a1).');
+REF(['trighab', 'comhab'], 'Machado, Neuroanatomia Funcional, 4ª ed., cap. 6 (Diencéfalo). Gabarito: Unicamp, corte coronal 7 (detalhe 7b1).');
+CONF(['lobo_limb', 'gsubcal', 'pehipo', 'hipo_corpo', 'alveo', 'subiculo', 'f_cingulo', 'f_mamtal', 'estria_t', 'trighab', 'comhab'], 'Página do Machado a confirmar.');
+CONF(['subst_inom', 'meynert'], 'Não conferido no Machado; posição pela Unicamp (corte 4). Página a confirmar.');
+NOTA('lobo_limb', 'O lóbulo paracentral (parte frontal e parte parietal) não entra em nenhum lobo aqui; a ínsula é o próprio lobo insular (item Ínsula).');
+['gsubcal', 'alveo', 'subiculo', 'f_cingulo', 'f_mamtal', 'estria_t', 'subst_inom', 'meynert', 'trighab', 'comhab'].forEach(id => NOTA(id, 'Forma esquemática, desenhada sobre as malhas reais na posição indicada pela peça da Unicamp; tamanho aproximado.'));
+['pehipo', 'hipo_corpo'].forEach(id => NOTA(id, 'Malha real do hipocampo dividida num plano coronal aproximado entre a cabeça e o corpo.'));
+/* ---- remodelagem 3, fase 4: núcleos e feixes internos do tronco (gabarito Unicamp, série axial; texto Machado) ---- */
+M('nuoliva', 'Núcleo olivar inferior', 'stem', '#c9a04a', 'Lâmina de substância cinzenta pregueada, em forma de bolsa aberta medialmente (hilo), dentro da oliva do bulbo. Envia as fibras olivocerebelares (fibras trepadeiras) ao cerebelo pelo pedúnculo cerebelar inferior.', 'Vertebral e PICA.', '');
+M('nugrac', 'Núcleo grácil', 'stem', '#5b8fd6', 'No bulbo fechado, sob o tubérculo do núcleo grácil. Nele terminam as fibras do fascículo grácil (tato epicrítico e propriocepção consciente da metade inferior do corpo); dele sai o lemnisco medial, depois de cruzar.', 'Espinais posteriores.', '');
+M('nucun', 'Núcleo cuneiforme', 'stem', '#4c7fc8', 'No bulbo fechado, sob o tubérculo do núcleo cuneiforme, lateral ao grácil. Recebe o fascículo cuneiforme (metade superior do corpo); dele sai o lemnisco medial, depois de cruzar.', 'Espinais posteriores.', '');
+M('nupont', 'Núcleos da base da ponte (núcleos pontinos)', 'stem', '#b88a64', 'Grupos de neurônios espalhados entre os feixes longitudinais da base da ponte. Recebem as fibras corticopontinas e enviam as fibras pontocerebelares, que cruzam e formam o pedúnculo cerebelar médio.', 'Ramos pontinos da basilar.', '');
+M('freticular', 'Formação reticular', 'stem', '#9c8f86', 'Rede de neurônios e fibras que ocupa o centro do tegmento, do mesencéfalo ao bulbo. Ativação do córtex e vigília, centros respiratório e vasomotor, controle da motricidade e da dor.', 'Ramos paramedianos e circunferenciais curtos.', 'Lesões extensas do tegmento alto: coma.');
+M('ctrap', 'Corpo trapezoide', 'stem', '#d9b0e8', 'Fibras transversais da via auditiva na parte ventral do tegmento da ponte, vindas dos núcleos cocleares; muitas cruzam para formar o lemnisco lateral.', 'Ramos da basilar.', '');
+M('flm', 'Fascículo longitudinal medial', 'stem', '#e8e0cf', 'Feixe paramediano, logo abaixo do assoalho do IV ventrículo e do aqueduto. Liga os núcleos vestibulares aos núcleos dos nervos III, IV e VI (movimentos conjugados dos olhos).', '', 'Lesão: oftalmoplegia internuclear.');
+REF(['nuoliva', 'nugrac', 'nucun', 'nupont', 'freticular', 'ctrap', 'flm'], 'Machado, Neuroanatomia Funcional, 4ª ed., cap. 16 e 17 (estrutura do tronco encefálico). Gabarito: Unicamp, série axial de cerebelo e tronco.');
+CONF(['nuoliva', 'nugrac', 'nucun', 'nupont', 'freticular', 'ctrap', 'flm'], 'Página do Machado a confirmar.');
+['nuoliva', 'nugrac', 'nucun', 'nupont', 'freticular', 'ctrap', 'flm'].forEach(id => NOTA(id, 'Forma esquemática; posição tirada das regiões reais da superfície do tronco (oliva, tubérculos, assoalho do IV ventrículo).'));
+/* ===== GABARITO DAS BOLACHAS (gerado por gabarito/montar_gabarito.cjs a partir do atlas de cortes coronais da Unicamp; só nomes, nenhuma imagem) ===== */
+const GAB = [{"n":1,"url":"https://anatpat.unicamp.br/bineucerebrocoronal1.html","nivel":"polo frontal até o joelho do corpo caloso","a":["fis_long","gcing","gfs","gfm","gfi_tr","gor","greto","lobo_front","bulbolf"],"b":["aca1","cc_joelho","gcing","greto","vlat_ant"]},{"n":2,"url":"https://anatpat.unicamp.br/bineucerebrocoronal2.html","nivel":"cabeça do caudado, accumbens e perna anterior da cápsula interna","a":["cc_joelho","fis_long","gcing","lobo_front","lobo_temp","caudado","s_lateral","vlat_ant"],"b":["acm","capsint","f_cingulo","claustro","cc_tronco","gcing","gsubcal","ginsula","lobo_temp","accumbens","caudado","putame","septo","s_lateral","vlat_ant"]},{"n":3,"url":"https://anatpat.unicamp.br/bineucerebrocoronal3.html","nivel":"quiasma óptico e comissura anterior","a":["aca1","acm","capsext","capsextr","claustro","gsubcal","ginsula","lobo_front","nc2","caudado","putame","quiasma","septo","s_lateral","vlat_ant"],"b":["acm","capsint","claustro","comant","cc","fornice","gpe","amigdala","caudado","putame","v3","quiasma","unco","vlat_inf","vlat_cent","lenticulo","capsext","capsextr","hipotal","ginsula","aca1"]},{"n":4,"url":"https://anatpat.unicamp.br/bineucerebrocoronal4.html","nivel":"amígdala, início do tálamo e núcleo subtalâmico","a":["basilar","capsint","claustro","comant","cc","fis_long","hipocampo","gpe","ginsula","amigdala","baseponte","putame","s_lateral","quiasma","vlat_inf","vlat_cent","v3","lenticulo","acm","capsext","capsextr","fornice","hipotal","meynert","caudado","septo","subst_inom","acp","fmonro","gfus","gti","gtm","gts","nc3","pehipo","s_colateral","unco"],"b":["aderencia","capsint","hipocampo","fornice","fossaip","caudado","putame","subtal","plexo","baseponte","snegra","talamo","vlat_inf","vlat_cent","v3","acm","acp","fmonro","pedunc","septo"]},{"n":5,"url":"https://anatpat.unicamp.br/bineucerebrocoronal5.html","nivel":"tálamo, núcleo subtalâmico, substância negra e núcleo rubro, com o tronco no plano do corte","a":["cbm","cc_tronco","capsint","fornice","fossaip","hipocampo","fmonro","nc5","caudado","putame","subtal","pedunc","piramide","plexo","baseponte","snegra","talamo","v_cs","vlat_cent","v3","aca1","acm","acp","claustro","f_mamtal","s_lateral","gparahip","gti","gtm","gts","ginsula","fimbria","subiculo","s_colateral","s_tempinf","s_tempsup","quiasma","unco","vlat_inf"],"b":["aca1","acm","acp","capsint","cbm","cc_tronco","hipocampo","fornice","ginsula","mesenc","caudado","pedunc","piramide","baseponte","putame","s_lateral","talamo","vlat_inf","vlat_cent","v3","capsext","capsextr","claustro","fmonro","rubro","plexo","snegra","quiasma","v_cs"]},{"n":6,"url":"https://anatpat.unicamp.br/bineucerebrocoronal6.html","nivel":"tálamo com núcleo rubro e substância negra; ponte e bulbo no plano","a":["capsint","cbm","cerebelo","fis_long","fmonro","hipocampo","gcing","ginsula","mesenc","nc7","nc8","caudado","putame","rubro","pedunc","piramide","ponte","snegra","sulbp","talamo","vlat_cent","v3","capsext","capsextr","claustro","fornice","septo","v_cs","alveo","acp","fimbria","gparahip","gfus","gti","plexo","s_colateral","s_occtemp","quiasma","vlat_inf"],"b":["bulbo","capsint","cc_tronco","cgl","fornice","hipocampo","mesenc","pcm","ponte","putame","caudado","talamo","vlat_inf","vlat_cent","v3","aca1","acm","acp","fmonro","ginsula","pedunc","v_cs","v_talest"]},{"n":7,"url":"https://anatpat.unicamp.br/bineucerebrocoronal7.html","nivel":"pineal, colículos, corpo geniculado lateral e aqueduto","a":["capsint","cbm","cb_floculo","cerebelo","cc_tronco","cgl","estria_t","hipocampo","fornice","fimbria","gcing","ginsula","mesenc","caudado","oliva","pcm","pedunc","piramide","putame","talamo","v_talest","vlat_cent","v3","acp","gfus","gparahip","plexo","subiculo","v_cs","vlat_inf","ablat","vertebral","bulbo","baseponte","sulbp"],"b":["aqueduto","bulbo","cerebelo","cc_tronco","foice","hipocampo","fimbria","pineal","mesenc","pcm","colsup","plexo","ponte","s_lateral","talamo","tentorio","vlat_cent","v3","acp","colinf","locus","caudado","trighab","v_talest"]},{"n":8,"url":"https://anatpat.unicamp.br/bineucerebrocoronal8.html","nivel":"pulvinar e esplênio; IV ventrículo aberto no plano","a":["aqueduto","capsint","cerebelo","cc_tronco","bulbo","hipocampo","fimbria","gcing","pineal","locus","caudado","pcm","colsup","plexo","ponte","talamo","v_talest","vlat_inf","vlat_cent","aca1","acp","fornice","s_colateral","cb_tonsila","colinf","pci","fossarom","v4"],"b":["bulbo","cb_cbm","cerebelo","vermis","cc_esplenio","hipocampo","plexo","v_opt","vlat","vlat_inf","vlat_cent","v4","cb_nodulo","denteado","fossarom","abmed","cb_lingula","tentorio","obex","tubcun","tubgrac","galeno"]},{"n":9,"url":"https://anatpat.unicamp.br/bineucerebrocoronal9.html","nivel":"esplênio do corpo caloso e átrio; núcleo denteado","a":["cb_tonsila","cb_cbm","vermis","cc_esplenio","hipocampo","gcing","lobo_par","plexo","v_opt","galeno","vlat","v4","cerebelo","cx_cinza","fimbria","cb_lingula","cb_nodulo","veusup","pcs","ablat"],"b":["cc_esplenio","gcing","gistmo","gfus","gling","gti","gtm","gts","gpara","gsm","gprec","v_opt","s_central","s_lateral","galeno","vlat_post","denteado","vermis","plexo","v4"]},{"n":10,"url":"https://anatpat.unicamp.br/bineucerebrocoronal10.html","nivel":"corno posterior e calcar avis","a":["denteado","tentorio","vermis","fis_long","foice","gcing","gistmo","gfus","gling","gti","gtm","gts","plexo","v_opt","vlat_post","cb_tonsila","cerebelo","cx_cinza","v4"],"b":[]},{"n":11,"url":"https://anatpat.unicamp.br/bineucerebrocoronal11.html","nivel":"lobos parietais e occipitais; cerebelo com o denteado","a":["cb_cbm","cerebelo","denteado","vermis","fis_long","gti","gts","gpara","gsm","gps","gprec","v_opt","vlat_post"],"b":[]},{"n":12,"url":"https://anatpat.unicamp.br/bineucerebrocoronal12.html","nivel":"polo occipital: cúneo, fissura calcarina e área 17","a":["cerebelo","vermis","gcun","s_calcarino","lobo_occ","gpara","gsm","gprec","s_cingulo","s_parocc","s_poscentral","gcalc","vlat_post"],"b":[]}];
 /* ===== UTILITÁRIOS ===== */
 const clamp01 = x => Math.max(0, Math.min(1, x));
 const smooth = (a, b, x) => { const t = clamp01((x - a) / (b - a)); return t * t * (3 - 2 * t); };
@@ -1320,20 +1421,23 @@ const CB = (function () {
   }
   // refina só onde precisa: divide as arestas mais longas que L, sem deixar rachaduras entre triângulos vizinhos
   function refina(P, I, L, deve) {
-    const Q = Array.from(P); let T = Array.from(I);
-    for (let it = 0; it < 7; it++) {
-      const mid = new Map(), out = []; let any = false;
-      const md = (a, b) => { const key = a < b ? a * K + b : b * K + a; let r = mid.get(key); if (r === undefined) { const d = Math.hypot(Q[a * 3] - Q[b * 3], Q[a * 3 + 1] - Q[b * 3 + 1], Q[a * 3 + 2] - Q[b * 3 + 2]); if (deve ? !deve(a, b, d, Q) : d <= L) r = -1; else { r = Q.length / 3; Q.push((Q[a * 3] + Q[b * 3]) / 2, (Q[a * 3 + 1] + Q[b * 3 + 1]) / 2, (Q[a * 3 + 2] + Q[b * 3 + 2]) / 2); any = true; } mid.set(key, r); } return r; };
+    // uma aresta que não foi dividida numa passada nunca será dividida depois (o critério só depende dos dois vértices),
+    // então cada passada só reexamina os triângulos que acabaram de nascer
+    const Q = Array.from(P), pronto = []; let T = Array.from(I);
+    for (let it = 0; it < 7 && T.length; it++) {
+      const mid = new Map(), out = [];
+      const md = (a, b) => { const key = a < b ? a * K + b : b * K + a; let r = mid.get(key); if (r === undefined) { const dx = Q[a * 3] - Q[b * 3], dy = Q[a * 3 + 1] - Q[b * 3 + 1], dz = Q[a * 3 + 2] - Q[b * 3 + 2], d = Math.sqrt(dx * dx + dy * dy + dz * dz); if (deve ? !deve(a, b, d, Q) : d <= L) r = -1; else { r = Q.length / 3; Q.push((Q[a * 3] + Q[b * 3]) / 2, (Q[a * 3 + 1] + Q[b * 3 + 1]) / 2, (Q[a * 3 + 2] + Q[b * 3 + 2]) / 2); } mid.set(key, r); } return r; };
       for (let i = 0; i < T.length; i += 3) {
         const a = T[i], b = T[i + 1], c = T[i + 2], m0 = md(a, b), m1 = md(b, c), m2 = md(c, a), n = (m0 >= 0) + (m1 >= 0) + (m2 >= 0);
-        if (n === 0) out.push(a, b, c);
+        if (n === 0) pronto.push(a, b, c);
         else if (n === 3) out.push(a, m0, m2, m0, b, m1, m2, m1, c, m0, m1, m2);
         else if (n === 1) { if (m0 >= 0) out.push(a, m0, c, m0, b, c); else if (m1 >= 0) out.push(b, m1, a, m1, c, a); else out.push(c, m2, b, m2, a, b); }
         else { if (m2 < 0) out.push(m0, b, m1, a, m0, m1, a, m1, c); else if (m0 < 0) out.push(m1, c, m2, b, m1, m2, b, m2, a); else out.push(m2, a, m0, c, m2, m0, c, m0, b); }
       }
-      T = out; if (!any) break;
+      T = out;
     }
-    return [new Float32Array(Q), new Uint32Array(T)];
+    for (let i = 0; i < T.length; i++) pronto.push(T[i]);
+    return [new Float32Array(Q), new Uint32Array(pronto)];
   }
   function vizinhos(n, I) {
     const viz = Array.from({ length: n }, () => []), ec = new Map();
@@ -1353,11 +1457,14 @@ const CB = (function () {
     const g = src.geometry, p = g.attributes.position, n0 = p.count;
     let P = new Float32Array(n0 * 3); for (let i = 0; i < n0; i++) { v.fromBufferAttribute(p, i).applyMatrix4(src.matrix); P[i * 3] = v.x; P[i * 3 + 1] = v.y; P[i * 3 + 2] = v.z; }
     let I = new Uint32Array(g.index.array);
+    let t0 = performance.now(); const soma = (k) => { TEMPOS['cb_' + k] = (TEMPOS['cb_' + k] || 0) + Math.round(performance.now() - t0); t0 = performance.now(); };
     [P, I] = refina(P, I, window.matchMedia && matchMedia('(pointer: coarse)').matches ? 0.11 : 0.085);   // superfície lisa: só as fissuras na geometria
+    soma('refina1');
     { const kc = [], kq = (Q, i) => { if (kc[i] === undefined) kc[i] = classifica(Q[i * 3], Q[i * 3 + 1], Q[i * 3 + 2]).k; return kc[i]; };
       [P, I] = refina(P, I, 0, (a, b, d, Q) => d > 0.03 && kq(Q, a) !== kq(Q, b)); }   // afina a malha só onde passa uma fissura: borda limpa
+    soma('refina2');
     const n = P.length / 3, [viz, borda] = vizinhos(n, I);
-    taubin(P, viz, borda, 4);
+    soma('vizinhos'); taubin(P, viz, borda, 4); soma('taubin');
     const geo = new THREE.BufferGeometry(); geo.setAttribute('position', new THREE.BufferAttribute(P, 3)); geo.setIndex(new THREE.BufferAttribute(I, 1)); geo.computeVertexNormals();
     const N = geo.attributes.normal.array, cor = new Float32Array(n * 3), cls = new Array(n);
     for (let i = 0; i < n; i++) {
@@ -1370,7 +1477,7 @@ const CB = (function () {
       P[i * 3] -= N[i * 3] * d; P[i * 3 + 1] -= N[i * 3 + 1] * d; P[i * 3 + 2] -= N[i * 3 + 2] * d;
       const sh = Math.max(0.4, Math.min(1, 1.04 - d * 3.2 - folha * 0.16)); cor[i * 3] = cor[i * 3 + 1] = cor[i * 3 + 2] = sh;
     }
-    geo.attributes.position.needsUpdate = true; geo.computeVertexNormals(); geo.setAttribute('color', new THREE.BufferAttribute(cor, 3));
+    geo.attributes.position.needsUpdate = true; geo.computeVertexNormals(); geo.setAttribute('color', new THREE.BufferAttribute(cor, 3)); soma('classifica');
     // triângulos por lóbulo; os que cruzam uma fissura formam a própria fissura
     const grupos = {};
     for (let i = 0; i < I.length; i += 3) {
@@ -2318,24 +2425,120 @@ laminaSag('foicecb', [[TORC[2], TORC[1]], [TORC[2] + 0.55, TORC[1] - 1.2], [TORC
 (function () { const g = new THREE.RingGeometry(0.12, 0.6, 32); g.rotateX(-Math.PI / 2); const m = new THREE.Mesh(g, stdMat(META.diafragma.color, { roughness: 0.75 })); m.position.set(0, -1.88, 1.35); m.userData.op0 = 0.6; register('diafragma', m, 0); })();
 // medula espinal, parte cervical (continua o bulbo da malha)
 tube('medula', [B(28.6, 0, 0.5), BE(30.5, 0, 0.5), BE(33, 0, 0.48), BE(36, 0, 0.46)], 0.62, 0.52, { mid: true, sx: 1.2, seg: 30, rad: 18 });
-// corte da medula: substância cinzenta em H (cornos anterior e posterior) no meio da branca
+// ponta da medula fechada com um disco liso (o corte em H volta com os cortes da medula, no modo de fatias)
 (function () {
-  const cv = document.createElement('canvas'); cv.width = cv.height = 256; const c = cv.getContext('2d');
-  c.fillStyle = '#efe4d4'; c.beginPath(); c.arc(128, 128, 126, 0, Math.PI * 2); c.fill();
-  c.fillStyle = '#b98c78'; c.beginPath();
-  c.moveTo(118, 120); c.bezierCurveTo(100, 100, 70, 60, 58, 30); c.bezierCurveTo(70, 28, 92, 60, 112, 96);   // corno posterior esquerdo
-  c.lineTo(144, 96); c.bezierCurveTo(164, 60, 186, 28, 198, 30); c.bezierCurveTo(186, 60, 156, 100, 138, 120);   // corno posterior direito
-  c.bezierCurveTo(170, 140, 196, 170, 196, 200); c.bezierCurveTo(176, 214, 150, 180, 138, 150);   // corno anterior direito
-  c.lineTo(118, 150); c.bezierCurveTo(106, 180, 80, 214, 60, 200); c.bezierCurveTo(60, 170, 86, 140, 118, 120);   // corno anterior esquerdo
-  c.closePath(); c.fill();
-  c.fillStyle = '#6a8fb0'; c.beginPath(); c.arc(128, 124, 5, 0, Math.PI * 2); c.fill();   // canal central
-  c.strokeStyle = '#8f6b58'; c.lineWidth = 3; c.beginPath(); c.moveTo(128, 254); c.lineTo(128, 214); c.stroke();   // fissura mediana anterior
-  const tex = new THREE.CanvasTexture(cv), m = new THREE.Mesh(new THREE.CircleGeometry(1, 48), stdMat('#ffffff', { map: tex, roughness: 0.85 }));
+  const m = new THREE.Mesh(new THREE.CircleGeometry(1, 48), stdMat(META.medula.color, { roughness: 0.85 }));
   const a = BE(35.6, 0, 0.46), b = BE(36.4, 0, 0.46), d = new THREE.Vector3(b[0] - a[0], b[1] - a[1], b[2] - a[2]).normalize();
-  m.position.set(b[0] + d.x * 0.01, b[1] + d.y * 0.01, b[2] + d.z * 0.01); m.up.set(0, 0, 1); m.lookAt(new THREE.Vector3(b[0] + d.x, b[1] + d.y, b[2] + d.z));
+  m.position.set(b[0] - d.x * 0.02, b[1] - d.y * 0.02, b[2] - d.z * 0.02); m.up.set(0, 0, 1); m.lookAt(new THREE.Vector3(b[0] + d.x, b[1] + d.y, b[2] + d.z));
   m.scale.set(0.62, 0.52, 1); register('medula', m, 0);
 })();
 
+/* ===== LOBOS, GIROS E SISTEMA LÍMBICO COMPLETOS (remodelagem 3, fase 2) =====
+   Gabarito: Unicamp, cortes coronais 1 a 12 (GABARITO.md). Texto: Machado, cap. 6, 7 e 27.
+   Formas novas desenhadas sobre as malhas reais; o que é esquemático está dito na nota de cada item. */
+// ---- lobos: cada região da parcelação pertence a um lobo; selecionar o lobo acende os seus giros
+const LOBO_DK = {
+  superiorfrontal: 'lobo_front', rostralmiddlefrontal: 'lobo_front', caudalmiddlefrontal: 'lobo_front', parsopercularis: 'lobo_front', parstriangularis: 'lobo_front',
+  parsorbitalis: 'lobo_front', lateralorbitofrontal: 'lobo_front', medialorbitofrontal: 'lobo_front', precentral: 'lobo_front', frontalpole: 'lobo_front',
+  postcentral: 'lobo_par', superiorparietal: 'lobo_par', inferiorparietal: 'lobo_par', supramarginal: 'lobo_par', precuneus: 'lobo_par',
+  superiortemporal: 'lobo_temp', middletemporal: 'lobo_temp', inferiortemporal: 'lobo_temp', bankssts: 'lobo_temp', fusiform: 'lobo_temp',
+  transversetemporal: 'lobo_temp', temporalpole: 'lobo_temp', entorhinal: 'lobo_temp', parahippocampal: 'lobo_temp',
+  lateraloccipital: 'lobo_occ', lingual: 'lobo_occ', cuneus: 'lobo_occ', pericalcarine: 'lobo_occ',
+  rostralanteriorcingulate: 'lobo_limb', caudalanteriorcingulate: 'lobo_limb', posteriorcingulate: 'lobo_limb', isthmuscingulate: 'lobo_limb'
+};
+cortexMeshes.forEach(m => {
+  const dk = m.userData.dk, L = LOBO_DK[dk];
+  if (dk === 'isthmuscingulate') {   // istmo: parte do giro do cíngulo, selecionável sozinho
+    m.userData.id = 'gistmo'; m.userData.base = META.gistmo.color; m.userData.pai = 'gcing'; itemOf('gistmo').meshes.push(m);
+  }
+  if (!L) return;   // lóbulo paracentral (frontal e parietal) e ínsula (o próprio lobo insular) ficam fora
+  m.userData.lobo = L; itemOf(L).meshes.push(m);
+  if (dk === 'parahippocampal' || dk === 'entorhinal') { m.userData.pai = 'lobo_limb'; itemOf('lobo_limb').meshes.push(m); }   // giro para-hipocampal: lobo temporal e lobo límbico
+});
+// fissura longitudinal do cérebro: linha na margem superior, entre os hemisférios
+tube('fis_long', lin(14, 195, 50).map(a => CONT.pt(a, -0.02)), 0.045, 0.045, { mid: true, seg: 160, rad: 6 });
+ITEMS.fis_long.meshes.forEach(m => { m.userData.sulco = true; m.userData.fis = true; });
+
+// ---- giro subcaloso (área septal): abaixo do rostro do corpo caloso, à frente da lâmina terminal
+fita('gsubcal', sx => medP(sx, [[0, 0.3, 2.85], [0, 0.0, 2.55], [0, -0.35, 2.2], [0, -0.7, 1.85], [0, -0.95, 1.65]], 0.03), u => 0.2 - 0.06 * u, 0.035, { up: [1, 0, 0] });
+
+// ---- hipocampo por partes: pé (cabeça, anterior) e corpo com a cauda; mesma malha real, dividida
+(function () {
+  const ms = ITEMS.hipocampo.meshes.slice(), v = new THREE.Vector3(), Z = -0.6;   // limite aproximado entre a cabeça e o corpo
+  ms.forEach(m => { if (m.parent) m.parent.remove(m); const k = ALLMESH.indexOf(m); if (k >= 0) ALLMESH.splice(k, 1); });
+  ITEMS.hipocampo.meshes = [];
+  const porGeo = new Map(); ms.forEach(m => { if (!porGeo.has(m.geometry)) porGeo.set(m.geometry, []); porGeo.get(m.geometry).push(m); });
+  porGeo.forEach((lista, g) => {
+    const m1 = lista.find(m => m.userData.side === 1) || lista[0], p = g.attributes.position, I = g.index.array, grupos = {}, W = [];
+    for (let k = 0; k < p.count; k++) { v.fromBufferAttribute(p, k).applyMatrix4(m1.matrix); W.push(v.z); }
+    for (let t = 0; t < I.length; t += 3) { const z = (W[I[t]] + W[I[t + 1]] + W[I[t + 2]]) / 3, id = z > Z ? 'pehipo' : 'hipo_corpo'; (grupos[id] = grupos[id] || []).push(I[t], I[t + 1], I[t + 2]); }
+    Object.keys(grupos).forEach(id => {
+      const sub = new THREE.BufferGeometry(); Object.keys(g.attributes).forEach(k => sub.setAttribute(k, g.attributes[k]));
+      sub.setIndex(new THREE.BufferAttribute(new Uint32Array(grupos[id]), 1)); sub.computeBoundingSphere(); sub.computeBoundingBox();
+      lista.forEach(src => { const m = new THREE.Mesh(sub, stdMat(META[id].color, { roughness: 0.62 })); m.matrixAutoUpdate = false; m.matrix.copy(src.matrix); register(id, m, src.userData.side); m.userData.pai = 'hipocampo'; itemOf('hipocampo').meshes.push(m); });
+    });
+  });
+})();
+// álveo (face ventricular do hipocampo) e subículo (transição para o giro para-hipocampal): lâminas esquemáticas ao longo do hipocampo
+fita('alveo', HIPO.slice(0, -1).map(q => desl(q, 0.22, 0.05, 0)), 0.2, 0.022, { up: [0.55, 0.83, 0], seg: 60 });
+fita('subiculo', HIPO.slice(0, -1).map(q => desl(q, -0.2, -0.32, 0)), 0.15, 0.035, { up: [-0.6, 0.8, 0], seg: 60 });
+
+// ---- feixes do sistema límbico
+// fascículo do cíngulo: dentro do giro do cíngulo, em arco sobre o corpo caloso
+tube('f_cingulo', sx => arcoCaloso(sx, -30, 200).map(p => { const q = fora(p, 0.36); return [sx * 0.42, q[1], q[2]]; }), 0.065, 0.055, { seg: 90, rad: 8, reto: true });
+// fascículo mamilotalâmico: do corpo mamilar ao núcleo anterior do tálamo (etapa do circuito de Papez)
+tube('f_mamtal', [[0.32, -0.95, 0.0], [0.42, -0.45, 0.22], [0.52, 0.15, 0.55], [0.58, 0.72, 0.82]], 0.045, 0.04, { seg: 30, rad: 8, reto: true });
+// estria terminal: do corpo amigdaloide, em C, pelo teto do corno inferior e pelo sulco entre caudado e tálamo, até a comissura anterior
+tube('estria_t', [[2.2, -1.1, 0.25], [2.55, -0.5, -0.9], [2.45, 0.25, -1.9], [2.05, 1.05, -1.65], [1.55, 1.36, -0.4], [1.0, 1.28, 0.55], [0.5, 0.88, 1.05], [0.38, 0.2, 1.25], [0.42, -0.35, 1.1]], 0.035, 0.03, { seg: 90, rad: 6, reto: true });
+
+// ---- prosencéfalo basal: substância inominada e núcleo basal de Meynert, abaixo do globo pálido, no nível da comissura anterior
+blob('subst_inom', sx => [sx * 1.65, Math.max(ENV[sx].inf(1.65, 1.15) + 0.32, -1.02), 1.15], [0.6, 0.12, 0.36], null, { amp: 0.06, seed: 51 });
+ITEMS.subst_inom.meshes.forEach(m => { m.userData.op0 = 0.55; });
+blob('meynert', sx => [sx * 1.7, Math.max(ENV[sx].inf(1.7, 1.1) + 0.3, -1.04), 1.1], [0.38, 0.07, 0.2], null, { amp: 0.08, seed: 53 });
+
+// ---- epitálamo: trígono e comissura das habênulas, à frente da glândula pineal, sobre o tálamo
+const TOPO_TAL = (x, z) => { const v = new THREE.Vector3(); let y = -9; ITEMS.talamo.meshes.filter(m => m.userData.side === 1).forEach(m => { const p = m.geometry.attributes.position; for (let k = 0; k < p.count; k++) { v.fromBufferAttribute(p, k).applyMatrix4(m.matrix); if (Math.abs(v.x - x) < 0.15 && Math.abs(v.z - z) < 0.18 && v.y > y) y = v.y; } }); return y > -9 ? y : 0.5; };
+{ const yh = TOPO_TAL(0.32, -1.4);
+  blob('trighab', [0.32, yh + 0.02, -1.4], [0.15, 0.05, 0.2], null, { amp: 0.04, seed: 57 });
+  fita('comhab', [[-0.3, yh - 0.02, -1.52], [0, yh - 0.04, -1.56], [0.3, yh - 0.02, -1.52]], 0.05, 0.04, { mid: true }); }
+/* ===== TRONCO: NÚCLEOS E FEIXES INTERNOS (remodelagem 3, fase 4) =====
+   Gabarito: Unicamp, série axial de cerebelo e tronco (figuras 1 a 21). Texto: Machado, cap. 16 e 17.
+   Posições tiradas das regiões reais da superfície (oliva, tubérculos, assoalho do IV ventrículo); formas esquemáticas. */
+// eixo do tronco no plano mediano: ponto ventral e direções (cranial e dorsal) num nível qualquer (fracionário) do perfil
+function eixoTronco(f) {
+  const P = MARCOS.tronco.perfil, n = P.length - 1, i = Math.max(0, Math.min(n - 1, Math.floor(f))), t = Math.max(0, Math.min(1, f - i));
+  const y = P[i][0] + (P[i + 1][0] - P[i][0]) * t, z = P[i][1] + (P[i + 1][1] - P[i][1]) * t;
+  const a = P[Math.max(0, i - 6)], b = P[Math.min(n, i + 7)], ty = a[0] - b[0], tz = a[1] - b[1], L = Math.hypot(ty, tz) || 1;   // janela larga: a ponte é abaulada e o eixo local oscila
+  const cr = [0, ty / L, tz / L];            // cranial (para cima ao longo do tronco)
+  const dor = [0, cr[2], -cr[1]];            // dorsal (para trás, perpendicular ao eixo)
+  return { V: [0, y, z], cr, dor };
+}
+const ROT_TRONCO = Math.atan2(0.28, 0.96);   // inclinação do eixo do tronco em relação à vertical
+// núcleo olivar inferior: bolsa pregueada dentro da oliva, aberta medialmente (hilo); núcleos olivares acessórios não modelados
+blob('nuoliva', [0.7, -4.66, -2.84], [0.17, 0.34, 0.18], [ROT_TRONCO, 0, 0], { amp: 0.22, freq: 4.2, seed: 61, seg: 48, seg2: 36, achata: [0, 0.55] });
+// núcleos grácil e cuneiforme: sob os tubérculos homônimos, no bulbo fechado
+blob('nugrac', [0.17, -4.97, -3.4], [0.08, 0.3, 0.08], [ROT_TRONCO, 0, 0], { amp: 0.05, seed: 63 });
+blob('nucun', [0.5, -4.8, -3.52], [0.11, 0.27, 0.09], [ROT_TRONCO, 0, 0], { amp: 0.05, seed: 65 });
+// núcleos da base da ponte: grupos de neurônios espalhados entre as fibras da base (granulado esquemático)
+(function () {
+  let sd = 7; const rnd = () => { sd = (sd * 16807) % 2147483647; return sd / 2147483647; };
+  const T = MARCOS.tronco, cnt = 34;
+  for (let k = 0; k < cnt; k++) {
+    const f = T.iSup + 1.5 + rnd() * (T.iInf - T.iSup - 3), e = eixoTronco(f), prof = 0.18 + rnd() * 0.5, x = (rnd() * 2 - 1) * 0.85;
+    const c = [x, e.V[1] + e.dor[1] * prof, e.V[2] + e.dor[2] * prof];
+    blob('nupont', c, [0.07 + rnd() * 0.04, 0.05, 0.06], null, { mid: true, amp: 0.2, seed: 70 + k, seg: 12, seg2: 9 });
+  }
+})();
+// formação reticular: coluna difusa no centro do tegmento, do mesencéfalo ao bulbo
+tube('freticular', sx => lin(1, 28, 14).map(f => { const e = eixoTronco(f), prof = f < MARCOS.tronco.iSup ? 0.95 : (f < MARCOS.tronco.iInf ? 1.05 : 0.7); return [sx * 0.3, e.V[1] + e.dor[1] * prof, e.V[2] + e.dor[2] * prof]; }), 0.2, 0.15, { seg: 60, rad: 10, reto: true });
+ITEMS.freticular.meshes.forEach(m => { m.userData.op0 = 0.45; });
+// corpo trapezoide: fibras transversais da via auditiva, na parte ventral do tegmento da ponte inferior
+(function () { const e = eixoTronco(MARCOS.tronco.iInf - 3), p = 0.62; const y = e.V[1] + e.dor[1] * p, z = e.V[2] + e.dor[2] * p;
+  fita('ctrap', [[-0.85, y, z], [-0.3, y - 0.02, z], [0.3, y - 0.02, z], [0.85, y, z]], 0.13, 0.045, { mid: true, up: e.cr }); })();
+// fascículo longitudinal medial: paramediano, logo abaixo do assoalho, do mesencéfalo ao bulbo
+tube('flm', [[0.1, -0.7, -1.98], [0.11, -1.9, -2.8], [0.12, -3.19, -3.12], [0.11, -4.3, -3.28], [0.1, -5.3, -3.42]], 0.05, 0.045, { seg: 60, rad: 8, reto: true });
+
+if (/debug/.test(location.hash)) window.tcDbg = { eixoTronco };
 /* ===== PARES CRANIANOS: sem, origem (ramo de 2 cm) ou trajeto inteiro ===== */
 const RAMOSET = new Set(RAMOS.map(q => q[0]));
 ['nc3', 'nc6', 'nc7'].forEach(id => ITEMS[id].meshes.slice(0, 2).forEach(m => { m.userData.intra = true; }));   // fibras dentro do tronco (núcleo até a emergência)
@@ -2559,6 +2762,10 @@ function applyAppearance() {
       if (fantasma && !isSel) op = Math.min(op, 0.1);
       mat.opacity = op; mat.transparent = op < 0.999; mat.depthWrite = true;
       tmpC.set(META[id].color);
+      {   // lobos: com um lobo selecionado ou numa lição de lobos, cada lobo ganha uma cor só (o giro para-hipocampal também é do lobo límbico)
+        const pl = m.userData.pai && /^lobo_/.test(m.userData.pai) && (sel === m.userData.pai || (state.licao && state.licao.set[m.userData.pai])) ? m.userData.pai : null, lb = pl || m.userData.lobo;
+        if (lb && /^lobo_/.test(lb) && (sel === lb || (sel && /^lobo_/.test(sel)) || (state.licao && state.licao.set[lb]))) tmpC.set(META[lb].color);
+      }
       if (iso && selCortex && !fantasma && !isSel) { const g = (tmpC.r + tmpC.g + tmpC.b) / 3 * 0.85 + 0.12; tmpC.r = tmpC.r * 0.22 + g * 0.78; tmpC.g = tmpC.g * 0.22 + g * 0.78; tmpC.b = tmpC.b * 0.22 + g * 0.78; }
       if (state.territ) tmpC.set('#ffffff');   // a cor vem do território, pintado por vértice
       mat.color.copy(tmpC);
@@ -2949,17 +3156,664 @@ let camAnt = '';
 function frame(t) {
   const dt = Math.min(0.05, (t - tPrev) / 1000); tPrev = t;
   if (auto) camGoal.theta += dt * 0.5, cam.theta = camGoal.theta;
-  stepInflada(dt); stepFluxo(dt); stepSetas(dt); stepSep(dt); stepCamera(dt);
+  stepInflada(dt); stepFluxo(dt); stepSetas(dt); stepSep(dt); stepBol(dt); stepCamera(dt);
   const ch = cam.theta.toFixed(4) + ',' + cam.phi.toFixed(4) + ',' + cam.dist.toFixed(3) + ',' + cam.target.x.toFixed(3) + ',' + cam.target.y.toFixed(3) + ',' + cam.target.z.toFixed(3);
   const mexeu = ch !== camAnt; camAnt = ch;
-  const anima = auto || inflT !== (state.inflada ? 1 : 0) || fluxoGrp.visible || setaGrp.visible || (typeof animando === 'function' && animando());
+  const anima = auto || inflT !== (state.inflada ? 1 : 0) || fluxoGrp.visible || setaGrp.visible || (typeof animando === 'function' && animando()) || bolAnimando();
   if (mexeu || anima || sujo > 0) { placeCamera(); renderer.render(scene, camera); stepRotulos(); legenda(); if (sujo > 0) sujo--; }
   requestAnimationFrame(frame);
 }
 ['click', 'input', 'change', 'wheel', 'keydown', 'pointerup'].forEach(ev => document.addEventListener(ev, marca, true));
 applyVisibility(); applyAppearance(); placeCamera();
-if (/debug/.test(location.hash)) window.atlasDebug = { TEMPOS: () => TEMPOS, THREE, scene, camera, cam, camGoal, state, ITEMS, ALLMESH, ENV, CONT, SYLV, MARCOS, cortexMeshes, select, setView, setInflada, applyVisibility, applyAppearance, syncLayerUI: () => syncLayerUI() };
+if (/debug/.test(location.hash)) window.atlasDebug = { TEMPOS: () => TEMPOS, META, THREE, scene, camera, cam, camGoal, state, ITEMS, ALLMESH, ENV, CONT, SYLV, MARCOS, cortexMeshes, select, setView, setInflada, applyVisibility, applyAppearance, syncLayerUI: () => syncLayerUI() };
 
+/* ===== BOLACHAS: cortes coronais em 3D (remodelagem 3, fase 3) =====
+   Gabarito e modelo: atlas de cortes coronais da Unicamp (12 cortes, face anterior "a" e posterior "b"); nenhuma imagem copiada.
+   A face de cada corte é calculada aqui: a interseção de cada malha com o plano dá segmentos; o interior é preenchido
+   linha a linha (par-ímpar); no córtex e no cerebelo, a faixa junto da superfície vira substância cinzenta e o resto, branca.
+   Os planos foram escolhidos para passar pelas mesmas estruturas-chave de cada corte da Unicamp (ver GABARITO.md). */
+const BOL_Z = [5.2, 3.2, 1.72, 0.85, -1.0, -1.45, -1.75, -2.05, -2.4, -4.0, -5.4, -6.8];   // plano k = face "a" do corte k+1 e face "b" do corte k
+const BOL_POLO = [8.4, -9.5];   // polos frontal e occipital (fim das fatias da ponta)
+const BOL_X0 = -7.3, BOL_X1 = 7.3, BOL_Y0 = -7.6, BOL_Y1 = 8.5;
+const BOL_TOQUE = window.matchMedia && matchMedia('(pointer: coarse)').matches;
+const BOL_RES = BOL_TOQUE ? 0.026 : 0.02, BOL_NX = Math.round((BOL_X1 - BOL_X0) / BOL_RES), BOL_NY = Math.round((BOL_Y1 - BOL_Y0) / BOL_RES);
+const BOL_CINZA = 0.25, BOL_CINZA_CB = 0.13;   // espessura da faixa cinzenta: córtex cerebral e cerebelar (cm)
+// itens-lâmina (superfícies abertas): no corte viram traços, não áreas
+const BOL_LAMINA = { septo: 0.05, capsint: 0.12, capsext: 0.05, claustro: 0.06, capsextr: 0.05, foice: 0.05, tentorio: 0.05, foicecb: 0.04, diafragma: 0.04, alveo: 0.03 };
+const BOL_FORA = { arbvida: 1 };   // o corte sagital do verme não entra
+const BOL_TRONCO = { mesenc: 1, ponte: 1, bulbo: 1 };
+M('cbm', 'Centro branco medular do cérebro', 'cortex', '#efe7da', 'Substância branca dos hemisférios, sob o córtex: fibras de projeção (coroa radiada), de associação e comissurais. Também chamado centro semioval.', 'Ramos corticais (fibras longas) e centrais.', '');
+M('cb_cbm', 'Corpo medular do cerebelo', 'stem', '#efe4d2', 'Substância branca do cerebelo, sob o córtex cerebelar; no verme, em corte sagital, forma a árvore da vida. Contém os núcleos centrais.', 'Artérias cerebelares.', '');
+M('cx_cinza', 'Córtex cerebral (substância cinzenta)', 'cortex', '#a08f86', 'Camada de substância cinzenta, de 2 a 4 mm, que reveste os giros e acompanha o fundo dos sulcos. No corte, é a faixa mais escura por fora da substância branca.', 'Ramos corticais das artérias cerebrais.', '');
+REF(['cbm', 'cb_cbm', 'cx_cinza'], 'Machado, Neuroanatomia Funcional, 4ª ed., cap. 7 e cap. 5. Gabarito: Unicamp, cortes coronais.');
+const BOL_BRANCAS = /^(cc|cc_|capsint|capsext|capsextr|fornice|fimbria|alveo|comant|compost|f_|estria_t|cbm|cb_cbm|quiasma|nc\d|v_|pedunc|pcs|pcm|pci|veusup|piramide|laminaterm)/;
+const bolNome = id => (META[id] ? META[id].name : id);
+// um id e os seus "pais" (lobo, item que reúne partes): o lobo frontal está presente se um giro frontal estiver
+const BOL_PAIS = {};
+function bolPais(id) { let r = BOL_PAIS[id]; if (r) return r; r = [id]; const it = ITEMS[id], m = it && it.meshes.find(q => q.userData.id === id); if (m) { if (m.userData.lobo && META[m.userData.lobo]) r.push(m.userData.lobo); if (m.userData.pai && META[m.userData.pai] && r.indexOf(m.userData.pai) < 0) r.push(m.userData.pai); } return (BOL_PAIS[id] = r); }
+
+// ---- posições do mundo de cada malha, guardadas uma vez
+const BOL_W = new Map();
+function bolMundo(m) {
+  let w = BOL_W.get(m); if (w) return w;
+  m.updateMatrixWorld(true);
+  const g = m.geometry, p = m.userData.cortex && m.userData.p0 ? m.userData.p0 : g.attributes.position.array, n = p.length / 3, e = m.matrixWorld.elements, P = new Float32Array(n * 3);
+  for (let i = 0; i < n; i++) { const x = p[i * 3], y = p[i * 3 + 1], z = p[i * 3 + 2]; P[i * 3] = e[0] * x + e[4] * y + e[8] * z + e[12]; P[i * 3 + 1] = e[1] * x + e[5] * y + e[9] * z + e[13]; P[i * 3 + 2] = e[2] * x + e[6] * y + e[10] * z + e[14]; }
+  let zmin = Infinity, zmax = -Infinity; for (let i = 2; i < P.length; i += 3) { if (P[i] < zmin) zmin = P[i]; if (P[i] > zmax) zmax = P[i]; }
+  let cx = 0, cy = 0, cz = 0; for (let i = 0; i < P.length; i += 3) { cx += P[i]; cy += P[i + 1]; cz += P[i + 2]; } cx /= n; cy /= n; cz /= n;
+  let r2 = 0; for (let i = 0; i < P.length; i += 3) { const d = (P[i] - cx) ** 2 + (P[i + 1] - cy) ** 2 + (P[i + 2] - cz) ** 2; if (d > r2) r2 = d; }
+  w = { P, zmin, zmax, c: [cx, cy, cz], r: Math.sqrt(r2) }; BOL_W.set(m, w); return w;
+}
+// grupo de preenchimento: superfícies divididas em partes são preenchidas juntas
+function bolChave(m) {
+  const u = m.userData, s = u.side || 0;
+  if (u.cortex) return 'CX' + s;
+  if (u.pai === 'cerebelo' || u.pai === 'vermis') return 'CB' + u.pai + s;
+  if (BOL_TRONCO[u.id] || (u.pai && BOL_TRONCO[u.pai])) return 'TE';
+  if (u.pai && ITEMS[u.pai] && !ITEMS[u.pai].meshes.some(q => q.userData.id === u.pai)) return 'U' + u.pai + s;
+  return 'M' + m.id;
+}
+function bolEntra(m) {
+  const u = m.userData, id = u.id;
+  if (!META[id] || BOL_FORA[id] || u.les !== undefined || u.corte || u.cortePed) return false;
+  if (u.pai && BOL_TRONCO[u.pai]) return true;   // regiões da superfície do tronco: fazem parte do contorno do tronco
+  if (u.fis || u.sulco && !/^s_/.test(id)) return false;
+  if (m.geometry.type === 'CircleGeometry' || m.geometry.type === 'RingGeometry') return false;
+  return true;
+}
+
+// ---- uma face: segmentos -> preenchimento -> substância cinzenta e branca
+const BOL_IDS = [], BOL_IDX = {};
+const bolCod = id => { if (BOL_IDX[id] === undefined) { BOL_IDX[id] = BOL_IDS.length; BOL_IDS.push(id); } return BOL_IDX[id]; };
+bolCod('');   // 0 = vazio
+// plano coronal padrão (as bolachas); outros planos (tronco) passam G
+function bolPlanoCoronal(z) { return { O: [0, 0, z], n: [0, 0, 1], u: [1, 0, 0], v: [0, 1, 0], X0: BOL_X0, X1: BOL_X1, Y0: BOL_Y0, Y1: BOL_Y1, RES: BOL_RES }; }
+function bolSecao(z, G) {
+  G = G || bolPlanoCoronal(z);
+  const O = G.O, N = G.n, U = G.u, V = G.v, Ox = O[0], Oy = O[1], Oz = O[2], nx = N[0], ny = N[1], nz = N[2];
+  const grupos = new Map(), laminas = [];
+  ALLMESH.forEach(m => {
+    if (!bolEntra(m) || (G.filtro && !G.filtro(m))) return;
+    const w = bolMundo(m); if (Math.abs((w.c[0] - Ox) * nx + (w.c[1] - Oy) * ny + (w.c[2] - Oz) * nz) > w.r) return;
+    const P = w.P, I = m.geometry.index.array, own = bolCod(m.userData.id), seg = [];
+    for (let t = 0; t < I.length; t += 3) {
+      const a = I[t] * 3, b = I[t + 1] * 3, c = I[t + 2] * 3, za = (P[a] - Ox) * nx + (P[a + 1] - Oy) * ny + (P[a + 2] - Oz) * nz, zb = (P[b] - Ox) * nx + (P[b + 1] - Oy) * ny + (P[b + 2] - Oz) * nz, zc = (P[c] - Ox) * nx + (P[c + 1] - Oy) * ny + (P[c + 2] - Oz) * nz;
+      if ((za > 0 && zb > 0 && zc > 0) || (za <= 0 && zb <= 0 && zc <= 0)) continue;
+      const pts = [];
+      const ed = (i, j, zi, zj) => { if ((zi > 0) !== (zj > 0)) { const f = zi / (zi - zj), qx = P[i] + (P[j] - P[i]) * f - Ox, qy = P[i + 1] + (P[j + 1] - P[i + 1]) * f - Oy, qz = P[i + 2] + (P[j + 2] - P[i + 2]) * f - Oz; pts.push(qx * U[0] + qy * U[1] + qz * U[2], qx * V[0] + qy * V[1] + qz * V[2]); } };
+      ed(a, b, za, zb); ed(b, c, zb, zc); ed(c, a, zc, za);
+      if (pts.length === 4) seg.push(pts[0], pts[1], pts[2], pts[3], own);
+    }
+    if (!seg.length) return;
+    const lam = BOL_LAMINA[m.userData.id];
+    if (lam !== undefined) { laminas.push({ seg, own, w: lam }); return; }
+    const k = bolChave(m); let g = grupos.get(k); if (!g) { g = { k, seg: [], cortex: /^CX/.test(k) ? 1 : (/^CB/.test(k) ? 2 : 0), envelope: k === 'TE' || /^CB/.test(k) }; grupos.set(k, g); }
+    for (let i = 0; i < seg.length; i++) g.seg.push(seg[i]);
+  });
+  const NX = Math.round((G.X1 - G.X0) / G.RES), NY = Math.round((G.Y1 - G.Y0) / G.RES), id = new Uint16Array(NX * NY), tipo = new Uint8Array(NX * NY);   // tipo: 1 cinzenta cerebral, 2 branca cerebral, 3 cinzenta cerebelar, 4 branca cerebelar
+  const px = x => (x - G.X0) / G.RES, py = y => (G.Y1 - y) / G.RES;
+  // preenche um grupo; devolve a área em pixels (para ordenar: grandes primeiro)
+  // tronco: contorno desenhado, inundação por fora e o resto preenchido com a parte mais próxima (robusto a cortes de raspão e a metades abertas)
+  function inunda(g) {
+    const S = g.seg, borda = new Int32Array(NX * NY), fora = new Uint8Array(NX * NY);
+    for (let i = 0; i < S.length; i += 5) { const x1 = px(S[i]), y1 = py(S[i + 1]), x2 = px(S[i + 2]), y2 = py(S[i + 3]), n = Math.max(1, Math.ceil(Math.hypot(x2 - x1, y2 - y1) * 2)); for (let k = 0; k <= n; k++) { const cx = x1 + (x2 - x1) * k / n, cy = y1 + (y2 - y1) * k / n; for (let dr = -1; dr <= 1; dr++) for (let dc = -1; dc <= 1; dc++) { const c = Math.floor(cx) + dc, rr = Math.floor(cy) + dr; if (c >= 0 && rr >= 0 && c < NX && rr < NY) borda[rr * NX + c] = S[i + 4] + 1; } } }
+    const fila = new Int32Array(NX * NY); let h = 0, t = 0;
+    for (let c = 0; c < NX; c++) { [c, (NY - 1) * NX + c].forEach(k => { if (!borda[k] && !fora[k]) { fora[k] = 1; fila[t++] = k; } }); }
+    for (let rr = 0; rr < NY; rr++) { [rr * NX, rr * NX + NX - 1].forEach(k => { if (!borda[k] && !fora[k]) { fora[k] = 1; fila[t++] = k; } }); }
+    while (h < t) { const k = fila[h++], c = k % NX; const viz = [c > 0 ? k - 1 : -1, c < NX - 1 ? k + 1 : -1, k - NX, k + NX]; for (let j = 0; j < 4; j++) { const q = viz[j]; if (q >= 0 && q < NX * NY && !fora[q] && !borda[q]) { fora[q] = 1; fila[t++] = q; } } }
+    // dono de cada pixel de dentro: a borda mais próxima (busca em largura a partir da borda)
+    const dono = new Int32Array(NX * NY), dist = new Uint16Array(NX * NY); h = 0; t = 0;
+    for (let k = 0; k < NX * NY; k++) if (borda[k]) { dono[k] = borda[k]; fila[t++] = k; }
+    while (h < t) { const k = fila[h++], c = k % NX; const viz = [c > 0 ? k - 1 : -1, c < NX - 1 ? k + 1 : -1, k - NX, k + NX]; for (let j = 0; j < 4; j++) { const q = viz[j]; if (q >= 0 && q < NX * NY && !fora[q] && !dono[q]) { dono[q] = dono[k]; dist[q] = dist[k] + 1; fila[t++] = q; } } }
+    const faixa = Math.max(2, Math.round(0.05 / G.RES)), paiDe = {};
+    for (let k = 0; k < NX * NY; k++) { const o = dono[k]; if (!o || fora[k] || dist[k] <= faixa) continue; let p = paiDe[o]; if (p === undefined) { const nm = BOL_IDS[o - 1], it = ITEMS[nm], m = it && it.meshes.find(q => q.userData.id === nm), pai = m && m.userData.pai; p = paiDe[o] = pai && BOL_TRONCO[pai] ? bolCod(pai) + 1 : o; } dono[k] = p; }
+    const out = []; let area = 0;
+    for (let rr = 0; rr < NY; rr++) { let c = 0; while (c < NX) { const k = rr * NX + c; if (fora[k] || !dono[k]) { c++; continue; } const o = dono[k]; let c1 = c; while (c1 + 1 < NX && !fora[rr * NX + c1 + 1] && dono[rr * NX + c1 + 1] === o) c1++; out.push(rr, c, c1, o - 1); area += c1 - c + 1; c = c1 + 1; } }
+    g.spans = out; g.area = area;
+  }
+  // fecha contornos abertos (a malha do tronco é aberta onde foi separada do diencéfalo): liga as pontas soltas de cada cadeia
+  function fecha(S) {
+    const q = v => Math.round(v * 2000), chave = (x, y) => q(x) + ',' + q(y), ends = new Map();
+    const conta = k => ends.set(k, (ends.get(k) || 0) + 1);
+    for (let i = 0; i < S.length; i += 5) { conta(chave(S[i], S[i + 1])); conta(chave(S[i + 2], S[i + 3])); }
+    // pontas soltas: aparecem uma vez só; liga-as aos pares, cada uma à mais próxima ainda livre
+    const soltas = []; const vistos = new Set();
+    for (let i = 0; i < S.length; i += 5) [[S[i], S[i + 1]], [S[i + 2], S[i + 3]]].forEach(p => { const k = chave(p[0], p[1]); if (ends.get(k) === 1 && !vistos.has(k)) { vistos.add(k); soltas.push([p[0], p[1], S[i + 4]]); } });
+    const usada = new Uint8Array(soltas.length);
+    for (let a = 0; a < soltas.length; a++) { if (usada[a]) continue; let b = -1, bd = Infinity; for (let j = 0; j < soltas.length; j++) if (j !== a && !usada[j]) { const d = Math.hypot(soltas[j][0] - soltas[a][0], soltas[j][1] - soltas[a][1]); if (d < bd) { bd = d; b = j; } } if (b < 0) break; usada[a] = usada[b] = 1; S.push(soltas[a][0], soltas[a][1], soltas[b][0], soltas[b][1], soltas[a][2]); }
+  }
+  function spans(g) {
+    if (g.envelope) { fecha(g.seg); return inunda(g); }   // tronco e cerebelo: contornos abertos e com muitos pedaços
+    const S = g.seg, rows = new Map();
+    for (let i = 0; i < S.length; i += 5) {
+      const y1 = py(S[i + 1]), y2 = py(S[i + 3]); if (y1 === y2) continue;
+      const r0 = Math.max(0, Math.ceil(Math.min(y1, y2) - 0.5)), r1 = Math.min(NY - 1, Math.ceil(Math.max(y1, y2) - 0.5) - 1);
+      for (let r = r0; r <= r1; r++) { let L = rows.get(r); if (!L) { L = []; rows.set(r, L); } L.push(i); }
+    }
+    const out = []; let area = 0;
+    rows.forEach((L, r) => {
+      const yc = r + 0.5, xs = [];
+      L.forEach(i => { const x1 = px(S[i]), y1 = py(S[i + 1]), x2 = px(S[i + 2]), y2 = py(S[i + 3]); xs.push([x1 + (yc - y1) * (x2 - x1) / (y2 - y1), S[i + 4]]); });
+      xs.sort((p, q) => p[0] - q[0]);
+      for (let j = 0; j + 1 < xs.length; j += 2) { const c0 = Math.max(0, Math.ceil(xs[j][0] - 0.5)), c1 = Math.min(NX - 1, Math.floor(xs[j + 1][0] - 0.5)); if (c1 >= c0) { out.push(r, c0, c1, xs[j][1]); area += c1 - c0 + 1; } }
+    });
+    g.spans = out; g.area = area;
+  }
+  const lista = [...grupos.values()]; lista.forEach(spans);
+  lista.sort((p, q) => (q.cortex ? 1e12 : q.area) - (p.cortex ? 1e12 : p.area));   // córtex e cerebelo primeiro, depois do maior para o menor
+  lista.forEach(g => { const O = g.spans; for (let i = 0; i < O.length; i += 4) { const base = O[i] * NX; for (let c = O[i + 1]; c <= O[i + 2]; c++) { id[base + c] = O[i + 3]; tipo[base + c] = g.cortex === 1 ? 2 : (g.cortex === 2 ? 4 : 0); } } });
+  // faixa cinzenta: distância até a superfície (chanfro 3-4) e o rótulo da região mais próxima
+  { const INF = 1e9, d = new Float32Array(NX * NY).fill(INF), lab = new Uint16Array(NX * NY);
+    const semCortex = { [bolCod('cc_cut')]: 1, [bolCod('dien_wall')]: 1 };   // a parede medial cortada não tem córtex
+    lista.forEach(g => { if (!g.cortex) return; const S = g.seg; for (let i = 0; i < S.length; i += 5) { if (semCortex[S[i + 4]]) continue; const x1 = px(S[i]), y1 = py(S[i + 1]), x2 = px(S[i + 2]), y2 = py(S[i + 3]), n = Math.max(1, Math.ceil(Math.hypot(x2 - x1, y2 - y1))); for (let k = 0; k <= n; k++) { const c = Math.floor(x1 + (x2 - x1) * k / n), r = Math.floor(y1 + (y2 - y1) * k / n); if (c >= 0 && c < NX && r >= 0 && r < NY) { d[r * NX + c] = 0; lab[r * NX + c] = S[i + 4]; } } } });
+    for (let r = 0; r < NY; r++) for (let c = 0; c < NX; c++) { const k = r * NX + c; let v = d[k], l = lab[k];
+      if (c > 0 && d[k - 1] + 3 < v) { v = d[k - 1] + 3; l = lab[k - 1]; } if (r > 0) { if (d[k - NX] + 3 < v) { v = d[k - NX] + 3; l = lab[k - NX]; } if (c > 0 && d[k - NX - 1] + 4 < v) { v = d[k - NX - 1] + 4; l = lab[k - NX - 1]; } if (c < NX - 1 && d[k - NX + 1] + 4 < v) { v = d[k - NX + 1] + 4; l = lab[k - NX + 1]; } } d[k] = v; lab[k] = l; }
+    for (let r = NY - 1; r >= 0; r--) for (let c = NX - 1; c >= 0; c--) { const k = r * NX + c; let v = d[k], l = lab[k];
+      if (c < NX - 1 && d[k + 1] + 3 < v) { v = d[k + 1] + 3; l = lab[k + 1]; } if (r < NY - 1) { if (d[k + NX] + 3 < v) { v = d[k + NX] + 3; l = lab[k + NX]; } if (c < NX - 1 && d[k + NX + 1] + 4 < v) { v = d[k + NX + 1] + 4; l = lab[k + NX + 1]; } if (c > 0 && d[k + NX - 1] + 4 < v) { v = d[k + NX - 1] + 4; l = lab[k + NX - 1]; } } d[k] = v; lab[k] = l; }
+    const gC = BOL_CINZA / G.RES * 3, gB = BOL_CINZA_CB / G.RES * 3, cbm = bolCod('cbm'), cbb = bolCod('cb_cbm');
+    for (let k = 0; k < id.length; k++) {
+      if (tipo[k] === 2) { if (d[k] <= gC) { tipo[k] = 1; id[k] = lab[k]; } else id[k] = cbm; }
+      else if (tipo[k] === 4) { if (d[k] <= gB) { tipo[k] = 3; id[k] = lab[k]; } else id[k] = cbb; }
+    }
+  }
+  // lâminas: traços com espessura
+  laminas.forEach(L => { const S = L.seg, rr = Math.max(1, L.w / G.RES / 2); for (let i = 0; i < S.length; i += 5) { const x1 = px(S[i]), y1 = py(S[i + 1]), x2 = px(S[i + 2]), y2 = py(S[i + 3]), n = Math.max(1, Math.ceil(Math.hypot(x2 - x1, y2 - y1))); for (let k = 0; k <= n; k++) { const cx = x1 + (x2 - x1) * k / n, cy = y1 + (y2 - y1) * k / n; for (let r = Math.floor(cy - rr); r <= cy + rr; r++) for (let c = Math.floor(cx - rr); c <= cx + rr; c++) if (c >= 0 && c < NX && r >= 0 && r < NY && (c - cx) * (c - cx) + (r - cy) * (r - cy) <= rr * rr) { id[r * NX + c] = L.own; tipo[r * NX + c] = 0; } } } });
+  // estruturas presentes: área e ponto do rótulo (do lado esquerdo do paciente, x > 0, quando houver)
+  const acc = {}, NOM = {}, nomes = (v, t) => { const k = v * 8 + t; return NOM[k] || (NOM[k] = bolPais(BOL_IDS[v]).concat(t === 1 ? ['cx_cinza'] : (t === 3 ? ['cerebelo'] : []))); };
+  for (let r = 0; r < NY; r += 2) for (let c = 0; c < NX; c += 2) { const v = id[r * NX + c]; if (!v) continue; const L = nomes(v, tipo[r * NX + c]); for (let j = 0; j < L.length; j++) { const nm = L[j], a = acc[nm] || (acc[nm] = { n: 0, sx: 0, sy: 0, nl: 0, lx: 0, ly: 0, bd: Infinity, best: null }); a.n++; a.sx += c; a.sy += r; if (c > NX / 2) { a.nl++; a.lx += c; a.ly += r; } } }
+  Object.keys(acc).forEach(nm => { const a = acc[nm], usa = a.nl >= 3; a.usa = usa; a.cx = usa ? a.lx / a.nl : a.sx / a.n; a.cy = usa ? a.ly / a.nl : a.sy / a.n; });
+  // pixel da própria estrutura mais perto do centro (formas em C), numa passada só
+  for (let r = 0; r < NY; r += 2) for (let c = 0; c < NX; c += 2) { const v = id[r * NX + c]; if (!v) continue; const L = nomes(v, tipo[r * NX + c]); for (let j = 0; j < L.length; j++) { const a = acc[L[j]]; if (a.usa && c <= NX / 2) continue; const dd = (c - a.cx) * (c - a.cx) + (r - a.cy) * (r - a.cy); if (dd < a.bd) { a.bd = dd; a.best = [c, r]; } } }
+  const pres = {};
+  Object.keys(acc).forEach(nm => { const a = acc[nm]; if (a.n >= 3) pres[nm] = { area: a.n * 4, p: a.best }; });
+  return { z, id, tipo, pres, NX, NY, G };
+}
+
+// ---- pintura da face
+const BOL_REAL = { cinza: '#7f6c62', branca: '#efe8dc', cinzaCb: '#7a675d', vent: '#3a3230', vaso: '#7b302b', nervo: '#e8decd', men: '#bdb3a6' };
+function bolCorDe(id, tipo, paleta) {
+  if (paleta === 'real') {
+    if (tipo === 2 || tipo === 4) return BOL_REAL.branca;
+    if (tipo === 1) return BOL_REAL.cinza; if (tipo === 3) return BOL_REAL.cinzaCb;
+    const g = META[id] ? META[id].grp : '';
+    if (g === 'vent' || /^(vlat|v3|v4|aqueduto)/.test(id)) return id === 'plexo' ? '#6d4140' : BOL_REAL.vent;
+    if (g === 'art' || g === 'ven') return BOL_REAL.vaso;
+    if (g === 'men') return BOL_REAL.men;
+    if (g === 'nc' && !/^nu/.test(id) || g === 'vias' || BOL_BRANCAS.test(id)) return BOL_REAL.nervo;
+    if (id === 'snegra') return '#4a3f3b'; if (id === 'rubro') return '#b58a86'; if (id === 'gpe' || id === 'gpi') return '#bfb0a2';
+    return BOL_REAL.cinza;
+  }
+  if (tipo === 2) return '#f1ebe1'; if (tipo === 4) return '#efe4d2';
+  return META[id] ? META[id].color : '#999999';
+}
+const BOL_CACHE = {};   // z -> { sec, canvas, tex }
+function bolPintar(S, opts) {
+  const NX = S.sec.NX, NY = S.sec.NY, cv = S.canvas || (S.canvas = document.createElement('canvas'));
+  cv.width = NX; cv.height = NY; const ctx = cv.getContext('2d'), img = ctx.createImageData(NX, NY), D = img.data, id = S.sec.id, tipo = S.sec.tipo;
+  const cache = {}, rgb = (v, t) => { const k = v * 8 + t; let c = cache[k]; if (!c) { tmpC.set(bolCorDe(BOL_IDS[v], t, opts.paleta)); c = cache[k] = [tmpC.r * 255, tmpC.g * 255, tmpC.b * 255]; } return c; };
+  // destaque: o próprio item ou qualquer parte dele (lobo, cerebelo, córtex cinzento)
+  const casa = (nm, v, t) => !!nm && (BOL_IDS[v] === nm || bolPais(BOL_IDS[v]).indexOf(nm) >= 0 || (nm === 'cx_cinza' && t === 1) || (nm === 'cerebelo' && t === 3));
+  const MC = {}, marcado = (nm, v, t) => { if (!nm) return false; const k = nm + '|' + v + '|' + t; let r = MC[k]; if (r === undefined) r = MC[k] = casa(nm, v, t); return r; };
+  for (let k = 0; k < id.length; k++) {
+    const v = id[k]; if (!v) continue;
+    const c = rgb(v, tipo[k]); let r = c[0], g = c[1], b = c[2];
+    const borda = (k % NX > 0 && id[k - 1] !== v) || (k >= NX && id[k - NX] !== v);   // contorno entre estruturas
+    if (borda) { r *= 0.62; g *= 0.62; b *= 0.62; }
+    const eAlvo = marcado(opts.alvo, v, tipo[k]), eSel = !eAlvo && marcado(opts.sel, v, tipo[k]);
+    if (eAlvo || eSel) { const t = eAlvo ? 0.55 : 0.4; r = r + (255 - r) * t; g = g + (230 - g) * t; b = b * (1 - t); }
+    D[k * 4] = r; D[k * 4 + 1] = g; D[k * 4 + 2] = b; D[k * 4 + 3] = 255;
+  }
+  ctx.putImageData(img, 0, 0);
+  if (opts.numeros && opts.lista) {   // números do gabarito sobre a peça
+    ctx.font = '600 ' + Math.round(NX / 62) + 'px "Source Sans 3", system-ui, sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    const R = NX / 95, postos = [];
+    opts.lista.forEach((nm, i) => { const p = S.sec.pres[nm]; if (!p || !p.p) return; const x0 = p.p[0], y0 = p.p[1]; let x = x0, y = y0;
+      for (let t = 0; t < 8 && postos.some(q => Math.hypot(q[0] - x, q[1] - y) < R * 2.3); t++) { y = y0 + R * 2.4 * Math.ceil((t + 1) / 2) * (t % 2 ? -1 : 1); }
+      postos.push([x, y]);
+      if (y !== y0) { ctx.beginPath(); ctx.moveTo(x0, y0); ctx.lineTo(x, y); ctx.lineWidth = R * 0.15; ctx.strokeStyle = 'rgba(8,14,18,.8)'; ctx.stroke(); ctx.beginPath(); ctx.arc(x0, y0, R * 0.25, 0, Math.PI * 2); ctx.fillStyle = 'rgba(8,14,18,.9)'; ctx.fill(); }
+      ctx.beginPath(); ctx.arc(x, y, R, 0, Math.PI * 2); ctx.fillStyle = nm === opts.sel ? '#ffd23f' : 'rgba(8,14,18,.86)'; ctx.fill(); ctx.lineWidth = R * 0.18; ctx.strokeStyle = '#ffffff'; ctx.stroke();
+      ctx.fillStyle = nm === opts.sel ? '#111' : '#fff'; ctx.fillText(String(i + 1), x, y + R * 0.06); });
+  }
+  if (!S.tex) { S.tex = new THREE.CanvasTexture(cv); S.tex.anisotropy = 4; S.tex.minFilter = THREE.LinearMipmapLinearFilter; if (renderer.outputEncoding) S.tex.encoding = renderer.outputEncoding; }
+  S.tex.needsUpdate = true; marca();
+}
+function bolFace(z) { let S = BOL_CACHE[z]; if (!S) { const t0 = performance.now(); S = BOL_CACHE[z] = { sec: bolSecao(z) }; TEMPOS['face_' + z] = Math.round(performance.now() - t0); } return S; }
+
+// ---- cena das bolachas: fatias separadas (cartões com as duas faces e a borda) e fatia em foco (malhas cortadas de verdade)
+const bolGrp = new THREE.Group(); bolGrp.visible = false; scene.add(bolGrp);
+const BOL_W2 = BOL_X1 - BOL_X0, BOL_H2 = BOL_Y1 - BOL_Y0, BOL_CX = (BOL_X0 + BOL_X1) / 2, BOL_CY = (BOL_Y0 + BOL_Y1) / 2;
+function bolPlano(tex, verso) {
+  const m = new THREE.Mesh(new THREE.PlaneGeometry(BOL_W2, BOL_H2), new THREE.MeshBasicMaterial({ map: tex, transparent: true, alphaTest: 0.5, side: THREE.FrontSide }));
+  if (verso) { m.rotation.y = Math.PI; const t = tex.clone(); t.needsUpdate = true; t.wrapS = THREE.RepeatWrapping; t.repeat.x = -1; t.offset.x = 1; m.material.map = t; }
+  return m;
+}
+// borda do cartão: quadrados em marcha sobre a máscara da face
+function bolBorda(sec, esp) {
+  const NX = BOL_NX, NY = BOL_NY, id = sec.id, P = 3, pos = [];
+  const cheio = (c, r) => c >= 0 && r >= 0 && c < NX && r < NY && id[r * NX + c] > 0 ? 1 : 0;
+  const X = c => BOL_X0 + c * BOL_RES - BOL_CX, Y = r => BOL_Y1 - r * BOL_RES - BOL_CY;
+  for (let r = -P; r < NY; r += P) for (let c = -P; c < NX; c += P) {
+    const a = cheio(c, r), b = cheio(c + P, r), d = cheio(c + P, r + P), e = cheio(c, r + P), k = a + b * 2 + d * 4 + e * 8; if (k === 0 || k === 15) continue;
+    const T = [c + P / 2, r], R = [c + P, r + P / 2], B = [c + P / 2, r + P], L = [c, r + P / 2];
+    const segs = { 1: [L, T], 2: [T, R], 3: [L, R], 4: [R, B], 5: [L, T, R, B], 6: [T, B], 7: [L, B], 8: [B, L], 9: [B, T], 10: [T, R, B, L], 11: [B, R], 12: [R, L], 13: [R, T], 14: [T, L] }[k];
+    for (let s = 0; s < segs.length; s += 2) { const p = segs[s], q = segs[s + 1], x1 = X(p[0]), y1 = Y(p[1]), x2 = X(q[0]), y2 = Y(q[1]); pos.push(x1, y1, esp, x2, y2, esp, x2, y2, -esp, x1, y1, esp, x2, y2, -esp, x1, y1, -esp); }
+  }
+  const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3)); g.computeVertexNormals();
+  return new THREE.Mesh(g, new THREE.MeshStandardMaterial({ color: '#cdb6a6', roughness: 0.8, side: THREE.DoubleSide }));
+}
+const bolCartoes = [];   // um por corte (1 a 12)
+const bolFoco = { frente: null, tras: null };
+const BOL_ESP = 0.09;
+const bolMeio = n => n < 12 ? (BOL_Z[n - 1] + BOL_Z[n]) / 2 : (BOL_Z[11] + BOL_POLO[1]) / 2;
+const bolFaces = n => ({ a: BOL_Z[n - 1], b: n < 12 ? BOL_Z[n] : null });
+function bolMontarCartao(n) {
+  if (bolCartoes[n]) return bolCartoes[n];
+  const f = bolFaces(n), A = bolFace(f.a), B = f.b !== null ? bolFace(f.b) : null, opt = bolOpts(n);
+  bolPintar(A, opt.a); if (B) bolPintar(B, opt.b);
+  const g = new THREE.Group(); g.userData.n = n;
+  const fa = bolPlano(A.tex, false); fa.position.set(BOL_CX, BOL_CY, BOL_ESP + 0.002); fa.userData = { bol: n, face: 'a' }; g.add(fa);
+  const fb = bolPlano((B || A).tex, true); fb.position.set(BOL_CX, BOL_CY, -BOL_ESP - 0.002); fb.userData = { bol: n, face: B ? 'b' : 'a' };
+  if (!B) { fb.material = new THREE.MeshBasicMaterial({ map: fb.material.map, transparent: true, alphaTest: 0.5, color: '#cdb6a6' }); }   // a última fatia só tem a face anterior
+  g.add(fb);
+  const bd = bolBorda(A.sec, BOL_ESP); bd.position.set(BOL_CX, BOL_CY, 0); bd.userData = { bol: n, face: 'borda' }; g.add(bd);
+  bolGrp.add(g); bolCartoes[n] = g; return g;
+}
+
+// ---- estado e opções
+state.bol = { on: false, n: 3, foco: false, face: 'a', paleta: 'atlas', numeros: true, abre: 0, quiz: null };
+function bolLista(n, face) { const c = GAB[n - 1]; if (!c) return []; const f = bolFaces(n), z = face === 'b' ? f.b : f.a; if (z === null) return []; const S = BOL_CACHE[z]; const ids = (face === 'b' ? c.b : c.a).length ? (face === 'b' ? c.b : c.a) : []; return S ? ids.filter(id => S.sec.pres[id] && S.sec.pres[id].p) : ids; }
+function bolOpts(n) {
+  const B = state.bol, q = B.quiz;
+  const o = face => ({ paleta: B.paleta, numeros: B.numeros && !q, lista: bolLista(n, face), sel: n === B.n ? state.sel : null, alvo: q && n === B.n && q.face === face ? q.alvo : undefined });
+  return { a: o('a'), b: o('b') };
+}
+function bolRepintar(n) {
+  const f = bolFaces(n), o = bolOpts(n);
+  if (BOL_CACHE[f.a] && BOL_CACHE[f.a].tex) bolPintar(BOL_CACHE[f.a], o.a);
+  if (f.b !== null && BOL_CACHE[f.b] && BOL_CACHE[f.b].tex) bolPintar(BOL_CACHE[f.b], o.b);
+  // as texturas do verso são cópias: refaz a ligação
+  const c = bolCartoes[n]; if (c) c.children.forEach(ch => { if (ch.material && ch.material.map && ch.rotation.y) { ch.material.map.image = ch.material.map.image; ch.material.map.needsUpdate = true; } });
+  if (bolFoco.tras && bolFoco.tras.material.map) bolFoco.tras.material.map.needsUpdate = true;
+  marca();
+}
+function bolRepintarTudo() { for (let n = 1; n <= 12; n++) if (bolCartoes[n]) bolRepintar(n); }
+
+// fatiar aos poucos, sem travar a página
+let bolFila = null;
+function bolPreparar(fim) {
+  const status = document.getElementById('bolStatus');
+  if (bolFila) return; const todos = []; for (let n = 1; n <= 12; n++) todos.push(n);
+  const ordem = [state.bol.n].concat(todos.filter(n => n !== state.bol.n));
+  bolFila = ordem.slice();
+  const passo = () => {
+    if (!bolFila.length) { bolFila = null; if (status) status.textContent = ''; bolLayout(); if (fim) fim(); return; }
+    const n = bolFila.shift(); bolMontarCartao(n); if (status) status.textContent = 'Fatiando… ' + (12 - bolFila.length) + '/12'; bolLayout(); marca();
+    setTimeout(passo, 0);
+  };
+  passo();
+}
+function bolLayout() {
+  const B = state.bol, G = 3.4 * B.abre;
+  for (let n = 1; n <= 12; n++) { const c = bolCartoes[n]; if (!c) continue; c.visible = !B.foco; c.position.z = bolMeio(n) + (6.5 - n) * G; const bd = c.children.find(q => q.userData.face === 'borda'); if (bd) bd.material.color.set(n === B.n ? '#00a9b4' : '#cdb6a6'); }
+  bolGrp.visible = B.on;
+}
+function bolAnimando() { return state.bol.on && Math.abs(state.bol.abre - (state.bol.foco ? 0 : 1)) > 0.002; }
+function stepBol(dt) {
+  const B = state.bol; if (!B.on) return;
+  const alvo = B.foco ? 0 : 1; if (Math.abs(B.abre - alvo) > 0.002) { B.abre += (alvo - B.abre) * (1 - Math.pow(0.002, dt)); bolLayout(); }
+}
+
+// fatia em foco: as próprias malhas, cortadas pelos dois planos, com as faces calculadas por cima
+const bolPlanos = [new THREE.Plane(new THREE.Vector3(0, 0, -1), 0), new THREE.Plane(new THREE.Vector3(0, 0, 1), 0)];
+function bolMontarFoco() {
+  const n = state.bol.n, f = bolFaces(n);
+  [bolFoco.frente, bolFoco.tras].forEach(m => { if (m) { bolGrp.remove(m); } });
+  bolFoco.frente = bolFoco.tras = null;
+  if (!state.bol.foco) { renderer.clippingPlanes = []; return; }
+  const zf = f.a, zt = f.b !== null ? f.b : BOL_POLO[1];
+  bolPlanos[0].constant = zf; bolPlanos[1].constant = -zt; renderer.clippingPlanes = bolPlanos;
+  const A = bolFace(f.a); if (!A.tex) bolPintar(A, bolOpts(n).a);
+  bolFoco.frente = bolPlano(A.tex, false); bolFoco.frente.position.set(BOL_CX, BOL_CY, zf - 0.004); bolFoco.frente.userData = { bol: n, face: 'a', foco: 1 }; bolGrp.add(bolFoco.frente);
+  if (f.b !== null) { const B = bolFace(f.b); if (!B.tex) bolPintar(B, bolOpts(n).b); bolFoco.tras = bolPlano(B.tex, true); bolFoco.tras.position.set(BOL_CX, BOL_CY, zt + 0.004); bolFoco.tras.userData = { bol: n, face: 'b', foco: 1 }; bolGrp.add(bolFoco.tras); }
+}
+const BOL_GRUPOS_FOCO = ['cortex', 'deep', 'limbic', 'dien', 'vent', 'stem'];
+function bolCamera() {
+  const B = state.bol;
+  if (B.foco) { const f = bolFaces(B.n), zc = f.b !== null ? (f.a + f.b) / 2 : bolMeio(B.n); camGoal.target.set(0, 0.6, zc); camGoal.dist = 30; camGoal.theta = B.face === 'b' ? Math.PI - 0.35 : 0.35; camGoal.phi = Math.PI / 2 - 0.22; }
+  else { camGoal.target.set(0, 0.3, 0); camGoal.dist = 74; camGoal.theta = B.face === 'b' ? Math.PI - 1.2 : 1.2; camGoal.phi = 1.25; }
+}
+function bolAplicar() {
+  const B = state.bol;
+  bolLayout(); bolMontarFoco();
+  if (B.on) { Object.keys(grpObj).forEach(k => grpObj[k].visible = B.foco && !!state.groupOn[k]); }
+  renderBolPainel(); marca();
+}
+// entra e sai do modo
+function setBolachas(on) {
+  const B = state.bol; if (!!on === B.on) return;
+  B.on = !!on; B.quiz = null;
+  document.getElementById('bolBtn').setAttribute('aria-pressed', on ? 'true' : 'false');
+  document.getElementById('bolpainel').hidden = !on;
+  if (on) {
+    if (state.troncoIso) setTroncoIso(false);
+    if (state.separado) setSeparado(false);
+    if (state.inflada) setInflada(false);
+    if (state.licao) { state.licao = null; }
+    state.sel = null; state.hideL = state.hideR = false; syncHemiUI();
+    document.getElementById('modoExplorar').setAttribute('aria-pressed', 'false');
+    document.getElementById('grpVistas').hidden = true;
+    Object.keys(GROUPS).forEach(k => state.groupOn[k] = BOL_GRUPOS_FOCO.indexOf(k) >= 0); syncLayerUI();
+    bolCamera(); bolAplicar(); bolPreparar(() => { bolAplicar(); renderInfo(); });
+  } else {
+    renderer.clippingPlanes = []; bolGrp.visible = false; B.foco = false; bolMontarFoco();
+    document.getElementById('modoExplorar').setAttribute('aria-pressed', 'true'); document.getElementById('grpVistas').hidden = false;
+    Object.keys(GROUPS).forEach(k => state.groupOn[k] = (k === 'cortex' || k === 'art')); syncLayerUI(); state.sel = null; setView('lateral');
+  }
+  applyVisibility(); applyAppearance(); renderInfo(); markList();
+}
+function bolIr(n, opt) {
+  const B = state.bol; B.n = Math.max(1, Math.min(12, n)); if (B.n === 12 && B.face === 'b') B.face = 'a';
+  B.quiz = null; state.sel = null; bolMontarCartao(B.n); bolRepintarTudo();
+  if (opt && opt.foco !== undefined) B.foco = opt.foco;
+  bolCamera(); bolAplicar(); applyAppearance(); renderInfo();
+}
+
+// ---- painel do modo
+function renderBolPainel() {
+  const B = state.bol, el = document.getElementById('bolpainel'); if (!el) return;
+  const c = GAB[B.n - 1];
+  el.querySelector('#bolN').textContent = 'Corte ' + B.n + ' de 12';
+  el.querySelector('#bolNivel').textContent = c ? c.nivel : '';
+  el.querySelector('#bolRange').value = B.n;
+  el.querySelectorAll('[data-bv]').forEach(b => b.setAttribute('aria-pressed', (b.dataset.bv === 'foco') === B.foco ? 'true' : 'false'));
+  el.querySelectorAll('[data-bf]').forEach(b => { b.setAttribute('aria-pressed', b.dataset.bf === B.face ? 'true' : 'false'); b.disabled = b.dataset.bf === 'b' && B.n === 12; });
+  el.querySelectorAll('[data-bp]').forEach(b => b.setAttribute('aria-pressed', b.dataset.bp === B.paleta ? 'true' : 'false'));
+  el.querySelector('#bolNum').setAttribute('aria-pressed', B.numeros ? 'true' : 'false');
+  el.querySelector('#bolUni').href = c ? c.url : '#';
+  el.querySelector('#bolTeste').textContent = B.quiz ? 'Parar o teste' : 'Testar esta bolacha';
+}
+// lista numerada do gabarito no painel de informação (quando nada está selecionado)
+function renderBolInfo() {
+  const B = state.bol, c = GAB[B.n - 1], f = bolFaces(B.n), z = B.face === 'b' ? f.b : f.a, S = z !== null ? BOL_CACHE[z] : null;
+  const ids = c ? (B.face === 'b' ? c.b : c.a) : [], nomeFace = B.face === 'b' ? 'face posterior (b)' : 'face anterior (a)';
+  let h = '<p class="eyebrow">Bolachas · corte ' + B.n + ' · ' + nomeFace + '</p><h2>' + esc(c ? c.nivel.charAt(0).toUpperCase() + c.nivel.slice(1) : '') + '</h2>';
+  if (B.quiz) {
+    const q = B.quiz;
+    h += '<p><b>Teste:</b> que estrutura está destacada em amarelo na ' + nomeFace + '?</p><div class="bolopc">' + q.ops.map(o => '<button type="button" class="opt" data-bq="' + o + '">' + esc(bolNome(o)) + '</button>').join('') + '</div>';
+    h += '<p class="muted">Acertos: ' + q.ok + ' de ' + q.feitas + (q.msg ? ' · ' + q.msg : '') + '</p>';
+  } else if (!S) h += '<p class="muted">Calculando o corte…</p>';
+  else {
+    const lista = bolLista(B.n, B.face), fora = ids.filter(id => lista.indexOf(id) < 0);
+    h += '<p class="muted">Os números da peça seguem o gabarito da Unicamp para esta face. Clique numa estrutura (na peça ou na lista) para ver a função, a irrigação e a clínica.</p><ol class="bollista">' + lista.map(id => '<li><button type="button" data-bid="' + id + '">' + esc(bolNome(id)) + '</button></li>').join('') + '</ol>';
+    if (fora.length) h += '<p class="muted" style="font-size:12.5px">No gabarito, mas fora deste plano no modelo: ' + fora.map(bolNome).map(esc).join(', ') + '.</p>';
+  }
+  h += '<p class="muted" style="font-size:12.5px">Gabarito: <a href="' + (c ? c.url : '#') + '" target="_blank" rel="noopener">atlas de cortes coronais, Unicamp ↗</a> (a peça real fica no site deles).</p>';
+  infoEl.innerHTML = h;
+  infoEl.querySelectorAll('[data-bid]').forEach(b => b.addEventListener('click', () => { select(b.dataset.bid, { focus: false }); }));
+  infoEl.querySelectorAll('[data-bq]').forEach(b => b.addEventListener('click', () => bolResponder(b.dataset.bq)));
+}
+// teste: uma estrutura acesa, quatro opções
+function bolNovaPergunta() {
+  const B = state.bol, q = B.quiz, lista = bolLista(B.n, B.face); if (lista.length < 2) { B.quiz = null; return; }
+  const resto = lista.filter(x => x !== q.alvo), alvo = resto[Math.floor(Math.random() * resto.length)] || lista[0];
+  const outras = lista.filter(x => x !== alvo).sort(() => Math.random() - 0.5).slice(0, 3);
+  q.alvo = alvo; q.face = B.face; q.ops = outras.concat([alvo]).sort(() => Math.random() - 0.5);
+  bolRepintar(B.n); renderInfo();
+}
+function bolResponder(o) {
+  const q = state.bol.quiz; if (!q) return; q.feitas++;
+  if (o === q.alvo) { q.ok++; q.msg = 'certo: ' + bolNome(q.alvo); } else q.msg = 'era ' + bolNome(q.alvo);
+  bolNovaPergunta();
+}
+function bolTeste() {
+  const B = state.bol;
+  if (B.quiz) { B.quiz = null; bolRepintar(B.n); renderInfo(); renderBolPainel(); return; }
+  state.sel = null; B.quiz = { ok: 0, feitas: 0, alvo: null, msg: '' }; bolNovaPergunta(); renderBolPainel();
+}
+
+// ---- clique e passagem do mouse sobre as faces
+function bolRaio(e) {
+  const r = canvas.getBoundingClientRect(); ndc.set((e.clientX - r.left) / r.width * 2 - 1, -((e.clientY - r.top) / r.height) * 2 + 1); ray.setFromCamera(ndc, camera);
+  const alvos = []; bolGrp.traverse(o => { if (o.isMesh && o.visible && o.userData.bol && o.userData.face !== 'borda' && (!o.parent || o.parent.visible)) alvos.push(o); });
+  const h = ray.intersectObjects(alvos, false)[0]; if (!h) return null;
+  const u = h.object.userData, n = u.bol, f = bolFaces(n), z = u.face === 'b' ? f.b : f.a, S = BOL_CACHE[z]; if (!S || !h.uv) return { n, face: u.face };
+  const uu = h.object.rotation.y ? 1 - h.uv.x : h.uv.x, c = Math.floor(uu * S.sec.NX), rr = Math.floor((1 - h.uv.y) * S.sec.NY);
+  const v = c >= 0 && rr >= 0 && c < S.sec.NX && rr < S.sec.NY ? S.sec.id[rr * S.sec.NX + c] : 0;
+  return { n, face: u.face, id: v ? BOL_IDS[v] : null, foco: !!u.foco };
+}
+const _pickOrig = pick;
+pick = function (e) {
+  const B = state.bol;
+  if (!B.on) return _pickOrig(e);
+  const h = bolRaio(e);
+  if (!B.foco) { if (h) { B.face = h.face === 'b' ? 'b' : 'a'; bolIr(h.n, { foco: true }); } return; }
+  if (h && h.id) { if (B.quiz) return; select(h.id, { focus: false }); return; }
+  if (!h) return _pickOrig(e);
+};
+const _hoverOrig = hover;
+hover = function (e) {
+  if (!state.bol.on) return _hoverOrig(e);
+  const h = bolRaio(e), r = stageEl.getBoundingClientRect();
+  if (!h) { if (state.bol.foco) return _hoverOrig(e); tip.hidden = true; return; }
+  tip.textContent = !state.bol.foco ? 'Corte ' + h.n + ' (clique para abrir)' : (state.bol.quiz ? '?' : (h.id ? bolNome(h.id) : ''));
+  tip.hidden = !tip.textContent; tip.style.left = Math.min(r.width - 20, e.clientX - r.left + 14) + 'px'; tip.style.top = (e.clientY - r.top + 14) + 'px';
+};
+// visibilidade, aparência e painel de informação levam o modo em conta
+const _visOrig = applyVisibility;
+applyVisibility = function () { _visOrig(); if (state.bol && state.bol.on) Object.keys(grpObj).forEach(k => grpObj[k].visible = state.bol.foco && !!state.groupOn[k]); };
+const _apOrig = applyAppearance;
+applyAppearance = function () { _apOrig(); if (state.bol && state.bol.on && bolCartoes[state.bol.n] && !state.bol.quiz) { const s = state.bol._ultSel; if (s !== state.sel) { state.bol._ultSel = state.sel; bolRepintar(state.bol.n); } } };
+const _infoOrig = renderInfo;
+renderInfo = function () { if (state.bol && state.bol.on && (!state.sel || state.bol.quiz)) return renderBolInfo(); _infoOrig(); if (state.bol && state.bol.on && state.sel && infoEl) { const b = document.createElement('button'); b.type = 'button'; b.className = 'btn'; b.textContent = '← Lista do corte ' + state.bol.n; b.style.marginTop = '8px'; b.addEventListener('click', () => select(null)); infoEl.appendChild(b); } };
+
+// ---- ligações do painel
+(function () {
+  const $b = s => document.querySelector(s);
+  $b('#bolBtn').addEventListener('click', () => setBolachas(true));
+  $b('#bolSair').addEventListener('click', () => setBolachas(false));
+  $b('#bolAnt').addEventListener('click', () => bolIr(state.bol.n - 1));
+  $b('#bolProx').addEventListener('click', () => bolIr(state.bol.n + 1));
+  $b('#bolRange').addEventListener('input', e => bolIr(+e.target.value));
+  document.querySelectorAll('[data-bv]').forEach(b => b.addEventListener('click', () => { state.bol.foco = b.dataset.bv === 'foco'; bolCamera(); bolAplicar(); }));
+  document.querySelectorAll('[data-bf]').forEach(b => b.addEventListener('click', () => { if (b.disabled) return; state.bol.face = b.dataset.bf; if (state.bol.quiz) bolNovaPergunta(); bolCamera(); bolAplicar(); renderInfo(); }));
+  document.querySelectorAll('[data-bp]').forEach(b => b.addEventListener('click', () => { state.bol.paleta = b.dataset.bp; bolRepintarTudo(); renderBolPainel(); }));
+  $b('#bolNum').addEventListener('click', () => { state.bol.numeros = !state.bol.numeros; bolRepintarTudo(); renderBolPainel(); });
+  $b('#bolTeste').addEventListener('click', bolTeste);
+  const pn = $b('#bolpainel'), mais = $b('#bolMais'), compacta = on => { pn.classList.toggle('compacto', on); mais.setAttribute('aria-expanded', on ? 'false' : 'true'); mais.textContent = on ? 'Opções ▸' : 'Opções ▾'; marca(); };
+  mais.addEventListener('click', () => compacta(!pn.classList.contains('compacto')));
+  if (window.matchMedia && matchMedia('(max-width: 600px)').matches) compacta(true);
+})();
+
+if (/debug/.test(location.hash)) window.bolDbg = { bolSecao, BOL_IDS, BOL_CACHE, bolEntra, bolChave, bolMundo };
+/* ===== CORTES TRANSVERSAIS DO TRONCO E DA MEDULA (remodelagem 3, fase 4) =====
+   Tronco: planos perpendiculares ao eixo do tronco do modelo, calculados com o mesmo motor das bolachas (bolSecao com plano G).
+   Gabarito: Unicamp, série axial de cerebelo e tronco (figuras 1 a 21); níveis clássicos do Machado.
+   Medula: o modelo 3D só tem um cilindro; os três cortes da medula são esquemas desenhados aqui (Machado, cap. 4; Notas, p. 18). */
+const TC_GR = { stem: 1, nc: 1, vias: 1, vent: 1 };
+const TC_NIVEIS = [
+  { k: 'cs', nome: 'Mesencéfalo: colículo superior', f: 0.5, fonte: 'Machado', gab: ['colsup', 'aqueduto', 'rubro', 'snegra', 'pedunc', 'nu3', 'nc3', 'v_lm', 'flm', 'freticular', 'mesenc', 'cerebelo', 'vermis'] },
+  { k: 'ci', nome: 'Mesencéfalo: colículo inferior', f: 2.6, fonte: 'Unicamp, figuras 1, 2, 9 e 10', gab: ['colinf', 'aqueduto', 'snegra', 'pedunc', 'fossaip', 'nu4', 'nc3', 'acp', 'mesenc', 'v_lm', 'flm', 'freticular', 'pcs', 'cerebelo', 'vermis'] },
+  { k: 'ps', nome: 'Ponte: terço superior', f: 5.5, fonte: 'Unicamp, figuras 3, 11 e 12', gab: ['locus', 'pcs', 'veusup', 'baseponte', 'ponte', 'nupont', 'cb_lingula', 'nc5', 'basilar', 'v4', 'aqueduto', 'cerebelo', 'v_lm', 'flm'] },
+  { k: 'pm', nome: 'Ponte: terço médio', f: 13, fonte: 'Unicamp, figuras 4, 5 e 13', gab: ['basilar', 'cb_cbm', 'cerebelo', 'denteado', 'vermis', 'pcm', 'baseponte', 'ponte', 'v4', 'cb_lingula', 'plexo', 'veusup', 'ctrap', 'v_lm', 'locus', 'nc5', 'numot5', 'nusp5', 'nupont', 'pcs'] },
+  { k: 'pi', nome: 'Ponte: terço inferior (colículo facial)', f: 20.5, fonte: 'Unicamp, figuras 6, 14, 15 e 16', gab: ['colfac', 'denteado', 'v_cs', 'nupont', 'pcm', 'fossarom', 'ctrap', 'v_lm', 'nc6', 'nc7', 'nc8', 'nu6', 'nu7', 'nuvest', 'ponte', 'baseponte', 'flm'] },
+  { k: 'ba', nome: 'Bulbo aberto (nível da oliva)', f: 25, fonte: 'Unicamp, figuras 7, 8, 17, 18 e 19', gab: ['vertebral', 'cerebelo', 'vermis', 'nuoliva', 'oliva', 'piramide', 'plexo', 'v4', 'cb_floculo', 'pci', 'nc9', 'nc12', 'nu12', 'freticular', 'v_lm', 'sulantlat', 'sulpostlat', 'fismedant', 'nusol', 'nudx', 'nuamb', 'nuvest', 'bulbo', 'flm'] },
+  { k: 'bf', nome: 'Bulbo fechado (núcleos grácil e cuneiforme)', f: 28, fonte: 'Unicamp, figuras 20 e 21', gab: ['pci', 'v_lm', 'nc12', 'nucun', 'nugrac', 'nu12', 'nuoliva', 'piramide', 'obex', 'fgrac', 'fcun', 'tubgrac', 'tubcun', 'bulbo', 'nuesp5', 'nudx'] },
+  { k: 'mc', nome: 'Medula: segmento cervical (intumescência)', medula: 'C' },
+  { k: 'mt', nome: 'Medula: segmento torácico', medula: 'T' },
+  { k: 'ml', nome: 'Medula: segmento lombar (intumescência)', medula: 'L' }
+];
+state.tc = { nivel: null };
+const TC_CACHE = {};
+const tcGrp = new THREE.Group(); tcGrp.visible = false; scene.add(tcGrp);
+function tcPlano(N) {
+  const e = eixoTronco(N.f), p = 0.9, O = [0, e.V[1] + e.dor[1] * p, e.V[2] + e.dor[2] * p];
+  return { O, n: e.cr, u: [1, 0, 0], v: e.dor, X0: -6.5, X1: 6.5, Y0: -1.6, Y1: 6.2, RES: BOL_TOQUE ? 0.02 : 0.014, filtro: m => TC_GR[META[m.userData.id].grp] };
+}
+
+// ---- medula: esquema desenhado (estrutura do mesmo formato das faces calculadas, para reaproveitar pintura, clique e teste)
+const ME_IDS = [
+  ['me_fma', 'Fissura mediana anterior', '#2b2b33', 'Sulco profundo na face anterior da medula; nela penetram ramos da artéria espinal anterior.'],
+  ['me_canal', 'Canal central da medula', '#3c6fb4', 'Resto do lúmen do tubo neural, no centro da comissura cinzenta; continua-se com o IV ventrículo.'],
+  ['me_cant', 'Coluna (corno) anterior', '#c97b5b', 'Substância cinzenta ventral: neurônios motores (alfa e gama) cujos axônios saem pela raiz anterior para os músculos esqueléticos. Mais volumosa nas intumescências cervical e lombar.'],
+  ['me_cpost', 'Coluna (corno) posterior', '#d8a27c', 'Substância cinzenta dorsal: recebe as fibras da raiz posterior; neurônios das vias de dor, temperatura e tato.'],
+  ['me_clat', 'Coluna (corno) lateral', '#e3b98a', 'Pequena projeção lateral da substância cinzenta, só de T1 a L2: neurônios pré-ganglionares simpáticos.'],
+  ['me_zint', 'Substância cinzenta intermédia e comissura cinzenta', '#d9ab8a', 'Faixa central da substância cinzenta, em volta do canal central, que une os dois lados.'],
+  ['me_fant', 'Funículo anterior', '#efe7da', 'Substância branca entre a fissura mediana anterior e o sulco lateral anterior (saída das raízes anteriores).'],
+  ['me_flat', 'Funículo lateral', '#ece3d3', 'Substância branca entre os sulcos lateral anterior e lateral posterior.'],
+  ['me_fpost', 'Funículo posterior', '#f1eadf', 'Substância branca entre o sulco mediano posterior e o sulco lateral posterior (entrada das raízes posteriores).'],
+  ['me_fgr', 'Fascículo grácil', '#7aa6e6', 'Parte medial do funículo posterior. Tato epicrítico, propriocepção consciente e vibração da metade inferior do corpo (membros inferiores).'],
+  ['me_fcu', 'Fascículo cuneiforme', '#5f90d8', 'Parte lateral do funículo posterior, só acima de T6. As mesmas modalidades do grácil, da metade superior do corpo (membros superiores).'],
+  ['me_csl', 'Trato corticospinal lateral', '#d23c3c', 'Na parte posterior do funículo lateral. Fibras motoras que cruzaram na decussação das pirâmides; motricidade voluntária do mesmo lado do corpo.'],
+  ['me_csa', 'Trato corticospinal anterior', '#e06464', 'Junto da fissura mediana anterior; fibras que não cruzaram no bulbo (cruzam no nível do segmento). Só nos segmentos cervicais e torácicos altos.'],
+  ['me_stl', 'Trato espinotalâmico lateral', '#2fa37a', 'Na parte anterior do funículo lateral. Dor e temperatura do lado oposto do corpo.'],
+  ['me_sta', 'Trato espinotalâmico anterior', '#5cbf95', 'No funículo anterior. Tato protopático e pressão do lado oposto.'],
+  ['me_ecp', 'Trato espinocerebelar posterior', '#b8742a', 'Na periferia posterior do funículo lateral. Propriocepção inconsciente do mesmo lado para o cerebelo.'],
+  ['me_eca', 'Trato espinocerebelar anterior', '#d39a52', 'Na periferia anterior do funículo lateral. Propriocepção inconsciente para o cerebelo.'],
+  ['me_comb', 'Comissura branca', '#f6f1e8', 'Fibras que cruzam a linha média à frente da comissura cinzenta (entre elas as do espinotalâmico).']
+];
+ME_IDS.forEach(q => { M(q[0], q[1], 'stem', q[2], q[3], 'Artérias espinais anterior e posteriores.', ''); });
+REF(ME_IDS.map(q => q[0]), 'Machado, Neuroanatomia Funcional, 4ª ed., cap. 4 (medula, anatomia) e cap. 13 (estrutura da medula); Notas do Gustavo, p. 18.');
+CONF(ME_IDS.map(q => q[0]), 'Esquema idealizado: forma e tamanho aproximados de cada segmento. Páginas do Machado a confirmar.');
+function tcMedula(seg) {
+  const RES = 0.004, X0 = -1.2, X1 = 1.2, Y0 = -1.0, Y1 = 1.0, NX = Math.round((X1 - X0) / RES), NY = Math.round((Y1 - Y0) / RES);
+  const id = new Uint16Array(NX * NY), tipo = new Uint8Array(NX * NY);
+  const P = { C: { rx: 1.0, ry: 0.68, ant: [0.21, 0.15], post: [0.055, 0.27], lat: false, cun: true, csa: true },
+              T: { rx: 0.72, ry: 0.62, ant: [0.1, 0.085], post: [0.04, 0.23], lat: true, cun: true, csa: true },
+              L: { rx: 0.86, ry: 0.78, ant: [0.2, 0.18], post: [0.085, 0.26], lat: false, cun: false, csa: false } }[seg];
+  const el = (x, y, cx, cy, rx, ry, a) => { const c = Math.cos(a || 0), s = Math.sin(a || 0), dx = x - cx, dy = y - cy, u = (dx * c + dy * s) / rx, v = (-dx * s + dy * c) / ry; return u * u + v * v <= 1; };
+  const C = n => bolCod(n);
+  for (let r = 0; r < NY; r++) for (let c = 0; c < NX; c++) {
+    const x = X0 + (c + 0.5) * RES, y = Y1 - (r + 0.5) * RES, ax = Math.abs(x), k = r * NX + c;   // y > 0 = posterior (dorsal para cima, como no Machado)
+    if (!el(x, y, 0, 0, P.rx, P.ry)) continue;
+    let n;
+    // substância branca: funículos por setores em volta do centro (ângulo a partir do plano frontal, positivo = posterior)
+    const th = Math.atan2(y / P.ry, ax / P.rx) * 180 / Math.PI, rr = Math.hypot(x / P.rx, y / P.ry);
+    if (th > 62) n = (P.cun && th < 77) ? 'me_fcu' : 'me_fgr';                  // funículo posterior: grácil medial, cuneiforme lateral
+    else if (th < -48) n = (P.csa && th < -76 && rr > 0.55) ? 'me_csa' : (th > -72 && rr > 0.5 ? 'me_sta' : 'me_fant');   // funículo anterior
+    else {                                                                         // funículo lateral
+      n = 'me_flat';
+      if (rr > 0.84) n = th > 8 ? 'me_ecp' : 'me_eca';                             // espinocerebelares na periferia
+      else if (rr > 0.48 && th > 10 && th < 55) n = 'me_csl';                      // corticospinal lateral
+      else if (rr > 0.48 && th < 2 && th > -42) n = 'me_stl';                      // espinotalâmico lateral
+    }
+    // substância cinzenta em H: cornos anteriores largos, posteriores finos e inclinados para fora
+    const ant = el(ax, y, P.rx * 0.27, -P.ry * 0.34, P.ant[0], P.ant[1], 0.25);
+    const post = el(ax, y, P.rx * 0.17, P.ry * 0.42, P.post[0], P.post[1], -0.38) && y > -P.ry * 0.02;
+    const inter = ax < P.rx * 0.3 && Math.abs(y + P.ry * 0.03) < P.ry * 0.13, lat = P.lat && el(ax, y, P.rx * 0.36, -P.ry * 0.03, 0.09, 0.06, 0);
+    if (ant) n = 'me_cant'; else if (post) n = 'me_cpost'; else if (lat) n = 'me_clat'; else if (inter) n = 'me_zint';
+    if (ax < P.rx * 0.16 && y < -P.ry * 0.17 && y > -P.ry * 0.27) n = 'me_comb';
+    if (Math.hypot(x, y + P.ry * 0.02) < 0.035) n = 'me_canal';
+    if (ax < 0.03 && y < -P.ry * 0.55) n = 'me_fma';
+    id[k] = C(n); tipo[k] = 0;
+  }
+  const acc = {};
+  for (let r = 0; r < NY; r += 2) for (let c = 0; c < NX; c += 2) { const v = id[r * NX + c]; if (!v) continue; const nm = BOL_IDS[v], a = acc[nm] || (acc[nm] = { n: 0, sx: 0, sy: 0, best: null, bd: Infinity }); if (c >= NX / 2) { a.n++; a.sx += c; a.sy += r; } }
+  Object.keys(acc).forEach(nm => { const a = acc[nm]; a.cx = a.sx / Math.max(1, a.n); a.cy = a.sy / Math.max(1, a.n); });
+  for (let r = 0; r < NY; r += 2) for (let c = Math.ceil(NX / 2); c < NX; c += 2) { const v = id[r * NX + c]; if (!v) continue; const a = acc[BOL_IDS[v]]; const d = (c - a.cx) ** 2 + (r - a.cy) ** 2; if (d < a.bd) { a.bd = d; a.best = [c, r]; } }
+  const pres = {}; Object.keys(acc).forEach(nm => { if (acc[nm].best) pres[nm] = { area: acc[nm].n * 4, p: acc[nm].best }; });
+  if (!pres.me_canal) pres.me_canal = { area: 1, p: [Math.round(NX / 2), Math.round(NY / 2)] };
+  return { z: 0, id, tipo, pres, NX, NY, G: { X0, X1, Y0, Y1, RES } };
+}
+const ME_GAB = { C: ['me_fma', 'me_canal', 'me_cant', 'me_cpost', 'me_zint', 'me_comb', 'me_fant', 'me_flat', 'me_fpost', 'me_fgr', 'me_fcu', 'me_csl', 'me_csa', 'me_stl', 'me_sta', 'me_ecp', 'me_eca'],
+  T: ['me_fma', 'me_canal', 'me_cant', 'me_cpost', 'me_clat', 'me_zint', 'me_comb', 'me_fant', 'me_flat', 'me_fpost', 'me_fgr', 'me_fcu', 'me_csl', 'me_csa', 'me_stl', 'me_sta', 'me_ecp', 'me_eca'],
+  L: ['me_fma', 'me_canal', 'me_cant', 'me_cpost', 'me_zint', 'me_comb', 'me_fant', 'me_flat', 'me_fpost', 'me_fgr', 'me_csl', 'me_stl', 'me_sta', 'me_ecp', 'me_eca'] };
+
+// ---- face de um nível (calculada uma vez)
+function tcFace(N) {
+  let S = TC_CACHE[N.k]; if (S) return S;
+  S = TC_CACHE[N.k] = { sec: N.medula ? tcMedula(N.medula) : bolSecao(0, tcPlano(N)) };
+  return S;
+}
+function tcLista(N) { const S = tcFace(N), g = N.medula ? ME_GAB[N.medula] : N.gab.filter(id => META[id]); return g.filter(id => S.sec.pres[id] && S.sec.pres[id].p); }
+function tcPintar(N) { const S = tcFace(N); bolPintar(S, { paleta: state.bol.paleta, numeros: state.bol.numeros && !state.tc.quiz, lista: tcLista(N), sel: state.sel, alvo: state.tc.quiz ? state.tc.quiz.alvo : undefined }); return S; }
+
+// ---- 3D: o tronco cortado no plano, com a face calculada por cima; a parte cranial ao plano é escondida
+let tcCap = null; const tcClip = new THREE.Plane(new THREE.Vector3(0, -1, 0), 0);
+function tcMontar3D() {
+  if (tcCap) { tcGrp.remove(tcCap); tcCap = null; }
+  const N = TC_NIVEIS.find(q => q.k === state.tc.nivel);
+  if (!N || N.medula) { if (!state.bol.on) renderer.clippingPlanes = []; tcGrp.visible = false; return; }
+  const G = tcPlano(N), S = tcPintar(N), n = new THREE.Vector3().fromArray(G.n), u = new THREE.Vector3().fromArray(G.u), v = new THREE.Vector3().fromArray(G.v), O = new THREE.Vector3().fromArray(G.O);
+  tcClip.normal.copy(n).multiplyScalar(-1); tcClip.constant = n.dot(O); renderer.clippingPlanes = [tcClip];
+  tcCap = new THREE.Mesh(new THREE.PlaneGeometry(G.X1 - G.X0, G.Y1 - G.Y0), new THREE.MeshBasicMaterial({ map: S.tex, transparent: true, alphaTest: 0.5 }));
+  const m4 = new THREE.Matrix4().makeBasis(u, v, n); tcCap.quaternion.setFromRotationMatrix(m4);
+  tcCap.position.copy(O).addScaledVector(u, (G.X0 + G.X1) / 2).addScaledVector(v, (G.Y0 + G.Y1) / 2).addScaledVector(n, -0.004);
+  tcCap.userData = { tc: N.k }; tcGrp.add(tcCap); tcGrp.visible = true;
+  // câmera: de cima e de trás do plano, olhando para a face
+  const d = n.clone().multiplyScalar(0.86).addScaledVector(v, -0.5).normalize();   // do lado ventral: o dorsal fica para cima na tela
+  const dir = new THREE.Vector3(0, 1, 0).cross(d).normalize();   // direita da tela: o corte fica à esquerda, livre do esquema 2D
+  camGoal.target.copy(O).addScaledVector(v, 0.9).addScaledVector(dir, 2.4); camGoal.dist = 16; camGoal.phi = Math.acos(Math.max(-1, Math.min(1, d.y))); camGoal.theta = Math.atan2(d.x, d.z);
+}
+// ---- painel 2D (esquema) ao lado e lista no painel de informação
+function tcRender2D() {
+  const el = document.getElementById('tc2d'), N = TC_NIVEIS.find(q => q.k === state.tc.nivel);
+  if (!el) return; el.hidden = !N; if (!N) return;
+  const S = tcPintar(N), box = el.querySelector('.tcimg'), sec = S.sec;
+  if (!S.caixa) { const hc = new Float64Array(sec.NX), hr = new Float64Array(sec.NY); let tot = 0; for (let r = 0; r < sec.NY; r += 2) for (let c = 0; c < sec.NX; c += 2) if (sec.id[r * sec.NX + c]) { hc[c]++; hr[r]++; tot++; }
+    const corta = (H, q) => { let a = 0, s0 = 0; while (a < H.length - 1 && s0 + H[a] < tot * q) s0 += H[a++]; let b = H.length - 1, s1 = 0; while (b > 0 && s1 + H[b] < tot * q) s1 += H[b--]; return [a, b]; };   // ignora pontas soltas (raízes nervosas distantes)
+    let [c0, c1] = corta(hc, 0.004), [r0, r1] = corta(hr, 0.004);
+    const mg = Math.round(sec.NX * 0.02); c0 = Math.max(0, c0 - mg); r0 = Math.max(0, r0 - mg); c1 = Math.min(sec.NX - 1, c1 + mg); r1 = Math.min(sec.NY - 1, r1 + mg);
+    const w = c1 - c0 + 1, h = r1 - r0 + 1, lado = Math.max(w, h); S.caixa = { c0: c0 - Math.floor((lado - w) / 2), r0: r0 - Math.floor((lado - h) / 2), w: lado, h: lado }; S.vis = document.createElement('canvas'); }
+  const cx = S.caixa, vis = S.vis; vis.width = Math.min(900, cx.w); vis.height = Math.round(vis.width * cx.h / cx.w); vis.getContext('2d').drawImage(S.canvas, cx.c0, cx.r0, cx.w, cx.h, 0, 0, vis.width, vis.height);
+  if (vis.parentNode !== box) { box.innerHTML = ''; box.appendChild(vis); }
+  el.querySelector('.tct').textContent = N.nome;
+  el.querySelector('.tcs').textContent = N.medula ? 'Esquema idealizado (Machado; Notas, p. 18). Posterior em cima.' : 'Corte calculado no modelo, perpendicular ao eixo do tronco. Dorsal em cima.';
+}
+function tcPicar(ev) {
+  const N = TC_NIVEIS.find(q => q.k === state.tc.nivel); if (!N) return null;
+  const S = tcFace(N); if (!S.vis || !S.caixa) return null; const r = S.vis.getBoundingClientRect(), c = Math.floor(S.caixa.c0 + (ev.clientX - r.left) / r.width * S.caixa.w), rr = Math.floor(S.caixa.r0 + (ev.clientY - r.top) / r.height * S.caixa.h);
+  if (c < 0 || rr < 0 || c >= S.sec.NX || rr >= S.sec.NY) return null; const v = S.sec.id[rr * S.sec.NX + c]; return v ? BOL_IDS[v] : null;
+}
+function renderTcInfo() {
+  const N = TC_NIVEIS.find(q => q.k === state.tc.nivel), lista = tcLista(N), q = state.tc.quiz;
+  let h = '<p class="eyebrow">Tronco e medula · corte transversal</p><h2>' + esc(N.nome) + '</h2>';
+  if (q) {
+    h += '<p><b>Teste:</b> que estrutura está destacada em amarelo no corte?</p><div class="bolopc">' + q.ops.map(o => '<button type="button" class="opt" data-tq="' + o + '">' + esc(bolNome(o)) + '</button>').join('') + '</div><p class="muted">Acertos: ' + q.ok + ' de ' + q.feitas + (q.msg ? ' · ' + q.msg : '') + '</p>';
+  } else {
+    h += '<p class="muted">Os números do corte seguem ' + (N.medula ? 'o esquema clássico da medula' : 'o gabarito (' + esc(N.fonte) + ')') + '. Clique numa estrutura, no desenho ou na lista.</p><ol class="bollista">' + lista.map(id => '<li><button type="button" data-tid="' + id + '">' + esc(bolNome(id)) + '</button></li>').join('') + '</ol>';
+    if (!N.medula) { const fora = N.gab.filter(id => META[id] && lista.indexOf(id) < 0); if (fora.length) h += '<p class="muted" style="font-size:12.5px">No gabarito, mas fora deste plano no modelo: ' + fora.map(bolNome).map(esc).join(', ') + '.</p>'; }
+    h += '<div class="btnrow"><button class="btn" type="button" id="tcTeste">Testar este corte</button></div>';
+  }
+  if (!N.medula) h += '<p class="muted" style="font-size:12.5px">Peças reais: <a href="https://anatpat.unicamp.br/bineucerebelotronco.html" target="_blank" rel="noopener">série axial de cerebelo e tronco, Unicamp ↗</a></p>';
+  infoEl.innerHTML = h;
+  infoEl.querySelectorAll('[data-tid]').forEach(b => b.addEventListener('click', () => select(b.dataset.tid, { focus: false })));
+  infoEl.querySelectorAll('[data-tq]').forEach(b => b.addEventListener('click', () => tcResponder(b.dataset.tq)));
+  const t = infoEl.querySelector('#tcTeste'); if (t) t.addEventListener('click', () => { state.tc.quiz = { ok: 0, feitas: 0, alvo: null }; tcPergunta(); });
+}
+function tcPergunta() { const N = TC_NIVEIS.find(q => q.k === state.tc.nivel), L = tcLista(N), q = state.tc.quiz; if (L.length < 2) { state.tc.quiz = null; return; } const resto = L.filter(x => x !== q.alvo), a = resto[Math.floor(Math.random() * resto.length)]; q.alvo = a; q.ops = L.filter(x => x !== a).sort(() => Math.random() - 0.5).slice(0, 3).concat([a]).sort(() => Math.random() - 0.5); tcAtualizar(); }
+function tcResponder(o) { const q = state.tc.quiz; if (!q) return; q.feitas++; if (o === q.alvo) { q.ok++; q.msg = 'certo: ' + bolNome(q.alvo); } else q.msg = 'era ' + bolNome(q.alvo); tcPergunta(); }
+function tcAtualizar() { const N = TC_NIVEIS.find(q => q.k === state.tc.nivel); if (N) { tcPintar(N); tcRender2D(); } renderInfo(); marca(); }
+function setCorteTronco(k) {
+  state.tc.nivel = k || null; state.tc.quiz = null; state.sel = null;
+  document.querySelectorAll('[data-tc]').forEach(b => b.setAttribute('aria-pressed', (b.dataset.tc || null) === (k || '') || (!k && b.dataset.tc === '') ? 'true' : 'false'));
+  tcMontar3D(); tcRender2D(); applyVisibility(); applyAppearance(); renderInfo();
+  if (!k && state.troncoIso) vistaTronco('ventral');
+  const N = TC_NIVEIS.find(q => q.k === k); if (N && N.medula) { camGoal.target.set(0, -6.2, -3.6); camGoal.dist = 16; }
+}
+// ---- ligações com o resto do atlas
+const _visTc = applyVisibility;
+applyVisibility = function () {
+  _visTc();
+  if (state.tc && state.tc.nivel && state.troncoIso) ALLMESH.forEach(m => { const id = m.userData.id; if ((/^nu/.test(id) || m.userData.intra || id === 'freticular' || id === 'flm' || id === 'ctrap') && grpObj[META[id].grp] && grpObj[META[id].grp].visible) m.visible = !((m.userData.side === 1 && state.hideL) || (m.userData.side === -1 && state.hideR)); });
+};
+const _apTc = applyAppearance;
+applyAppearance = function () { _apTc(); if (state.tc && state.tc.nivel) { const s = state.tc._ultSel; if (s !== state.sel) { state.tc._ultSel = state.sel; tcAtualizar(); } } };
+const _infoTc = renderInfo;
+renderInfo = function () { if (state.tc && state.tc.nivel && (!state.sel || state.tc.quiz) && infoEl) return renderTcInfo(); _infoTc(); };
+const _setTI = setTroncoIso;
+setTroncoIso = function (on) { if (!on && state.tc.nivel) { state.tc.nivel = null; tcMontar3D(); tcRender2D(); } _setTI(on); };
+const _pickTc = pick;
+pick = function (e) {
+  if (state.tc.nivel && tcCap) { const r = canvas.getBoundingClientRect(); ndc.set((e.clientX - r.left) / r.width * 2 - 1, -((e.clientY - r.top) / r.height) * 2 + 1); ray.setFromCamera(ndc, camera); const h = ray.intersectObject(tcCap, false)[0];
+    if (h && h.uv) { const S = tcFace(TC_NIVEIS.find(q => q.k === state.tc.nivel)), c = Math.floor(h.uv.x * S.sec.NX), rr = Math.floor((1 - h.uv.y) * S.sec.NY), v = S.sec.id[rr * S.sec.NX + c]; if (v) { if (!state.tc.quiz) select(BOL_IDS[v], { focus: false }); return; } } }
+  return _pickTc(e);
+};
+(function () {
+  const el = document.getElementById('tc2d'); if (!el) return;
+  el.addEventListener('click', ev => { if (state.tc.quiz) return; const id = tcPicar(ev); if (id) select(id, { focus: false }); });
+  el.addEventListener('mousemove', ev => { const id = tcPicar(ev), t = el.querySelector('.tcdica'); t.textContent = id && !state.tc.quiz ? bolNome(id) : ''; });
+  document.querySelectorAll('[data-tc]').forEach(b => b.addEventListener('click', () => setCorteTronco(b.dataset.tc)));
+})();
 /* ===== INTERFACE ===== */
 const $ = (s, r) => (r || document).querySelector(s);
 const $$ = (s, r) => Array.from((r || document).querySelectorAll(s));
@@ -3064,7 +3918,7 @@ $$('[data-nm]').forEach(b => b.addEventListener('click', () => setNervos(b.datas
 const TI_VISTA = { ventral: ['anterior', [0, -3.1, -1.5], 15, 0, 1.99], dorsal: ['posterior', [0, -3.0, -2.5], 14, Math.PI, 1.15], lateral: ['lateral', [0, -3.1, -1.9], 16, Math.PI / 2, 1.57] };
 function vistaTronco(v) { const q = TI_VISTA[v]; const hl = state.hideL, hr = state.hideR; setView(q[0]); state.hideL = hl; state.hideR = hr; camGoal.target.set(q[1][0], q[1][1], q[1][2]); camGoal.dist = q[2]; camGoal.theta = q[3]; camGoal.phi = q[4]; $$('[data-tiv]').forEach(b => b.setAttribute('aria-pressed', b.dataset.tiv === v ? 'true' : 'false')); applyVisibility(); }
 function setTroncoIso(on) {
-  state.troncoIso = !!on; $('#tiBtn').setAttribute('aria-pressed', on ? 'true' : 'false'); $('#tipainel').hidden = !on;
+  state.troncoIso = !!on; $('#tiBtn').setAttribute('aria-pressed', on ? 'true' : 'false'); $('#modoExplorar').setAttribute('aria-pressed', on ? 'false' : 'true'); $('#grpVistas').hidden = !!on; $('#tipainel').hidden = !on;
   if (on) {
     state.licao = null; renderLicao(); state.sel = null;
     Object.keys(GROUPS).forEach(k => state.groupOn[k] = (k === 'stem' || k === 'nc')); syncLayerUI();
@@ -3073,7 +3927,8 @@ function setTroncoIso(on) {
   } else { Object.keys(GROUPS).forEach(k => state.groupOn[k] = (k === 'cortex' || k === 'art')); syncLayerUI(); setNervos('inteiro'); setView('lateral'); }
   applyVisibility(); applyAppearance(); renderInfo(); markList();
 }
-$('#tiBtn').addEventListener('click', () => setTroncoIso(!state.troncoIso));
+$('#tiBtn').addEventListener('click', () => { if (state.bol.on) setBolachas(false); if (!state.troncoIso) setTroncoIso(true); });
+$('#modoExplorar').addEventListener('click', () => { if (state.bol.on) setBolachas(false); if (state.troncoIso) setTroncoIso(false); });
 $('#tiBtn2').addEventListener('click', () => setTroncoIso(true));
 $('#tiSair').addEventListener('click', () => setTroncoIso(false));
 $$('[data-tiv]').forEach(b => b.addEventListener('click', () => vistaTronco(b.dataset.tiv)));
@@ -3269,7 +4124,7 @@ function answer(id) {
 
 /* ---- nomes em latim (Terminologia Anatômica) e inglês ---- */
 const NOMES = {};
-`mesenc|Mesencephalon|Midbrain;ponte|Pons|Pons;bulbo|Medulla oblongata|Medulla oblongata;pedunc|Pedunculus cerebri|Cerebral peduncle;colsup|Colliculus superior|Superior colliculus;colinf|Colliculus inferior|Inferior colliculus;fismedant|Fissura mediana anterior|Anterior median fissure;piramide|Pyramis medullae oblongatae|Pyramid;decpir|Decussatio pyramidum|Pyramidal decussation;sulantlat|Sulcus anterolateralis|Anterolateral sulcus;oliva|Oliva|Olive;sulpostlat|Sulcus posterolateralis|Posterolateral sulcus;sulbp|Sulcus bulbopontinus|Medullopontine sulcus;baseponte|Pars basilaris pontis|Basilar part of pons;sulbas|Sulcus basilaris|Basilar sulcus;fossaip|Fossa interpeduncularis|Interpeduncular fossa;sulmedped|Sulcus medialis cruris cerebri|Medial sulcus of cerebral crus;sullatmes|Sulcus lateralis mesencephali|Lateral sulcus of midbrain;fossarom|Fossa rhomboidea|Rhomboid fossa;sulmedfr|Sulcus medianus|Median sulcus;eminmed|Eminentia medialis|Medial eminence;colfac|Colliculus facialis|Facial colliculus;sullim|Sulcus limitans|Sulcus limitans;fovsup|Fovea superior|Superior fovea;fovinf|Fovea inferior|Inferior fovea;locus|Locus caeruleus|Locus coeruleus;areavest|Area vestibularis|Vestibular area;estrias|Striae medullares ventriculi quarti|Medullary striae of fourth ventricle;trighipo|Trigonum nervi hypoglossi|Hypoglossal trigone;trigvago|Trigonum nervi vagi|Vagal trigone;areapostrema|Area postrema|Area postrema;obex|Obex|Obex;sulmedpost|Sulcus medianus posterior|Posterior median sulcus;sulintpost|Sulcus intermedius posterior|Posterior intermediate sulcus;fgrac|Fasciculus gracilis|Gracile fasciculus;fcun|Fasciculus cuneatus|Cuneate fasciculus;tubgrac|Tuberculum gracile|Gracile tubercle;tubcun|Tuberculum cuneatum|Cuneate tubercle;bracsup|Brachium colliculi superioris|Brachium of superior colliculus;bracinf|Brachium colliculi inferioris|Brachium of inferior colliculus;veusup|Velum medullare superius|Superior medullary velum;pcs|Pedunculus cerebellaris superior|Superior cerebellar peduncle;pcm|Pedunculus cerebellaris medius|Middle cerebellar peduncle;pci|Pedunculus cerebellaris inferior|Inferior cerebellar peduncle;cerebelo|Hemispherium cerebelli|Cerebellar hemisphere;vermis|Vermis cerebelli|Vermis;cb_ant|Lobus cerebelli anterior|Anterior lobe of cerebellum;cb_post|Lobus cerebelli posterior|Posterior lobe of cerebellum;cb_fn|Lobus flocculonodularis|Flocculonodular lobe;cb_lingula|Lingula cerebelli|Lingula;cb_central|Lobulus centralis|Central lobule;cb_culmen|Culmen|Culmen;cb_declive|Declive|Declive;cb_folium|Folium vermis|Folium of vermis;cb_tuber|Tuber vermis|Tuber of vermis;cb_piramide|Pyramis vermis|Pyramid of vermis;cb_uvula|Uvula vermis|Uvula of vermis;cb_nodulo|Nodulus|Nodule;cb_asa|Ala lobuli centralis|Wing of central lobule;cb_quadant|Lobulus quadrangularis anterior|Anterior quadrangular lobule;cb_quadpost|Lobulus quadrangularis posterior|Posterior quadrangular lobule;cb_semisup|Lobulus semilunaris superior|Superior semilunar lobule;cb_semiinf|Lobulus semilunaris inferior|Inferior semilunar lobule;cb_biventre|Lobulus biventer|Biventral lobule;cb_tonsila|Tonsilla cerebelli|Cerebellar tonsil;cb_floculo|Flocculus|Flocculus;f_prima|Fissura prima|Primary fissure;f_postlat|Fissura posterolateralis|Posterolateral fissure;f_horiz|Fissura horizontalis|Horizontal fissure;f_precent|Fissura precentralis|Precentral fissure;f_preculm|Fissura preculminalis|Preculminate fissure;f_posclival|Fissura postclivalis|Postclival fissure;f_prepir|Fissura prepyramidalis|Prepyramidal fissure;f_pospir|Fissura secunda|Secondary fissure;arbvida|Arbor vitae cerebelli|Arbor vitae;nc1|Nervus olfactorius|Olfactory nerve;nc2|Nervus opticus|Optic nerve;nc3|Nervus oculomotorius|Oculomotor nerve;nc4|Nervus trochlearis|Trochlear nerve;nc5|Nervus trigeminus|Trigeminal nerve;nc6|Nervus abducens|Abducens nerve;nc7|Nervus facialis|Facial nerve;nc8|Nervus vestibulocochlearis|Vestibulocochlear nerve;nc9|Nervus glossopharyngeus|Glossopharyngeal nerve;nc10|Nervus vagus|Vagus nerve;nc11|Nervus accessorius|Accessory nerve;nc12|Nervus hypoglossus|Hypoglossal nerve;g_trig|Ganglion trigeminale|Trigeminal ganglion;n_oft|Nervus ophthalmicus|Ophthalmic nerve;n_max|Nervus maxillaris|Maxillary nerve;n_mand|Nervus mandibularis|Mandibular nerve;g_ciliar|Ganglion ciliare|Ciliary ganglion;g_pterig|Ganglion pterygopalatinum|Pterygopalatine ganglion;n_petmaior|Nervus petrosus major|Greater petrosal nerve;g_genic|Ganglion geniculi|Geniculate ganglion;n_corda|Chorda tympani|Chorda tympani;n_lingual|Nervus lingualis|Lingual nerve;g_submand|Ganglion submandibulare|Submandibular ganglion;n_timp|Nervus tympanicus|Tympanic nerve;g_otico|Ganglion oticum|Otic ganglion;n_auriculo|Nervus auriculotemporalis|Auriculotemporal nerve;n_infraorb|Nervus infraorbitalis|Infraorbital nerve;n_alvinf|Nervus alveolaris inferior|Inferior alveolar nerve;aci|Arteria carotis interna|Internal carotid artery;acm|Arteria cerebri media|Middle cerebral artery;aca1|Arteria cerebri anterior|Anterior cerebral artery;acomA|Arteria communicans anterior|Anterior communicating artery;pcom|Arteria communicans posterior|Posterior communicating artery;acp|Arteria cerebri posterior|Posterior cerebral artery;acp1|Arteria cerebri posterior, pars precommunicalis|Precommunicating part of posterior cerebral artery;basilar|Arteria basilaris|Basilar artery;vertebral|Arteria vertebralis|Vertebral artery;pica|Arteria inferior posterior cerebelli|Posterior inferior cerebellar artery;aica|Arteria inferior anterior cerebelli|Anterior inferior cerebellar artery;sca|Arteria superior cerebelli|Superior cerebellar artery;a_pont|Arteriae pontis|Pontine arteries;a_labir|Arteria labyrinthi|Labyrinthine artery;a_espant|Arteria spinalis anterior|Anterior spinal artery;a_espost|Arteria spinalis posterior|Posterior spinal artery;coroant|Arteria choroidea anterior|Anterior choroidal artery;a_oft|Arteria ophthalmica|Ophthalmic artery;pericalosa|Arteria pericallosa|Pericallosal artery;calmarg|Arteria callosomarginalis|Callosomarginal artery;heubner|Arteria striata medialis distalis|Recurrent artery (of Heubner);lenticulo|Arteriae centrales anterolaterales|Anterolateral central (lenticulostriate) arteries;sss|Sinus sagittalis superior|Superior sagittal sinus;sinf|Sinus sagittalis inferior|Inferior sagittal sinus;sreto|Sinus rectus|Straight sinus;torcula|Confluens sinuum|Confluence of sinuses;stransv|Sinus transversus|Transverse sinus;ssigm|Sinus sigmoideus|Sigmoid sinus;jugular|Vena jugularis interna|Internal jugular vein;socc|Sinus occipitalis|Occipital sinus;scav|Sinus cavernosus|Cavernous sinus;sinterc|Sinus intercavernosi|Intercavernous sinuses;spsup|Sinus petrosus superior|Superior petrosal sinus;spinf|Sinus petrosus inferior|Inferior petrosal sinus;sesfpar|Sinus sphenoparietalis|Sphenoparietal sinus;plexbas|Plexus basilaris|Basilar plexus;galeno|Vena magna cerebri|Great cerebral vein;vint|Venae internae cerebri|Internal cerebral veins;basal|Vena basalis|Basal vein;v_talest|Vena thalamostriata superior|Superior thalamostriate vein;v_coroid|Vena choroidea superior|Superior choroidal vein;v_septo|Vena anterior septi pellucidi|Anterior vein of septum pellucidum;silv|Vena media superficialis cerebri|Superficial middle cerebral vein;s_lateral|Sulcus lateralis|Lateral sulcus;s_central|Sulcus centralis|Central sulcus;s_precentral|Sulcus precentralis|Precentral sulcus;s_poscentral|Sulcus postcentralis|Postcentral sulcus;s_fronsup|Sulcus frontalis superior|Superior frontal sulcus;s_froninf|Sulcus frontalis inferior|Inferior frontal sulcus;s_tempsup|Sulcus temporalis superior|Superior temporal sulcus;s_tempinf|Sulcus temporalis inferior|Inferior temporal sulcus;s_intrapar|Sulcus intraparietalis|Intraparietal sulcus;s_calcarino|Sulcus calcarinus|Calcarine sulcus;s_parocc|Sulcus parietooccipitalis|Parieto-occipital sulcus;s_corpcal|Sulcus corporis callosi|Callosal sulcus;s_cingulo|Sulcus cinguli|Cingulate sulcus;s_marginal|Ramus marginalis sulci cinguli|Marginal branch of cingulate sulcus;s_subpar|Sulcus subparietalis|Subparietal sulcus;s_paracent|Sulcus paracentralis|Paracentral sulcus;s_colateral|Sulcus collateralis|Collateral sulcus;s_occtemp|Sulcus occipitotemporalis|Occipitotemporal sulcus;s_olfat|Sulcus olfactorius|Olfactory sulcus;cc|Corpus callosum|Corpus callosum;cc_rostro|Rostrum corporis callosi|Rostrum of corpus callosum;cc_joelho|Genu corporis callosi|Genu of corpus callosum;cc_tronco|Truncus corporis callosi|Trunk of corpus callosum;cc_esplenio|Splenium corporis callosi|Splenium of corpus callosum;septo|Septum pellucidum|Septum pellucidum;fornice|Fornix|Fornix;aderencia|Adhesio interthalamica|Interthalamic adhesion;unco|Uncus|Uncus;fimbria|Fimbria hippocampi|Fimbria of hippocampus;giroden|Gyrus dentatus|Dentate gyrus;hipocampo|Hippocampus|Hippocampus;vlat|Ventriculus lateralis|Lateral ventricle;vlat_ant|Cornu frontale|Frontal horn;vlat_cent|Pars centralis ventriculi lateralis|Central part of lateral ventricle;vlat_post|Cornu occipitale|Occipital horn;vlat_inf|Cornu temporale|Temporal horn;v3|Ventriculus tertius|Third ventricle;v4|Ventriculus quartus|Fourth ventricle;aqueduto|Aqueductus mesencephali|Cerebral aqueduct;fmonro|Foramen interventriculare|Interventricular foramen;foice|Falx cerebri|Falx cerebri;tentorio|Tentorium cerebelli|Tentorium cerebelli;foicecb|Falx cerebelli|Falx cerebelli;diafragma|Diaphragma sellae|Diaphragma sellae;medula|Medulla spinalis|Spinal cord;talamo|Thalamus|Thalamus;hipotal|Hypothalamus|Hypothalamus;hipofise|Hypophysis|Pituitary gland;pineal|Glandula pinealis|Pineal gland;caudado|Nucleus caudatus|Caudate nucleus;putame|Putamen|Putamen;amigdala|Corpus amygdaloideum|Amygdala;capsint|Capsula interna|Internal capsule;quiasma|Chiasma opticum|Optic chiasm;gpre|Gyrus precentralis|Precentral gyrus;gpos|Gyrus postcentralis|Postcentral gyrus;gfs|Gyrus frontalis superior|Superior frontal gyrus;gfm|Gyrus frontalis medius|Middle frontal gyrus;gts|Gyrus temporalis superior|Superior temporal gyrus;gtm|Gyrus temporalis medius|Middle temporal gyrus;gti|Gyrus temporalis inferior|Inferior temporal gyrus;gsm|Gyrus supramarginalis|Supramarginal gyrus;gang|Gyrus angularis|Angular gyrus;gcing|Gyrus cinguli|Cingulate gyrus;gcun|Cuneus|Cuneus;gprec|Precuneus|Precuneus;gling|Gyrus lingualis|Lingual gyrus;gparahip|Gyrus parahippocampalis|Parahippocampal gyrus;ginsula|Insula|Insula;gfus|Gyrus fusiformis|Fusiform gyrus;greto|Gyrus rectus|Straight gyrus;gpara|Lobulus paracentralis|Paracentral lobule;gps|Lobulus parietalis superior|Superior parietal lobule`.split(';').forEach(l => { const q = l.split('|'); NOMES[q[0]] = [q[1], q[2]]; });
+`nuoliva|Nucleus olivaris inferior|Inferior olivary nucleus;nugrac|Nucleus gracilis|Gracile nucleus;nucun|Nucleus cuneatus|Cuneate nucleus;nupont|Nuclei pontis|Pontine nuclei;freticular|Formatio reticularis|Reticular formation;ctrap|Corpus trapezoideum|Trapezoid body;flm|Fasciculus longitudinalis medialis|Medial longitudinal fasciculus;lobo_front|Lobus frontalis|Frontal lobe;lobo_par|Lobus parietalis|Parietal lobe;lobo_temp|Lobus temporalis|Temporal lobe;lobo_occ|Lobus occipitalis|Occipital lobe;lobo_limb|Lobus limbicus|Limbic lobe;gistmo|Isthmus gyri cinguli|Isthmus of cingulate gyrus;fis_long|Fissura longitudinalis cerebri|Longitudinal cerebral fissure;gsubcal|Gyrus subcallosus|Subcallosal gyrus;pehipo|Pes hippocampi|Hippocampal head (pes);hipo_corpo|Hippocampus|Hippocampus, body and tail;alveo|Alveus hippocampi|Alveus;subiculo|Subiculum|Subiculum;f_cingulo|Cingulum|Cingulum;f_mamtal|Fasciculus mammillothalamicus|Mammillothalamic tract;estria_t|Stria terminalis|Stria terminalis;subst_inom|Substantia innominata|Substantia innominata;meynert|Nucleus basalis (Meynert)|Basal nucleus of Meynert;trighab|Trigonum habenulae|Habenular trigone;comhab|Commissura habenularum|Habenular commissure;mesenc|Mesencephalon|Midbrain;ponte|Pons|Pons;bulbo|Medulla oblongata|Medulla oblongata;pedunc|Pedunculus cerebri|Cerebral peduncle;colsup|Colliculus superior|Superior colliculus;colinf|Colliculus inferior|Inferior colliculus;fismedant|Fissura mediana anterior|Anterior median fissure;piramide|Pyramis medullae oblongatae|Pyramid;decpir|Decussatio pyramidum|Pyramidal decussation;sulantlat|Sulcus anterolateralis|Anterolateral sulcus;oliva|Oliva|Olive;sulpostlat|Sulcus posterolateralis|Posterolateral sulcus;sulbp|Sulcus bulbopontinus|Medullopontine sulcus;baseponte|Pars basilaris pontis|Basilar part of pons;sulbas|Sulcus basilaris|Basilar sulcus;fossaip|Fossa interpeduncularis|Interpeduncular fossa;sulmedped|Sulcus medialis cruris cerebri|Medial sulcus of cerebral crus;sullatmes|Sulcus lateralis mesencephali|Lateral sulcus of midbrain;fossarom|Fossa rhomboidea|Rhomboid fossa;sulmedfr|Sulcus medianus|Median sulcus;eminmed|Eminentia medialis|Medial eminence;colfac|Colliculus facialis|Facial colliculus;sullim|Sulcus limitans|Sulcus limitans;fovsup|Fovea superior|Superior fovea;fovinf|Fovea inferior|Inferior fovea;locus|Locus caeruleus|Locus coeruleus;areavest|Area vestibularis|Vestibular area;estrias|Striae medullares ventriculi quarti|Medullary striae of fourth ventricle;trighipo|Trigonum nervi hypoglossi|Hypoglossal trigone;trigvago|Trigonum nervi vagi|Vagal trigone;areapostrema|Area postrema|Area postrema;obex|Obex|Obex;sulmedpost|Sulcus medianus posterior|Posterior median sulcus;sulintpost|Sulcus intermedius posterior|Posterior intermediate sulcus;fgrac|Fasciculus gracilis|Gracile fasciculus;fcun|Fasciculus cuneatus|Cuneate fasciculus;tubgrac|Tuberculum gracile|Gracile tubercle;tubcun|Tuberculum cuneatum|Cuneate tubercle;bracsup|Brachium colliculi superioris|Brachium of superior colliculus;bracinf|Brachium colliculi inferioris|Brachium of inferior colliculus;veusup|Velum medullare superius|Superior medullary velum;pcs|Pedunculus cerebellaris superior|Superior cerebellar peduncle;pcm|Pedunculus cerebellaris medius|Middle cerebellar peduncle;pci|Pedunculus cerebellaris inferior|Inferior cerebellar peduncle;cerebelo|Hemispherium cerebelli|Cerebellar hemisphere;vermis|Vermis cerebelli|Vermis;cb_ant|Lobus cerebelli anterior|Anterior lobe of cerebellum;cb_post|Lobus cerebelli posterior|Posterior lobe of cerebellum;cb_fn|Lobus flocculonodularis|Flocculonodular lobe;cb_lingula|Lingula cerebelli|Lingula;cb_central|Lobulus centralis|Central lobule;cb_culmen|Culmen|Culmen;cb_declive|Declive|Declive;cb_folium|Folium vermis|Folium of vermis;cb_tuber|Tuber vermis|Tuber of vermis;cb_piramide|Pyramis vermis|Pyramid of vermis;cb_uvula|Uvula vermis|Uvula of vermis;cb_nodulo|Nodulus|Nodule;cb_asa|Ala lobuli centralis|Wing of central lobule;cb_quadant|Lobulus quadrangularis anterior|Anterior quadrangular lobule;cb_quadpost|Lobulus quadrangularis posterior|Posterior quadrangular lobule;cb_semisup|Lobulus semilunaris superior|Superior semilunar lobule;cb_semiinf|Lobulus semilunaris inferior|Inferior semilunar lobule;cb_biventre|Lobulus biventer|Biventral lobule;cb_tonsila|Tonsilla cerebelli|Cerebellar tonsil;cb_floculo|Flocculus|Flocculus;f_prima|Fissura prima|Primary fissure;f_postlat|Fissura posterolateralis|Posterolateral fissure;f_horiz|Fissura horizontalis|Horizontal fissure;f_precent|Fissura precentralis|Precentral fissure;f_preculm|Fissura preculminalis|Preculminate fissure;f_posclival|Fissura postclivalis|Postclival fissure;f_prepir|Fissura prepyramidalis|Prepyramidal fissure;f_pospir|Fissura secunda|Secondary fissure;arbvida|Arbor vitae cerebelli|Arbor vitae;nc1|Nervus olfactorius|Olfactory nerve;nc2|Nervus opticus|Optic nerve;nc3|Nervus oculomotorius|Oculomotor nerve;nc4|Nervus trochlearis|Trochlear nerve;nc5|Nervus trigeminus|Trigeminal nerve;nc6|Nervus abducens|Abducens nerve;nc7|Nervus facialis|Facial nerve;nc8|Nervus vestibulocochlearis|Vestibulocochlear nerve;nc9|Nervus glossopharyngeus|Glossopharyngeal nerve;nc10|Nervus vagus|Vagus nerve;nc11|Nervus accessorius|Accessory nerve;nc12|Nervus hypoglossus|Hypoglossal nerve;g_trig|Ganglion trigeminale|Trigeminal ganglion;n_oft|Nervus ophthalmicus|Ophthalmic nerve;n_max|Nervus maxillaris|Maxillary nerve;n_mand|Nervus mandibularis|Mandibular nerve;g_ciliar|Ganglion ciliare|Ciliary ganglion;g_pterig|Ganglion pterygopalatinum|Pterygopalatine ganglion;n_petmaior|Nervus petrosus major|Greater petrosal nerve;g_genic|Ganglion geniculi|Geniculate ganglion;n_corda|Chorda tympani|Chorda tympani;n_lingual|Nervus lingualis|Lingual nerve;g_submand|Ganglion submandibulare|Submandibular ganglion;n_timp|Nervus tympanicus|Tympanic nerve;g_otico|Ganglion oticum|Otic ganglion;n_auriculo|Nervus auriculotemporalis|Auriculotemporal nerve;n_infraorb|Nervus infraorbitalis|Infraorbital nerve;n_alvinf|Nervus alveolaris inferior|Inferior alveolar nerve;aci|Arteria carotis interna|Internal carotid artery;acm|Arteria cerebri media|Middle cerebral artery;aca1|Arteria cerebri anterior|Anterior cerebral artery;acomA|Arteria communicans anterior|Anterior communicating artery;pcom|Arteria communicans posterior|Posterior communicating artery;acp|Arteria cerebri posterior|Posterior cerebral artery;acp1|Arteria cerebri posterior, pars precommunicalis|Precommunicating part of posterior cerebral artery;basilar|Arteria basilaris|Basilar artery;vertebral|Arteria vertebralis|Vertebral artery;pica|Arteria inferior posterior cerebelli|Posterior inferior cerebellar artery;aica|Arteria inferior anterior cerebelli|Anterior inferior cerebellar artery;sca|Arteria superior cerebelli|Superior cerebellar artery;a_pont|Arteriae pontis|Pontine arteries;a_labir|Arteria labyrinthi|Labyrinthine artery;a_espant|Arteria spinalis anterior|Anterior spinal artery;a_espost|Arteria spinalis posterior|Posterior spinal artery;coroant|Arteria choroidea anterior|Anterior choroidal artery;a_oft|Arteria ophthalmica|Ophthalmic artery;pericalosa|Arteria pericallosa|Pericallosal artery;calmarg|Arteria callosomarginalis|Callosomarginal artery;heubner|Arteria striata medialis distalis|Recurrent artery (of Heubner);lenticulo|Arteriae centrales anterolaterales|Anterolateral central (lenticulostriate) arteries;sss|Sinus sagittalis superior|Superior sagittal sinus;sinf|Sinus sagittalis inferior|Inferior sagittal sinus;sreto|Sinus rectus|Straight sinus;torcula|Confluens sinuum|Confluence of sinuses;stransv|Sinus transversus|Transverse sinus;ssigm|Sinus sigmoideus|Sigmoid sinus;jugular|Vena jugularis interna|Internal jugular vein;socc|Sinus occipitalis|Occipital sinus;scav|Sinus cavernosus|Cavernous sinus;sinterc|Sinus intercavernosi|Intercavernous sinuses;spsup|Sinus petrosus superior|Superior petrosal sinus;spinf|Sinus petrosus inferior|Inferior petrosal sinus;sesfpar|Sinus sphenoparietalis|Sphenoparietal sinus;plexbas|Plexus basilaris|Basilar plexus;galeno|Vena magna cerebri|Great cerebral vein;vint|Venae internae cerebri|Internal cerebral veins;basal|Vena basalis|Basal vein;v_talest|Vena thalamostriata superior|Superior thalamostriate vein;v_coroid|Vena choroidea superior|Superior choroidal vein;v_septo|Vena anterior septi pellucidi|Anterior vein of septum pellucidum;silv|Vena media superficialis cerebri|Superficial middle cerebral vein;s_lateral|Sulcus lateralis|Lateral sulcus;s_central|Sulcus centralis|Central sulcus;s_precentral|Sulcus precentralis|Precentral sulcus;s_poscentral|Sulcus postcentralis|Postcentral sulcus;s_fronsup|Sulcus frontalis superior|Superior frontal sulcus;s_froninf|Sulcus frontalis inferior|Inferior frontal sulcus;s_tempsup|Sulcus temporalis superior|Superior temporal sulcus;s_tempinf|Sulcus temporalis inferior|Inferior temporal sulcus;s_intrapar|Sulcus intraparietalis|Intraparietal sulcus;s_calcarino|Sulcus calcarinus|Calcarine sulcus;s_parocc|Sulcus parietooccipitalis|Parieto-occipital sulcus;s_corpcal|Sulcus corporis callosi|Callosal sulcus;s_cingulo|Sulcus cinguli|Cingulate sulcus;s_marginal|Ramus marginalis sulci cinguli|Marginal branch of cingulate sulcus;s_subpar|Sulcus subparietalis|Subparietal sulcus;s_paracent|Sulcus paracentralis|Paracentral sulcus;s_colateral|Sulcus collateralis|Collateral sulcus;s_occtemp|Sulcus occipitotemporalis|Occipitotemporal sulcus;s_olfat|Sulcus olfactorius|Olfactory sulcus;cc|Corpus callosum|Corpus callosum;cc_rostro|Rostrum corporis callosi|Rostrum of corpus callosum;cc_joelho|Genu corporis callosi|Genu of corpus callosum;cc_tronco|Truncus corporis callosi|Trunk of corpus callosum;cc_esplenio|Splenium corporis callosi|Splenium of corpus callosum;septo|Septum pellucidum|Septum pellucidum;fornice|Fornix|Fornix;aderencia|Adhesio interthalamica|Interthalamic adhesion;unco|Uncus|Uncus;fimbria|Fimbria hippocampi|Fimbria of hippocampus;giroden|Gyrus dentatus|Dentate gyrus;hipocampo|Hippocampus|Hippocampus;vlat|Ventriculus lateralis|Lateral ventricle;vlat_ant|Cornu frontale|Frontal horn;vlat_cent|Pars centralis ventriculi lateralis|Central part of lateral ventricle;vlat_post|Cornu occipitale|Occipital horn;vlat_inf|Cornu temporale|Temporal horn;v3|Ventriculus tertius|Third ventricle;v4|Ventriculus quartus|Fourth ventricle;aqueduto|Aqueductus mesencephali|Cerebral aqueduct;fmonro|Foramen interventriculare|Interventricular foramen;foice|Falx cerebri|Falx cerebri;tentorio|Tentorium cerebelli|Tentorium cerebelli;foicecb|Falx cerebelli|Falx cerebelli;diafragma|Diaphragma sellae|Diaphragma sellae;medula|Medulla spinalis|Spinal cord;talamo|Thalamus|Thalamus;hipotal|Hypothalamus|Hypothalamus;hipofise|Hypophysis|Pituitary gland;pineal|Glandula pinealis|Pineal gland;caudado|Nucleus caudatus|Caudate nucleus;putame|Putamen|Putamen;amigdala|Corpus amygdaloideum|Amygdala;capsint|Capsula interna|Internal capsule;quiasma|Chiasma opticum|Optic chiasm;gpre|Gyrus precentralis|Precentral gyrus;gpos|Gyrus postcentralis|Postcentral gyrus;gfs|Gyrus frontalis superior|Superior frontal gyrus;gfm|Gyrus frontalis medius|Middle frontal gyrus;gts|Gyrus temporalis superior|Superior temporal gyrus;gtm|Gyrus temporalis medius|Middle temporal gyrus;gti|Gyrus temporalis inferior|Inferior temporal gyrus;gsm|Gyrus supramarginalis|Supramarginal gyrus;gang|Gyrus angularis|Angular gyrus;gcing|Gyrus cinguli|Cingulate gyrus;gcun|Cuneus|Cuneus;gprec|Precuneus|Precuneus;gling|Gyrus lingualis|Lingual gyrus;gparahip|Gyrus parahippocampalis|Parahippocampal gyrus;ginsula|Insula|Insula;gfus|Gyrus fusiformis|Fusiform gyrus;greto|Gyrus rectus|Straight gyrus;gpara|Lobulus paracentralis|Paracentral lobule;gps|Lobulus parietalis superior|Superior parietal lobule`.split(';').forEach(l => { const q = l.split('|'); NOMES[q[0]] = [q[1], q[2]]; });
 
 /* ---- lições guiadas: uma vista, poucas estruturas numeradas, em sequência ---- */
 const LICOES = [
@@ -3303,10 +4158,13 @@ const LICOES = [
     { n: 'Face lateral: sulcos', v: 'lateral', d: 34, g: ['cortex'], i: ['s_lateral', 's_central', 's_precentral', 's_poscentral', 's_fronsup', 's_froninf', 's_tempsup', 's_tempinf', 's_intrapar'], x: 'Os dois sulcos mais importantes são o lateral (de Sylvius) e o central (de Rolando) (cap. 7, p. 55).' },
     { n: 'Face medial', v: 'medial', d: 34, g: ['cortex', 'deep'], i: ['s_corpcal', 's_cingulo', 's_marginal', 's_paracent', 's_subpar', 's_parocc', 's_calcarino', 'cc_rostro', 'cc_joelho', 'cc_tronco', 'cc_esplenio', 'septo'], x: 'O corpo caloso une os hemisférios; entre ele e o fórnice está o septo pelúcido (cap. 7, p. 61-62).' },
     { n: 'Face inferior', v: 'inferior', d: 32, g: ['cortex', 'limbic'], i: ['s_olfat', 'greto', 's_occtemp', 'gfus', 's_colateral', 'gparahip', 'unco', 'gling'], x: 'No lobo temporal, da borda lateral para a medial: sulcos occipitotemporal, colateral e do hipocampo (cap. 7, p. 62).' },
+    { n: 'Lobos do cérebro', v: 'lateral', d: 34, g: ['cortex'], i: ['lobo_front', 'lobo_par', 'lobo_temp', 'lobo_occ', 'ginsula', 's_central', 's_lateral', 's_parocc', 'fis_long'], x: 'O sulco central separa o lobo frontal do parietal; o sulco lateral separa o temporal dos lobos frontal e parietal; o occipital fica atrás da linha parietoccipital. A ínsula, lobo insular, fica no fundo do sulco lateral (cap. 7, p. 55).' },
+    { n: 'Sistema límbico', v: 'medial', a: [0, 0.2, -0.6], d: 22, g: ['cortex', 'limbic', 'dien', 'deep'], i: ['lobo_limb', 'gcing', 'gistmo', 'gparahip', 'unco', 'gsubcal', 'f_cingulo', 'pehipo', 'hipo_corpo', 'fimbria', 'fornice', 'mamilar', 'f_mamtal', 'amigdala', 'estria_t', 'cc'], x: 'O lobo límbico (cíngulo, istmo e para-hipocampal) cerca o corpo caloso. Circuito de Papez: hipocampo, fórnice, corpo mamilar, fascículo mamilotalâmico, núcleo anterior do tálamo, giro do cíngulo, fascículo do cíngulo e de volta ao giro para-hipocampal (cap. 27).' },
     { n: 'Ventrículos', v: 'lateral', a: [0, 0, -0.5], d: 22, g: ['vent'], i: ['vlat_ant', 'vlat_cent', 'vlat_post', 'vlat_inf', 'fmonro', 'v3', 'aqueduto', 'v4'], x: 'Os ventrículos laterais comunicam-se com o III ventrículo pelos forames interventriculares; o aqueduto liga o III ao IV (figura 7.2).' },
     { n: 'Pregas da dura-máter', v: 'lateral', th: 2.3, ph: 1.1, d: 32, g: ['men', 'ven', 'stem'], i: ['foice', 'tentorio', 'foicecb', 'diafragma', 'sss', 'sinf', 'sreto', 'torcula'], x: 'O folheto interno da dura-máter forma pregas que dividem a cavidade craniana: foice do cérebro, tentório do cerebelo, foice do cerebelo e diafragma da sela (cap. 8, p. 69-71).' }] }];
 const licEl = $('#licBody');
 function abrirLicao(ti, li) {
+  if (state.bol.on) setBolachas(false);
   const L = LICOES[ti].l[li];
   state.licao = { ti, li, ids: L.i.filter(id => ITEMS[id] && ITEMS[id].meshes.length), set: {} }; state.licao.ids.forEach(id => state.licao.set[id] = 1);
   state.sel = null; state.realce = null; state.les = null; state.lesao = false; $('#lesao').checked = false;

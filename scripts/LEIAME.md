@@ -8,9 +8,9 @@ licença **CC BY-SA 3.0**. As malhas foram decimadas e recoloridas; o resultado 
 
 | Arquivo | Para que serve |
 |---|---|
-| `atlas.modelo.html` | Fonte do atlas, sem os dados pesados. **É este que se edita.** |
+| `../src/` | **Fonte do atlas. É aqui que se edita.** `cabeca.html`, `estilo.css`, `corpo.html`, `js/NN-*.js` (executados em ordem numérica) e `fim.html` |
 | `converter_brainder.mjs` | OBJ do Brainder → `dados_brainder/cortex.glb` e `dados_brainder/marcos.json` |
-| `embutir_glb.mjs` | Junta o modelo, o GLB (base64) e os marcos em `../atlas-3d-neuroanatomia.html` |
+| `embutir_glb.mjs` | Junta as partes de `../src/`, confere a sintaxe do JavaScript e embute o GLB (base64) e os marcos em `../atlas-3d-neuroanatomia.html` |
 | `servidor.mjs` | Servidor local simples (http://localhost:8765/) |
 | `../atlas-3d-neuroanatomia.original.html` | Cópia do atlas antes da troca do córtex |
 | `../dados_brainder/` | Downloads do Brainder (pial, inflada, Desikan-Killiany, subcortical) |
@@ -27,7 +27,7 @@ node servidor.mjs
 ```
 
 O número em `converter_brainder.mjs` é a quantidade de triângulos por hemisfério.
-Depois de editar `atlas.modelo.html`, basta rodar `node embutir_glb.mjs`.
+Depois de editar qualquer arquivo de `../src/`, basta rodar `node scripts/embutir_glb.mjs` na raiz do projeto.
 O atlas final também abre com duplo clique, sem servidor (precisa de internet para o three.js).
 
 ## O que a conversão faz
@@ -77,3 +77,13 @@ Vasos e formas esquemáticas são construídos uma vez e espelhados.
 - A área subcalosa/septal não tem região própria na parcelação e ficou sem malha.
 - O GLB não usa alinhamento de 4 bytes nos atributos de vértice (economia de tamanho). O three.js r128 lê
   sem problema; validadores estritos de glTF podem reclamar.
+
+## Gabarito das bolachas
+
+`../gabarito/montar_gabarito.cjs` gera `../GABARITO.md`, `../gabarito/unicamp-coronal.json` e `../src/js/01-gabarito.js` (os ids das estruturas de cada face dos 12 cortes coronais da Unicamp). Rodar `node gabarito/montar_gabarito.cjs` depois de mudar o mapa, e então `node scripts/embutir_glb.mjs`.
+
+## Partes novas da remodelagem 3
+- `src/js/10-sistema-limbico.js`: lobos, istmo, giro subcaloso, hipocampo por partes, feixes límbicos, prosencéfalo basal, habênulas.
+- `src/js/10-tronco-interno.js`: eixo do tronco e núcleos e feixes internos.
+- `src/js/14-bolachas.js`: motor de corte por plano (`bolSecao`) e o modo Bolachas.
+- `src/js/14-cortes-tronco.js`: cortes transversais do tronco e esquemas da medula.
