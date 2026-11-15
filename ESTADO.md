@@ -1,4 +1,4 @@
-# Estado do projeto: Atlas 3D de Neuroanatomia
+# Estado do projeto: Mímir: Atlas 3D de Neuroanatomia
 
 Nota de passagem para quem continuar o trabalho (atualizada em 14/11/2026). Leia isto antes de mexer.
 

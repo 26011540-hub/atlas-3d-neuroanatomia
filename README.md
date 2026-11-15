@@ -1,8 +1,10 @@
-# Atlas 3D de Neuroanatomia
+# Mímir: Atlas 3D de Neuroanatomia
 
 **Autor: Gustavo de Castro** · © 2026 · licença CC BY-SA 3.0 (ver [LICENSE](LICENSE))
 
-Atlas 3D interativo para estudo de neuroanatomia, criado por Gustavo de Castro, estudante de Medicina, com base em Ângelo Machado, *Neuroanatomia Funcional*, 4ª ed. Roda no navegador, em um único arquivo HTML, sem instalação.
+O Mímir é um atlas 3D interativo para estudo de neuroanatomia, criado por Gustavo de Castro, estudante de Medicina, com base em Ângelo Machado, *Neuroanatomia Funcional*, 4ª ed. Roda no navegador, em um único arquivo HTML, sem instalação.
+
+*Sobre o nome:* na mitologia nórdica, Mímir guarda a fonte da sabedoria e da memória; depois de sua morte, Odin conserva sua cabeça e continua a consultá-la. Uma cabeça que guarda o conhecimento.
 
 **Abrir no navegador:** https://26011540-hub.github.io/atlas-3d-neuroanatomia/
 
@@ -42,4 +44,4 @@ Detalhes da conversão das malhas em [scripts/LEIAME.md](scripts/LEIAME.md); est
 Por usar as malhas do Brain for Blender, o atlas é distribuído sob a mesma licença, **CC BY-SA 3.0**. Quem reutilizar deve citar o autor (Gustavo de Castro, com o link deste repositório), indicar as alterações e manter a mesma licença. O código foi escrito com o auxílio de inteligência artificial (Claude, da Anthropic), sob a direção do autor.
 
 ## Como citar
-CASTRO, Gustavo de. *Atlas 3D de Neuroanatomia*. 2026. Disponível em: https://github.com/26011540-hub/atlas-3d-neuroanatomia.
+CASTRO, Gustavo de. *Mímir: Atlas 3D de Neuroanatomia*. 2026. Disponível em: https://github.com/26011540-hub/atlas-3d-neuroanatomia.
