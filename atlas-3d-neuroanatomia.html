@@ -215,6 +215,12 @@ details.grp li button.on { background: var(--accent); color: var(--accent-ink); 
 .selo { display: inline-block; font: 700 10.5px var(--f-body); letter-spacing: .04em; padding: 0 5px; border-radius: 4px; margin-left: 4px; vertical-align: 1px; }
 .selo-nc { background: #f3d6a4; color: #5a3a00; }
 .selo-sa { background: #c9e3f5; color: #0d3a5c; }
+.hcptipos { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 8px; }
+.hcptipos[hidden] { display: none; }
+.hcptipos button { display: inline-flex; align-items: center; gap: 6px; padding: 3px 9px; border-radius: 999px; border: 1px solid var(--line, #d5dde2); background: transparent; color: inherit; font: inherit; font-size: 12px; cursor: pointer; }
+.hcptipos button i { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+.hcptipos button[aria-pressed="false"] { opacity: .45; }
+.hcptipos button[aria-pressed="false"] i { background: transparent !important; outline: 1px solid currentColor; }
 </style>
 
 <div class="app">
@@ -310,9 +316,10 @@ details.grp li button.on { background: var(--accent); color: var(--accent-ink); 
           <div class="sect">Estudo</div>
           <div class="row" style="gap:8px"><span class="lbl">Idioma dos nomes</span><span class="seg" id="linguaSeg"><button type="button" data-l="pt" aria-pressed="true">PT</button><button type="button" data-l="la" aria-pressed="false">Latim</button><button type="button" data-l="en" aria-pressed="false">EN</button></span></div>
           <div class="btnrow" style="margin:2px 0 6px"><button class="btn" type="button" id="sepBtn">Separar o cerebelo do tronco</button></div>
-          <div class="row" style="gap:8px;margin:2px 0 6px;flex-wrap:wrap"><span class="lbl">Cerebelo</span><span class="seg" id="cbmSeg"><button type="button" data-cbm="atlas" aria-pressed="true" title="Modelo do atlas (Brain for Blender), liso, com lóbulos">Atlas</button><button type="button" data-cbm="folhas" aria-pressed="false" title="Superfície real com as folhas (Sereno 2020)">Folhas</button><button type="button" data-cbm="estudo" aria-pressed="false" title="Superfície real suavizada (Sereno 2020)">Estudo</button><button type="button" data-cbm="lobos" aria-pressed="false" title="Superfície real com lobos e lóbulos coloridos">Lobos</button></span><span class="muted" id="cbsStatus" style="font-size:12px"></span></div>
+          <div class="row" style="gap:8px;margin:2px 0 6px;flex-wrap:wrap"><span class="lbl">Cerebelo</span><span class="seg" id="cbmSeg"><button type="button" data-cbm="atlas" aria-pressed="false" title="Modelo do atlas (Brain for Blender), liso, com lóbulos">Atlas</button><button type="button" data-cbm="folhas" aria-pressed="true" title="Superfície real com as folhas (Sereno 2020)">Folhas</button><button type="button" data-cbm="estudo" aria-pressed="false" title="Superfície real suavizada (Sereno 2020)">Estudo</button><button type="button" data-cbm="lobos" aria-pressed="false" title="Superfície real com lobos e lóbulos coloridos">Lobos</button></span><span class="muted" id="cbsStatus" style="font-size:12px"></span></div>
           <div class="row" style="gap:8px;margin:2px 0 6px;flex-wrap:wrap"><span class="lbl">Núcleos do tronco</span><span class="seg" id="mspSeg"><button type="button" data-msp="esquema" aria-pressed="true" title="Esquemas do Mímir">Esquema</button><button type="button" data-msp="massp" aria-pressed="false" title="Forma real média do atlas MASSP 2.0 (97 pessoas)">MASSP</button></span><span class="muted" id="mspStatus" style="font-size:12px"></span></div>
           <div class="row" style="gap:8px;margin:2px 0 6px;flex-wrap:wrap"><span class="lbl">Pares cranianos</span><span class="seg" id="vkSeg"><button type="button" data-vkn="esquema" aria-pressed="true" title="Nervos desenhados do Mímir">Esquema</button><button type="button" data-vkn="nervos" aria-pressed="false" title="Nervos reais do Visible Korean, uma cor por par (uso não comercial)">Só nervos</button><button type="button" data-vkn="completo" aria-pressed="false" title="Nervos reais com núcleos, base do crânio e forames">Nervo + núcleo + forame</button></span><span class="muted" id="vkStatus" style="font-size:12px"></span></div>
+          <div class="row" style="gap:8px;margin:2px 0 6px;flex-wrap:wrap"><span class="lbl">Grandes vias</span><span class="seg" id="hcpSeg"><button type="button" data-hcp="esquema" aria-pressed="true" title="Vias desenhadas do Mímir">Esquema</button><button type="button" data-hcp="hcp" aria-pressed="false" title="Fibras reais do atlas de tratografia HCP1065 (média de 1065 pessoas)">HCP1065</button></span><span class="muted" id="hcpStatus" style="font-size:12px"></span></div>
           <div id="bistLista" class="bist-lista"></div>
           <label class="row"><input type="checkbox" id="sulcosOn"><span class="lbl">Mostrar os sulcos (linhas sobre o córtex)</span></label>
           <label class="row"><input type="checkbox" id="rotOn"><span class="lbl">Mostrar rótulos no modelo</span></label>
@@ -344,6 +351,7 @@ details.grp li button.on { background: var(--accent); color: var(--accent-ink); 
           <li><b>Atlas probabilístico dos lóbulos e núcleos do cerebelo (Diedrichsen et al. 2009; SUIT)</b>. Lóbulos e núcleos do cerebelo: Diedrichsen J, Balsters JH, Flavell J, Cussans E, Ramnani N. A probabilistic atlas of the human cerebellum. NeuroImage 2009; e Diedrichsen J, Maderwald S, Küper M, et al. Imaging the deep cerebellar nuclei: a probabilistic atlas and normalization procedure. NeuroImage 2011. Coleção cerebellar_atlases do Diedrichsen Lab (CC BY). <a href="https://github.com/DiedrichsenLab/cerebellar_atlases/tree/master/Diedrichsen_2009" target="_blank" rel="noopener">github.com/DiedrichsenLab/cerebellar_atlases/tree/master/Diedrichsen_2009</a></li>
           <li><b>Lüsebrink et al. 2021, 7 T (OpenNeuro ds003563)</b>. T1 de 250 µm: Lüsebrink F, Mattern H, Yakupov R, Acosta-Cabronero J, Ashtarayeh M, Oeltze-Jafra S, Speck O. Comprehensive ultrahigh resolution whole brain in vivo MRI dataset as a human phantom. Sci Data 2021. OpenNeuro ds003563 v1.1.0, doi:10.18112/openneuro.ds003563.v1.1.0 (CC0). <a href="https://openneuro.org/datasets/ds003563" target="_blank" rel="noopener">openneuro.org/datasets/ds003563</a></li>
           <li><b>MASSP 2.0 Lifespan Probabilistic Atlas (Bazin et al. 2025, AHEAD)</b>. Núcleos subcorticais e do tronco: Bazin PL, Forstmann BU, Alkemade A, Miletic S. MASSP 2.0 Lifespan Probabilistic Atlas. University of Amsterdam, 2024. doi:10.21942/uva.27291579.v2 (CC BY 4.0). <a href="https://uvaauas.figshare.com/articles/dataset/MASSP_2_0_Lifespan_Probabilistic_Atlas/27291579" target="_blank" rel="noopener">uvaauas.figshare.com/articles/dataset/MASSP_2_0_Lifespan_Probabilistic_Atlas/27291579</a></li>
+          <li><b>HCP1065 Population-Averaged Tractography Atlas (Yeh 2022)</b> <span class="selo selo-sa" title="Derivados sob a mesma licença">SA</span>. Grandes vias: Yeh FC. Population-based tract-to-region connectome of the human brain and its hierarchical topology. Nat Commun 2022;13:4933. doi:10.1038/s41467-022-32595-4 (atlas HCP1065, CC BY-SA 4.0). Dados fornecidos pelo Human Connectome Project, WU-Minn Consortium (Principal Investigators: David Van Essen e Kamil Ugurbil; 1U54MH091657), financiado pelos 16 institutos e centros do NIH que apoiam o NIH Blueprint for Neuroscience Research e pelo McDonnell Center for Systems Neuroscience da Washington University. <a href="https://github.com/data-others/tract" target="_blank" rel="noopener">github.com/data-others/tract</a></li>
           <li><b>Visible Korean, cabeça masculina</b> <span class="selo selo-nc" title="Uso não comercial">NC</span>. Nervos cranianos e estruturas da cabeça: Kim CY, Park JS. Visible Korean male head dataset: sectioned images, segmented images, 7.0 T MRI data, and 3D models. Zenodo, 2026. doi:10.5281/zenodo.22759852 (CC BY-NC 4.0). <a href="https://sites.google.com/ajou.ac.kr/anatomy" target="_blank" rel="noopener">sites.google.com/ajou.ac.kr/anatomy</a></li>
         </ul>
         <h3>Autoria própria</h3>
@@ -3232,7 +3240,7 @@ function bolChave(m) {
 }
 function bolEntra(m) {
   const u = m.userData, id = u.id;
-  if (!META[id] || BOL_FORA[id] || u.les !== undefined || u.corte || u.cortePed) return false;
+  if (!META[id] || BOL_FORA[id] || u.les !== undefined || u.corte || u.cortePed || u.semBolacha) return false;   // semBolacha: linhas e malhas carregadas à parte (sem triângulos para cortar)
   if (u.pai && BOL_TRONCO[u.pai]) return true;   // regiões da superfície do tronco: fazem parte do contorno do tronco
   if (u.fis || u.sulco && !/^s_/.test(id)) return false;
   if (m.geometry.type === 'CircleGeometry' || m.geometry.type === 'RingGeometry') return false;
@@ -3689,10 +3697,13 @@ M('interposito', 'Núcleo interpósito', 'stem', '#6e8a3b', 'Zona intermédia do
 REF(['interposito'], 'Forma: atlas SUIT, Diedrichsen J et al., NeuroImage 2009 e 2011 (CC BY). Texto: Machado, cap. 22, p. 208-209.');
 NOTA('interposito', 'Nos modos do cerebelo real, os núcleos vêm do atlas SUIT (compartimento mais provável em 23 pessoas): o emboliforme e os globosos aparecem juntos como interpósito. No modo Atlas continuam os esquemas do Mímir.');
 const CBS = { modo: 'atlas', malhas: {}, carregando: null, nucleos: null };
-const CBS_ARQ = { folhas: 'models/cerebelo_sereno_folhas.glb', estudo: 'models/cerebelo_sereno_estudo.glb' };
+const CBS_ARQ = { folhas: 'models/cerebelo_sereno_folhas.glb', leve: 'models/cerebelo_sereno_leve.glb', estudo: 'models/cerebelo_sereno_estudo.glb' };
+// níveis de detalhe das folhas: 'leve' (250 mil triângulos) de longe e em telas de toque; 'folhas' (700 mil) de perto
+const CBS_TOQUE = !!(window.matchMedia && matchMedia('(pointer: coarse)').matches), CBS_PERTO = 24;
 const CBS_LOBO_COR = { cb_ant: '#eba052', cb_post: '#c47a9c', cb_fn: '#6fb35f' };   // três tons bem distintos: os lobos se leem de longe; os lóbulos variam em volta deles
 let cbsLoader = null;
-const cbsNivel = modo => modo === 'estudo' ? 'estudo' : 'folhas';   // Folhas e Lobos usam a malha com as folhas; Estudo, a envoltória lisa
+// Folhas e Lobos usam a malha com as folhas (no nível de detalhe da distância); Estudo, a envoltória lisa
+const cbsNivel = modo => { if (modo === 'estudo') return 'estudo'; const perto = !CBS_TOQUE && cam.dist <= CBS_PERTO && CBS.malhas.folhas; return perto || !CBS.malhas.leve ? (CBS.malhas.folhas || !CBS.malhas.leve ? 'folhas' : 'leve') : 'leve'; };
 // GLB quantizado do gltfpack -> geometria em ponto flutuante já no espaço do atlas
 function cbsGeo(malha) {
   const src = malha.geometry, pa = src.attributes.position, P = new Float32Array(pa.count * 3);
@@ -3756,18 +3767,21 @@ function cbsAplicarCores(m, lobos) {
   const g = m.geometry, cor = g.userData.cores, A = g.attributes.color.array, sel = state.sel; A.set(lobos ? cor.lobos : cor.simples);
   if (sel && (/^cb_/.test(sel) && sel !== 'cb_sereno')) { const L = g.userData.lobulo, Lo = g.userData.lobo;
     for (let i = 0; i < L.length; i++) if (L[i] === sel || Lo[i] === sel) { A[i * 3] = A[i * 3] * 0.45 + 0.55; A[i * 3 + 1] = A[i * 3 + 1] * 0.45 + 0.5; A[i * 3 + 2] *= 0.35; } }
-  g.attributes.color.needsUpdate = true; m.userData.corSel = sel;
+  g.attributes.color.needsUpdate = true; m.userData.corSel = sel; m.userData.corModo = CBS.modo;
 }
 const _apCbs = applyAppearance;
-applyAppearance = function () { _apCbs(); if (CBS.modo !== 'atlas') { const nivel = cbsNivel(CBS.modo), m = CBS.malhas[nivel]; if (m && m.userData.corSel !== state.sel) cbsAplicarCores(m, CBS.modo === 'lobos'); } };
-function setCerebeloModo(modo) {
+applyAppearance = function () { _apCbs(); if (CBS.modo !== 'atlas') { const nivel = cbsNivel(CBS.modo), m = CBS.malhas[nivel]; if (m && (m.userData.corSel !== state.sel || m.userData.corModo !== CBS.modo)) cbsAplicarCores(m, CBS.modo === 'lobos'); } };
+// troca de nível de detalhe quando a câmera se aproxima ou se afasta
+const _pcCbs = placeCamera;
+placeCamera = function () { _pcCbs(); if (CBS.modo === 'atlas' || CBS.modo === 'estudo') return; const n = cbsNivel(CBS.modo); if (n !== CBS.ultimo) { CBS.ultimo = n; applyVisibility(); applyAppearance(); } };
+function setCerebeloModo(modo, inicial) {
   CBS.modo = modo;
   document.querySelectorAll('[data-cbm]').forEach(b => b.setAttribute('aria-pressed', b.dataset.cbm === modo ? 'true' : 'false'));
   if (modo === 'atlas') { applyVisibility(); applyAppearance(); return; }
-  const nivel = cbsNivel(modo), st = document.getElementById('cbsStatus');
+  const nivel = modo === 'estudo' ? 'estudo' : (CBS.malhas.folhas ? 'folhas' : 'leve'), st = document.getElementById('cbsStatus');
   if (st) st.textContent = CBS.malhas[nivel] ? '' : 'Carregando o cerebelo real…';
   cbsCarregarNucleos();
-  cbsCarregar(nivel).then(m => { if (st) st.textContent = ''; cbsAplicarCores(m, modo === 'lobos'); if (!state.groupOn.stem) { state.groupOn.stem = true; syncLayerUI(); } applyVisibility(); applyAppearance(); })
+  cbsCarregar(nivel).then(m => { if (st) st.textContent = ''; if (nivel === 'leve' && !CBS_TOQUE) cbsCarregar('folhas').then(() => { CBS.ultimo = null; applyVisibility(); applyAppearance(); marca(); }).catch(e => console.warn(e)); cbsAplicarCores(m, modo === 'lobos'); if (!inicial && !state.groupOn.stem) { state.groupOn.stem = true; syncLayerUI(); } applyVisibility(); applyAppearance(); })
     .catch(e => { if (st) st.textContent = 'Não foi possível carregar ' + CBS_ARQ[nivel] + '.'; console.warn(e); CBS.modo = 'atlas'; setCerebeloModo('atlas'); });
 }
 // visibilidade: com o cerebelo real, o do atlas (lóbulos e fissuras) some; só o nível escolhido aparece
@@ -3796,6 +3810,9 @@ pick = function (e) {
 };
 BOL_FORA.cb_sereno = 1;   // os cortes continuam calculados com o cerebelo do atlas (a malha real tem centenas de milhares de triângulos)
 document.querySelectorAll('[data-cbm]').forEach(b => b.addEventListener('click', () => setCerebeloModo(b.dataset.cbm)));
+// o atlas abre com o cerebelo real (Folhas); o modelo antigo continua no botão Atlas
+setTimeout(() => setCerebeloModo('folhas', true), 0);
+if (/debug/.test(location.hash)) window.cbsDebug = { CBS, cbsNivel, get toque() { return CBS_TOQUE; } };
 /* ===== CORTES TRANSVERSAIS DO TRONCO E DA MEDULA (remodelagem 3, fase 4) =====
    Tronco: planos perpendiculares ao eixo do tronco do modelo, calculados com o mesmo motor das bolachas (bolSecao com plano G).
    Gabarito: Unicamp, série axial de cerebelo e tronco (figuras 1 a 21); níveis clássicos do Machado.
@@ -4199,6 +4216,153 @@ applyAppearance = function () {
 BOL_FORA.vk_coclea = BOL_FORA.vk_labirinto = BOL_FORA.vk_meato_int = BOL_FORA.vk_ossiculos = 1;
 ['osso_esfenoide', 'osso_temporal', 'osso_occipital', 'osso_etmoide', 'osso_frontal'].forEach(id => BOL_FORA[id] = 1);
 document.querySelectorAll('[data-vkn]').forEach(b => b.addEventListener('click', () => setNervosModo(b.dataset.vkn)));
+/* ===== GRANDES VIAS DO ATLAS HCP1065 =====
+   Yeh FC, Nat Commun 2022;13:4933 (atlas HCP1065, CC BY-SA 4.0; dados do Human Connectome Project). Superfícies dos
+   feixes de fibras (média de 1065 pessoas), feitas por scripts/process/hcp_vias.py e levadas ao atlas pela afim do MNI.
+   Modo "HCP1065": os feixes reais aparecem; os esquemas das mesmas vias (corticospinal, corticonuclear, lemnisco
+   medial, vias óptica e auditiva) ficam transparentes, como complemento onde a tratografia não chega (decussação das
+   pirâmides, medula, relés). Cores: vias descendentes em tons quentes, ascendentes em tons frios. */
+const HCP_ITENS = {
+  hcp_corticopontino: ['Tratos corticopontinos (frontopontino, parietopontino e occipitopontino)', '#e0702c', 'Fibras do córtex frontal, parietal e occipital que descem pela cápsula interna e pela base do pedúnculo cerebral até os núcleos da ponte; dali a via segue ao cerebelo pelo pedúnculo cerebelar médio.'],
+  hcp_reticular: ['Trato reticular (reticulospinal)', '#d65fa0', 'Fibras descendentes da formação reticular do tronco encefálico.'],
+  hcp_dentatorubrotalamico: ['Trato dentatorrubrotalâmico', '#c9a26b', 'Fibras do núcleo denteado que saem pelo pedúnculo cerebelar superior, cruzam na decussação dos pedúnculos e vão ao núcleo rubro e ao tálamo do lado oposto (há também um contingente que não cruza).'],
+  hcp_pcs: ['Pedúnculo cerebelar superior (fibras)', '#d9b27a', 'Feixe de fibras que liga o cerebelo ao mesencéfalo; principal via eferente do cerebelo.'],
+  hcp_pcm: ['Pedúnculo cerebelar médio (fibras pontocerebelares)', '#b8742a', 'Fibras dos núcleos da ponte que cruzam a linha média e entram no cerebelo do lado oposto.'],
+  hcp_pci: ['Pedúnculo cerebelar inferior (fibras)', '#e3c08a', 'Feixe que liga o bulbo ao cerebelo, com fibras aferentes (espinocerebelar posterior, olivocerebelares).'],
+  hcp_rad_talamica_ant: ['Radiação talâmica anterior', '#5aa9e6', 'Fibras entre o tálamo e o córtex do lobo frontal, pela perna anterior da cápsula interna.'],
+  hcp_rad_talamica_sup: ['Radiação talâmica superior', '#3f8fe0', 'Fibras entre o tálamo e o córtex dos giros pré e pós-central, pela perna posterior da cápsula interna.'],
+  hcp_rad_talamica_post: ['Radiação talâmica posterior', '#7fb6ef', 'Fibras entre o tálamo e o córtex parietal e occipital.'],
+  hcp_cc_forceps_menor: ['Corpo caloso: fórceps menor (joelho)', '#efe8d6', 'Fibras do joelho do corpo caloso que unem os lobos frontais.'],
+  hcp_cc_corpo: ['Corpo caloso: fibras do tronco', '#e6dcc4', 'Fibras do tronco do corpo caloso que unem as áreas homólogas dos dois hemisférios.'],
+  hcp_cc_forceps_maior: ['Corpo caloso: fórceps maior (esplênio)', '#f3ecdc', 'Fibras do esplênio do corpo caloso que unem os lobos occipitais.'],
+  hcp_cc_tapete: ['Corpo caloso: tapete', '#d9cfb6', 'Fibras do corpo caloso que formam o teto e a parede lateral do corno posterior e inferior do ventrículo lateral.'],
+  hcp_com_anterior: ['Comissura anterior (fibras)', '#c7b98f', 'Fibras que cruzam a linha média na comissura anterior, unindo partes dos lobos temporais e as vias olfatórias.'],
+  hcp_fornix: ['Fórnice (fibras)', '#b48ad6', 'Feixe de fibras do hipocampo ao corpo mamilar e à área septal.'],
+  hcp_cingulo: ['Cíngulo', '#9b7ccf', 'Feixe de associação dentro do giro do cíngulo, do lobo frontal ao giro para-hipocampal.'],
+  hcp_fls: ['Fascículo longitudinal superior', '#4fae6a', 'Feixe de associação longo que liga os lobos frontal, parietal e occipital.'],
+  hcp_arqueado: ['Fascículo arqueado', '#2f8f5b', 'Feixe de associação que contorna o sulco lateral e liga a área de Broca à área de Wernicke.'],
+  hcp_fli: ['Fascículo longitudinal inferior', '#7bbf5a', 'Feixe de associação entre o lobo occipital e o lobo temporal.'],
+  hcp_flmedio: ['Fascículo longitudinal médio', '#98c96f', 'Feixe de associação no giro temporal superior.'],
+  hcp_ffoi: ['Fascículo fronto-occipital inferior', '#5fb8a0', 'Feixe de associação do lobo frontal ao occipital, passando pela cápsula extrema.'],
+  hcp_uncinado: ['Fascículo uncinado', '#3fa38c', 'Feixe de associação em forma de gancho entre o lobo frontal (orbital) e o polo temporal.'],
+  hcp_capsula_extrema: ['Cápsula extrema (fibras)', '#6fb0a0', 'Fibras de associação entre o claustro e o córtex da ínsula.'],
+  hcp_fpm: ['Feixe prosencefálico medial', '#e0608c', 'Feixe que atravessa o hipotálamo lateral, ligando a área septal, o hipotálamo e o tegmento do mesencéfalo.'],
+  hcp_corticoestriatal: ['Fibras corticoestriatais', '#6d86d8', 'Fibras do córtex para o corpo estriado (caudado e putâmen).'],
+  hcp_alcas_nb: ['Alça e fascículo lenticular, alça e fascículo subtalâmico', '#3d63c9', 'Fibras do globo pálido para o tálamo (alça e fascículo lenticular) e entre o pálido e o núcleo subtalâmico.'],
+};
+Object.entries(HCP_ITENS).forEach(([id, [nome, cor, f]]) => M(id, nome, 'vias', cor, f, '', ''));
+REF(Object.keys(HCP_ITENS), 'Feixe: atlas HCP1065, Yeh FC, Nat Commun 2022 (CC BY-SA 4.0), dados do Human Connectome Project. Texto: a conferir no Machado (REVISAR.md).');
+// cor dos feixes reais das vias que já existem no atlas: descendentes quentes, ascendentes frias
+const HCP_COR = { v_cs: '#d23c3c', v_cn: '#f08a6a', v_lm: '#3f8fe0', v_opt: '#7fb6ef', v_aud: '#22a6b8' };
+const HCP_ESQ = Object.keys(HCP_COR);
+const HCP = { modo: 'esquema', carga: null };
+function hcpCarregar() {
+  if (HCP.carga) return HCP.carga;
+  // fibras como linhas (models/hcp_fibras.bin: int16 x, y, z em 1/escala cm; hcp_fibras.json: fibras de cada item e lado)
+  HCP.carga = Promise.all([fetch('models/hcp_fibras.json').then(r => r.json()), fetch('models/hcp_fibras.bin').then(r => r.arrayBuffer())]).then(([ix, buf]) => {
+    const Q = new Int16Array(buf), k = 1 / ix.escala;
+    let semente = 7; const sorteio = () => (semente = (semente * 16807) % 2147483647) / 2147483647;
+    ix.grupos.forEach(g => {
+      if (!META[g.item]) return;
+      let n = 0; g.fibras.forEach(([, c]) => n += (c - 1) * 2);
+      const P = new Float32Array(n * 3), C = new Float32Array(n * 3); let w = 0;
+      g.fibras.forEach(([a, c]) => {
+        const tom = 0.72 + 0.45 * sorteio();                      // cada fibra num tom: dá volume ao feixe sem custo de geometria
+        for (let i = a; i < a + c - 1; i++) for (const j of [i, i + 1]) { P[w] = Q[j * 3] * k; P[w + 1] = Q[j * 3 + 1] * k; P[w + 2] = Q[j * 3 + 2] * k; C[w] = C[w + 1] = C[w + 2] = tom; w += 3; }
+      });
+      const geo = new THREE.BufferGeometry(); geo.setAttribute('position', new THREE.BufferAttribute(P, 3)); geo.setAttribute('color', new THREE.BufferAttribute(C, 3));
+      geo.computeBoundingSphere();
+      const mat = new THREE.LineBasicMaterial({ color: HCP_COR[g.item] || META[g.item].color, vertexColors: true, transparent: true, opacity: 0.9 });
+      mat.emissive = new THREE.Color(0); mat.emissiveIntensity = 0;   // a aparência do atlas mexe no brilho de todo material
+      const m = new THREE.LineSegments(geo, mat);
+      m.userData.hcp = true; m.userData.semBolacha = true;
+      register(g.item, m, g.lado === 'r' ? -1 : (g.lado === 'l' ? 1 : 0)); m.userData.base = HCP_COR[g.item] || META[g.item].color;
+    });
+  });
+  if (typeof ray !== 'undefined' && ray.params && ray.params.Line) ray.params.Line.threshold = 0.06;   // clique a menos de 0,6 mm da fibra
+  return HCP.carga;
+}
+function setViasModo(modo) {
+  HCP.modo = modo;
+  document.querySelectorAll('[data-hcp]').forEach(b => b.setAttribute('aria-pressed', b.dataset.hcp === modo ? 'true' : 'false'));
+  const st = document.getElementById('hcpStatus');
+  if (modo === 'esquema') { if (st) st.textContent = ''; applyVisibility(); applyAppearance(); return; }
+  if (st) st.textContent = 'Carregando as vias do HCP1065…';
+  hcpCarregar().then(() => { if (st) st.textContent = ''; if (!state.groupOn.vias) { state.groupOn.vias = true; syncLayerUI(); } applyVisibility(); applyAppearance(); })
+    .catch(e => { if (st) st.textContent = 'Não foi possível carregar models/hcp_vias.glb.'; console.warn(e); setViasModo('esquema'); });
+}
+const _visHcp = applyVisibility;
+applyVisibility = function () {
+  _visHcp();
+  const real = HCP.modo === 'hcp';
+  ALLMESH.forEach(m => { if (m.userData.hcp) m.visible = real && m.visible; });
+};
+const _apHcp = applyAppearance;
+applyAppearance = function () {
+  _apHcp();
+  if (HCP.modo !== 'hcp') return;
+  ALLMESH.forEach(m => {
+    const u = m.userData;
+    if (u.hcp) { if (HCP_COR[u.id] && !state.territ) m.material.color.set(HCP_COR[u.id]); return; }
+    if (HCP_ESQ.includes(u.id)) { m.material.opacity = Math.min(m.material.opacity, 0.3); m.material.depthWrite = false; }   // o esquema fica como complemento
+  });
+};
+Object.keys(HCP_ITENS).forEach(id => BOL_FORA[id] = 1);
+document.querySelectorAll('[data-hcp]').forEach(b => b.addEventListener('click', () => setViasModo(b.dataset.hcp)));
+// ---- filtros por tipo de fibra e legenda ----
+const HCP_TIPOS = [
+  ['projecao', 'Projeção', '#d23c3c', ['v_cs', 'v_cn', 'hcp_corticopontino', 'hcp_reticular', 'v_lm', 'v_opt', 'v_aud', 'hcp_rad_talamica_ant', 'hcp_rad_talamica_sup', 'hcp_rad_talamica_post']],
+  ['comissura', 'Comissuras', '#e6dcc4', ['hcp_cc_forceps_menor', 'hcp_cc_corpo', 'hcp_cc_forceps_maior', 'hcp_cc_tapete', 'hcp_com_anterior']],
+  ['associacao', 'Associação', '#4fae6a', ['hcp_fls', 'hcp_arqueado', 'hcp_fli', 'hcp_flmedio', 'hcp_ffoi', 'hcp_uncinado', 'hcp_capsula_extrema']],
+  ['limbico', 'Límbicas', '#9b7ccf', ['hcp_fornix', 'hcp_cingulo', 'hcp_fpm']],
+  ['cerebelo', 'Cerebelares', '#c9a26b', ['hcp_pcs', 'hcp_pcm', 'hcp_pci', 'hcp_dentatorubrotalamico']],
+  ['nb', 'Núcleos da base', '#3d63c9', ['hcp_corticoestriatal', 'hcp_alcas_nb']],
+];
+const HCP_TIPO_DE = {}; HCP_TIPOS.forEach(([t, , , ids]) => ids.forEach(id => HCP_TIPO_DE[id] = t));
+HCP.tipos = new Set(HCP_TIPOS.map(t => t[0]));
+(function () {
+  const seg = document.getElementById('hcpSeg'); if (!seg) return;
+  const linha = document.createElement('div'); linha.id = 'hcpTipos'; linha.className = 'hcptipos'; linha.hidden = true;
+  linha.innerHTML = HCP_TIPOS.map(([t, nome, cor]) => `<button type="button" data-hcpt="${t}" aria-pressed="true"><i style="background:${cor}"></i>${nome}</button>`).join('');
+  seg.closest('.row').after(linha);
+  linha.querySelectorAll('[data-hcpt]').forEach(b => b.addEventListener('click', () => {
+    const t = b.dataset.hcpt; HCP.tipos.has(t) ? HCP.tipos.delete(t) : HCP.tipos.add(t);
+    b.setAttribute('aria-pressed', HCP.tipos.has(t) ? 'true' : 'false'); applyVisibility(); applyAppearance(); marca();
+  }));
+})();
+const _svmHcp = setViasModo;
+setViasModo = function (modo) { _svmHcp(modo); const l = document.getElementById('hcpTipos'); if (l) l.hidden = modo !== 'hcp'; };
+const _visHcp2 = applyVisibility;
+applyVisibility = function () {
+  _visHcp2();
+  if (HCP.modo !== 'hcp') return;
+  ALLMESH.forEach(m => { if (m.userData.hcp && m.visible && !HCP.tipos.has(HCP_TIPO_DE[m.userData.id])) m.visible = false; });
+};
+// ---- modo via: ao escolher uma via, o trajeto inteiro aparece com os relés acesos (o resto fica apagado) ----
+const HCP_RELES = {
+  v_cs: ['gpre', 'capsint', 'pedunc', 'baseponte', 'piramide', 'decpir'],
+  v_cn: ['gpre', 'capsint', 'pedunc', 'nu7', 'nu12', 'numot5', 'nuamb'],
+  hcp_corticopontino: ['capsint', 'pedunc', 'baseponte', 'nupont', 'hcp_pcm'],
+  v_lm: ['nugrac', 'nucun', 'talamo', 'gpos'],
+  v_opt: ['quiasma', 'cgl', 'gcalc'],
+  v_aud: ['colinf', 'cgm', 'gtt'],
+  hcp_dentatorubrotalamico: ['denteado', 'rubro', 'talamo', 'hcp_pcs'],
+  hcp_pcm: ['nupont', 'baseponte'],
+  hcp_rad_talamica_ant: ['talamo', 'capsint'], hcp_rad_talamica_sup: ['talamo', 'capsint', 'gpre', 'gpos'], hcp_rad_talamica_post: ['talamo'],
+  hcp_fornix: ['hipo_corpo', 'mamilar', 'septo'],
+  hcp_cingulo: ['gcing'],
+};
+const _selHcp = select;
+select = function (id, opt) {
+  _selHcp(id, opt);
+  if (HCP.modo !== 'hcp') { if (HCP.isoAuto) { HCP.isoAuto = false; state.isolate = false; const c = document.getElementById('iso'); if (c) c.checked = false; applyAppearance(); } return; }
+  const reles = HCP_RELES[id];
+  if (reles) {
+    state.realce = Object.fromEntries(reles.filter(r => META[r]).map(r => [r, 1]));
+    if (!state.isolate) { HCP.isoAuto = true; state.isolate = true; const c = document.getElementById('iso'); if (c) c.checked = true; }
+    applyAppearance(); marca();
+  } else if (HCP.isoAuto) { HCP.isoAuto = false; state.isolate = false; const c = document.getElementById('iso'); if (c) c.checked = false; applyAppearance(); }
+};
 /* ===== INTERFACE ===== */
 const $ = (s, r) => (r || document).querySelector(s);
 const $$ = (s, r) => Array.from((r || document).querySelectorAll(s));

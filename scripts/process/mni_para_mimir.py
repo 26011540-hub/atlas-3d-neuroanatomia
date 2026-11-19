@@ -21,6 +21,7 @@ from sereno_cerebelo import fs_para_mimir_matriz, ler_obj
 from suit_cerebelo import aplicar, superficie
 
 MASSP = RAIZ / "data" / "raw" / "massp2" / "ahead-massp2_avg-maxlabel_decade-18to80.nii.gz"
+SUIT = RAIZ / "data" / "raw" / "diedrichsen2009" / "atl-Anatom_space-MNISym_dseg.nii"
 OBJ = RAIZ / "dados_brainder" / "subcortical_obj" / "subcortical_obj"
 # estrutura: (rótulos do MASSP à esquerda, à direita, arquivo do Brain for Blender do lado esquerdo ou da linha média)
 PARES = {"caudado": ([1], [2], "Left-Caudate"), "putame": ([38], [39], "Left-Putamen"), "palido": ([9, 11], [10, 12], "Left-Pallidum"),
@@ -52,6 +53,12 @@ def main():
                 v, _ = superficie(np.isin(vol, rots), afim, 0.8)
                 fontes[f"{nome}_{lado}"] = v
                 alvos[f"{nome}_{lado}"] = alvo * [sinal, 1, 1]               # direito = espelho do esquerdo
+    # cerebelo: a superfície do SUIT (MNI 2009c simétrico, o mesmo sistema de coordenadas) contra o cerebelo do atlas;
+    # sem ele a afim só via estruturas profundas do prosencéfalo e errava 5 a 8 mm na fossa posterior
+    vs, afs = ler_volume(SUIT); vs = np.rint(vs).astype(np.int16)
+    v, _ = superficie((vs >= 1) & (vs <= 28), afs, 1.2)
+    alvo = aplicar(Mfs, ler_obj(OBJ / "Left-Cerebellum-Cortex.obj"))
+    fontes["cerebelo"] = v; alvos["cerebelo"] = np.vstack([alvo, alvo * [-1, 1, 1]])
     for k in fontes:
         if len(fontes[k]) > 4000: fontes[k] = fontes[k][rng.choice(len(fontes[k]), 4000, replace=False)]
     arvores = {k: cKDTree(a) for k, a in alvos.items()}

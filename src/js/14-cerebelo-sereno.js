@@ -45,10 +45,13 @@ M('interposito', 'Núcleo interpósito', 'stem', '#6e8a3b', 'Zona intermédia do
 REF(['interposito'], 'Forma: atlas SUIT, Diedrichsen J et al., NeuroImage 2009 e 2011 (CC BY). Texto: Machado, cap. 22, p. 208-209.');
 NOTA('interposito', 'Nos modos do cerebelo real, os núcleos vêm do atlas SUIT (compartimento mais provável em 23 pessoas): o emboliforme e os globosos aparecem juntos como interpósito. No modo Atlas continuam os esquemas do Mímir.');
 const CBS = { modo: 'atlas', malhas: {}, carregando: null, nucleos: null };
-const CBS_ARQ = { folhas: 'models/cerebelo_sereno_folhas.glb', estudo: 'models/cerebelo_sereno_estudo.glb' };
+const CBS_ARQ = { folhas: 'models/cerebelo_sereno_folhas.glb', leve: 'models/cerebelo_sereno_leve.glb', estudo: 'models/cerebelo_sereno_estudo.glb' };
+// níveis de detalhe das folhas: 'leve' (250 mil triângulos) de longe e em telas de toque; 'folhas' (700 mil) de perto
+const CBS_TOQUE = !!(window.matchMedia && matchMedia('(pointer: coarse)').matches), CBS_PERTO = 24;
 const CBS_LOBO_COR = { cb_ant: '#eba052', cb_post: '#c47a9c', cb_fn: '#6fb35f' };   // três tons bem distintos: os lobos se leem de longe; os lóbulos variam em volta deles
 let cbsLoader = null;
-const cbsNivel = modo => modo === 'estudo' ? 'estudo' : 'folhas';   // Folhas e Lobos usam a malha com as folhas; Estudo, a envoltória lisa
+// Folhas e Lobos usam a malha com as folhas (no nível de detalhe da distância); Estudo, a envoltória lisa
+const cbsNivel = modo => { if (modo === 'estudo') return 'estudo'; const perto = !CBS_TOQUE && cam.dist <= CBS_PERTO && CBS.malhas.folhas; return perto || !CBS.malhas.leve ? (CBS.malhas.folhas || !CBS.malhas.leve ? 'folhas' : 'leve') : 'leve'; };
 // GLB quantizado do gltfpack -> geometria em ponto flutuante já no espaço do atlas
 function cbsGeo(malha) {
   const src = malha.geometry, pa = src.attributes.position, P = new Float32Array(pa.count * 3);
@@ -112,18 +115,21 @@ function cbsAplicarCores(m, lobos) {
   const g = m.geometry, cor = g.userData.cores, A = g.attributes.color.array, sel = state.sel; A.set(lobos ? cor.lobos : cor.simples);
   if (sel && (/^cb_/.test(sel) && sel !== 'cb_sereno')) { const L = g.userData.lobulo, Lo = g.userData.lobo;
     for (let i = 0; i < L.length; i++) if (L[i] === sel || Lo[i] === sel) { A[i * 3] = A[i * 3] * 0.45 + 0.55; A[i * 3 + 1] = A[i * 3 + 1] * 0.45 + 0.5; A[i * 3 + 2] *= 0.35; } }
-  g.attributes.color.needsUpdate = true; m.userData.corSel = sel;
+  g.attributes.color.needsUpdate = true; m.userData.corSel = sel; m.userData.corModo = CBS.modo;
 }
 const _apCbs = applyAppearance;
-applyAppearance = function () { _apCbs(); if (CBS.modo !== 'atlas') { const nivel = cbsNivel(CBS.modo), m = CBS.malhas[nivel]; if (m && m.userData.corSel !== state.sel) cbsAplicarCores(m, CBS.modo === 'lobos'); } };
-function setCerebeloModo(modo) {
+applyAppearance = function () { _apCbs(); if (CBS.modo !== 'atlas') { const nivel = cbsNivel(CBS.modo), m = CBS.malhas[nivel]; if (m && (m.userData.corSel !== state.sel || m.userData.corModo !== CBS.modo)) cbsAplicarCores(m, CBS.modo === 'lobos'); } };
+// troca de nível de detalhe quando a câmera se aproxima ou se afasta
+const _pcCbs = placeCamera;
+placeCamera = function () { _pcCbs(); if (CBS.modo === 'atlas' || CBS.modo === 'estudo') return; const n = cbsNivel(CBS.modo); if (n !== CBS.ultimo) { CBS.ultimo = n; applyVisibility(); applyAppearance(); } };
+function setCerebeloModo(modo, inicial) {
   CBS.modo = modo;
   document.querySelectorAll('[data-cbm]').forEach(b => b.setAttribute('aria-pressed', b.dataset.cbm === modo ? 'true' : 'false'));
   if (modo === 'atlas') { applyVisibility(); applyAppearance(); return; }
-  const nivel = cbsNivel(modo), st = document.getElementById('cbsStatus');
+  const nivel = modo === 'estudo' ? 'estudo' : (CBS.malhas.folhas ? 'folhas' : 'leve'), st = document.getElementById('cbsStatus');
   if (st) st.textContent = CBS.malhas[nivel] ? '' : 'Carregando o cerebelo real…';
   cbsCarregarNucleos();
-  cbsCarregar(nivel).then(m => { if (st) st.textContent = ''; cbsAplicarCores(m, modo === 'lobos'); if (!state.groupOn.stem) { state.groupOn.stem = true; syncLayerUI(); } applyVisibility(); applyAppearance(); })
+  cbsCarregar(nivel).then(m => { if (st) st.textContent = ''; if (nivel === 'leve' && !CBS_TOQUE) cbsCarregar('folhas').then(() => { CBS.ultimo = null; applyVisibility(); applyAppearance(); marca(); }).catch(e => console.warn(e)); cbsAplicarCores(m, modo === 'lobos'); if (!inicial && !state.groupOn.stem) { state.groupOn.stem = true; syncLayerUI(); } applyVisibility(); applyAppearance(); })
     .catch(e => { if (st) st.textContent = 'Não foi possível carregar ' + CBS_ARQ[nivel] + '.'; console.warn(e); CBS.modo = 'atlas'; setCerebeloModo('atlas'); });
 }
 // visibilidade: com o cerebelo real, o do atlas (lóbulos e fissuras) some; só o nível escolhido aparece
@@ -152,3 +158,6 @@ pick = function (e) {
 };
 BOL_FORA.cb_sereno = 1;   // os cortes continuam calculados com o cerebelo do atlas (a malha real tem centenas de milhares de triângulos)
 document.querySelectorAll('[data-cbm]').forEach(b => b.addEventListener('click', () => setCerebeloModo(b.dataset.cbm)));
+// o atlas abre com o cerebelo real (Folhas); o modelo antigo continua no botão Atlas
+setTimeout(() => setCerebeloModo('folhas', true), 0);
+if (/debug/.test(location.hash)) window.cbsDebug = { CBS, cbsNivel, get toque() { return CBS_TOQUE; } };

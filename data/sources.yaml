@@ -203,8 +203,16 @@ fontes:
     licenca: "CC BY-SA 4.0"
     comercial_permitido: true
     share_alike: true
-    credito_exato: "Yeh FC. Population-based tract-to-region connectome of the human brain and its hierarchical topology. Nat Commun 2022;13:4933. Dados do Human Connectome Project (WU-Minn Consortium, 1U54MH091657). CC BY-SA 4.0."
-    credito_conferido: false   # texto e DOI escritos de memória; conferir na página da fonte ao baixar
+    credito_exato: "Grandes vias: Yeh FC. Population-based tract-to-region connectome of the human brain and its hierarchical topology. Nat Commun 2022;13:4933. doi:10.1038/s41467-022-32595-4 (atlas HCP1065, CC BY-SA 4.0). Dados fornecidos pelo Human Connectome Project, WU-Minn Consortium (Principal Investigators: David Van Essen e Kamil Ugurbil; 1U54MH091657), financiado pelos 16 institutos e centros do NIH que apoiam o NIH Blueprint for Neuroscience Research e pelo McDonnell Center for Systems Neuroscience da Washington University."
+    credito_conferido: true    # citação e licença conferidas no README do repositório (19/11/2026); agradecimento do HCP pelo texto padrão dos termos de uso
+    espaco: "ICBM 2009a não linear assimétrico (MNI)"
+    downloads:
+      - arquivo: "human.tt.gz"
+        url: "https://raw.githubusercontent.com/data-others/tract/main/human.tt.gz"
+        tamanho_aprox: "3,1 MB (3.121.495 bytes)"
+      - arquivo: "human.txt"
+        url: "https://raw.githubusercontent.com/data-others/tract/main/human.txt"
+        tamanho_aprox: "4 kB"
     verificacao_link_2026_11_17: "ok"
   - id: julich_brain
     nome: "Julich-Brain v3.1 (EBRAINS)"
@@ -478,4 +486,31 @@ assets:
       Calculado pelo Mímir: primeiro contato (menos de 1,5 mm) do nervo de referência de cada forame com os ossos da base,
       o mais próximo da ponte, por lado. Nome do forame e nervos que passam: Machado (tabela FORAMES em vk_nervos.py, a
       conferir). A fissura orbital superior é marcada pelo V1; III, IV e VI tocam o processo clinoide e o clivo antes dela.
+    data_download: "2026-11-18"
+  - id: hcp_fibras
+    arquivo: "models/hcp_fibras.bin"
+    estrutura: "Fibras das grandes vias (até 160 por trato e lado): projeção, comissuras, associação, pedúnculos cerebelares e vias dos núcleos da base"
+    fonte: hcp1065
+    fonte_adicional: mimir
+    processamento: >-
+      human.tt.gz (formato tt do DSI Studio, decodificado em scripts/process/hcp_vias.py); tratos agrupados nos itens do atlas
+      (tabela ITENS); até 160 fibras por item e lado, sorteadas com semente fixa; reamostradas a 2 mm; MNI -> Mímir pela afim
+      de mni_para_mimir.py (o HCP1065 está no ICBM 2009a); coordenadas em int16 (5 µm). Script: scripts/process/hcp_fibras.py.
+      Derivado de obra CC BY-SA 4.0: distribuído sob a mesma licença.
+    data_download: "2026-11-19"
+  - id: hcp_fibras_indice
+    arquivo: "models/hcp_fibras.json"
+    estrutura: "Índice das fibras de models/hcp_fibras.bin (item, lado, início e número de pontos)"
+    fonte: hcp1065
+    fonte_adicional: mimir
+    processamento: "Gerado junto com hcp_fibras.bin por scripts/process/hcp_fibras.py."
+    data_download: "2026-11-19"
+  - id: cerebelo_sereno_leve
+    arquivo: "models/cerebelo_sereno_leve.glb"
+    estrutura: "Córtex cerebelar com as folhas, nível de detalhe leve (cerca de 250 mil triângulos), para vistas de longe e telas de toque"
+    fonte: sereno2020
+    fonte_adicional: [diedrichsen2009, mimir]
+    processamento: >-
+      O GLB do nível folhas (com os lóbulos do SUIT em COLOR_0) simplificado pelo gltfpack para 36% dos triângulos
+      (-si 0.36; a simplificação mantém vértices originais, então os rótulos continuam válidos); compressão meshopt.
     data_download: "2026-11-18"

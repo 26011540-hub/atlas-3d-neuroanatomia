@@ -46,7 +46,7 @@ function bolChave(m) {
 }
 function bolEntra(m) {
   const u = m.userData, id = u.id;
-  if (!META[id] || BOL_FORA[id] || u.les !== undefined || u.corte || u.cortePed) return false;
+  if (!META[id] || BOL_FORA[id] || u.les !== undefined || u.corte || u.cortePed || u.semBolacha) return false;   // semBolacha: linhas e malhas carregadas à parte (sem triângulos para cortar)
   if (u.pai && BOL_TRONCO[u.pai]) return true;   // regiões da superfície do tronco: fazem parte do contorno do tronco
   if (u.fis || u.sulco && !/^s_/.test(id)) return false;
   if (m.geometry.type === 'CircleGeometry' || m.geometry.type === 'RingGeometry') return false;

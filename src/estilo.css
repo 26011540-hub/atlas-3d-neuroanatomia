@@ -202,3 +202,9 @@ details.grp li button.on { background: var(--accent); color: var(--accent-ink); 
 .selo { display: inline-block; font: 700 10.5px var(--f-body); letter-spacing: .04em; padding: 0 5px; border-radius: 4px; margin-left: 4px; vertical-align: 1px; }
 .selo-nc { background: #f3d6a4; color: #5a3a00; }
 .selo-sa { background: #c9e3f5; color: #0d3a5c; }
+.hcptipos { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 8px; }
+.hcptipos[hidden] { display: none; }
+.hcptipos button { display: inline-flex; align-items: center; gap: 6px; padding: 3px 9px; border-radius: 999px; border: 1px solid var(--line, #d5dde2); background: transparent; color: inherit; font: inherit; font-size: 12px; cursor: pointer; }
+.hcptipos button i { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+.hcptipos button[aria-pressed="false"] { opacity: .45; }
+.hcptipos button[aria-pressed="false"] i { background: transparent !important; outline: 1px solid currentColor; }
