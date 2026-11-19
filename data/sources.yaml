@@ -233,8 +233,17 @@ fontes:
     licenca: "CC BY-NC 4.0"
     comercial_permitido: false
     share_alike: false
-    credito_exato: "Visible Korean, Ajou University (Park JS, Chung MS et al.), Zenodo 10.5281/zenodo.22759852, CC BY-NC 4.0."
-    credito_conferido: false   # texto e DOI escritos de memória; conferir na página da fonte ao baixar
+    credito_exato: "Nervos cranianos e estruturas da cabeça: Kim CY, Park JS. Visible Korean male head dataset: sectioned images, segmented images, 7.0 T MRI data, and 3D models. Zenodo, 2026. doi:10.5281/zenodo.22759852 (CC BY-NC 4.0)."
+    credito_conferido: true    # título, autores, data e licença conferidos na API do Zenodo (18/11/2026)
+    downloads:
+      - arquivo: "4. Surface models.zip"
+        url: "https://zenodo.org/api/records/22759852/files/4.%20Surface%20models.zip/content"
+        tamanho_aprox: "128 MB (133.865.842 bytes)"
+        md5_fonte: "9eeca57bbe289be6b5bcf6c142c20219"
+      - arquivo: "Supplementary Table 1.xlsx"
+        url: "https://zenodo.org/api/records/22759852/files/Supplementary%20Table%201.xlsx/content"
+        tamanho_aprox: "18 kB"
+        md5_fonte: "595a8c6d22643011c965e5f98c826d02"
     verificacao_link_2026_11_17: "ok"
   - id: bodyparts3d
     nome: "BodyParts3D"
@@ -273,8 +282,18 @@ fontes:
     licenca: "CC BY 4.0"
     comercial_permitido: true
     share_alike: false
-    credito_exato: "Crânio de Halle, micro-CT, Zenodo 10.5281/zenodo.6108435, CC BY 4.0 (citar os autores indicados no registro)."
-    credito_conferido: false   # texto e DOI escritos de memória; conferir na página da fonte ao baixar
+    credito_exato: "Crânio e forames: Kirchner T. A micro-CT of a human skull. Zenodo, 2022. doi:10.5281/zenodo.6108435 (CC BY 4.0)."
+    credito_conferido: true    # título, autor, data e licença conferidos na API do Zenodo (18/11/2026)
+    downloads:
+      - arquivo: "halle_skull_segmented.nrrd"
+        url: "https://zenodo.org/api/records/6108435/files/halle_skull_segmented.nrrd/content"
+        tamanho_aprox: "36 MB (37.249.251 bytes)"
+        md5_fonte: "7ae22945a353069bdb695b63fa2f20bd"
+      - arquivo: "README.pdf"
+        url: "https://zenodo.org/api/records/6108435/files/README.pdf/content"
+        tamanho_aprox: "5 MB"
+        md5_fonte: "ae7981f3f14754e4e2904ddaebf4fdc3"
+        nota: "descrição do conjunto; PDF fica fora do git (.gitignore)"
     verificacao_link_2026_11_17: "ok"
   - id: openear
     nome: "OpenEar (Sieber et al. 2019)"
@@ -430,3 +449,33 @@ assets:
       scripts/process/lusebrink_mni.py, scripts/process/bolachas_tronco.py. O molde MNI só foi usado no registro.
     data_download: "2026-11-18"
 
+  - id: vk_nervos
+    arquivo: "models/vk_nervos.glb"
+    estrutura: "Pares cranianos I a XII com ramos e gânglios (trigeminal, geniculado), núcleos e fibras de III, IV e VI, orelha interna (cóclea, labirinto vestibular, meato acústico interno, ossículos)"
+    fonte: visible_korean
+    fonte_adicional: mimir
+    processamento: >-
+      STL de "4. Surface models.zip" (Nervous system, Sense organs/Ear); eixos VK -> RAS (anterior = -y, superior = +z,
+      direita = -x, supondo coordenadas destras); afim VK -> Mímir por ICP das estruturas do encéfalo do próprio Visible
+      Korean (tálamo, caudado, putâmen, pálido, ventrículos, tronco, cerebelo) contra as do atlas (erro médio 3,04 mm,
+      p95 9,29 mm); decimação quádrica (até 6 mil triângulos por nervo, 8 mil na orelha; pymeshlab); compressão meshopt
+      (gltfpack). Cada arquivo do VK foi ligado a um item do atlas (tabela NERVOS em scripts/process/vk_nervos.py).
+    data_download: "2026-11-18"
+  - id: vk_cranio_base
+    arquivo: "models/vk_cranio_base.glb"
+    estrutura: "Ossos da base do crânio: esfenoide, temporal, occipital, etmoide e frontal"
+    fonte: visible_korean
+    processamento: >-
+      STL de "Skeletal system, cranium"; mesma transformação dos nervos; decimação para cerca de 30 mil triângulos por
+      osso; compressão meshopt. Mostrados transparentes no modo "Nervo + núcleo + forame".
+    data_download: "2026-11-18"
+  - id: vk_forames
+    arquivo: "models/vk_forames.json"
+    estrutura: "Posição dos forames de saída dos pares cranianos (8 por lado)"
+    fonte: mimir
+    fonte_adicional: visible_korean
+    processamento: >-
+      Calculado pelo Mímir: primeiro contato (menos de 1,5 mm) do nervo de referência de cada forame com os ossos da base,
+      o mais próximo da ponte, por lado. Nome do forame e nervos que passam: Machado (tabela FORAMES em vk_nervos.py, a
+      conferir). A fissura orbital superior é marcada pelo V1; III, IV e VI tocam o processo clinoide e o clivo antes dela.
+    data_download: "2026-11-18"

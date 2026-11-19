@@ -1,0 +1,261 @@
+{
+ "fonte": "visible_korean (nervos e ossos) + Mímir (contato nervo-osso e nome do forame)",
+ "forames": [
+  {
+   "forame": "Lâmina cribriforme do etmoide",
+   "lado": "e",
+   "nervos": [
+    "nc1"
+   ],
+   "referencia": [
+    "nc1"
+   ],
+   "posicao": [
+    0.433,
+    -2.59,
+    4.248
+   ]
+  },
+  {
+   "forame": "Lâmina cribriforme do etmoide",
+   "lado": "d",
+   "nervos": [
+    "nc1"
+   ],
+   "referencia": [
+    "nc1"
+   ],
+   "posicao": [
+    -0.51,
+    -2.575,
+    4.248
+   ]
+  },
+  {
+   "forame": "Canal óptico",
+   "lado": "e",
+   "nervos": [
+    "nc2"
+   ],
+   "referencia": [
+    "nc2"
+   ],
+   "posicao": [
+    0.513,
+    -2.11,
+    2.05
+   ]
+  },
+  {
+   "forame": "Canal óptico",
+   "lado": "d",
+   "nervos": [
+    "nc2"
+   ],
+   "referencia": [
+    "nc2"
+   ],
+   "posicao": [
+    -0.933,
+    -2.009,
+    2.351
+   ]
+  },
+  {
+   "forame": "Fissura orbital superior",
+   "lado": "e",
+   "nervos": [
+    "nc3",
+    "nc4",
+    "n_oft",
+    "nc6"
+   ],
+   "referencia": [
+    "n_oft"
+   ],
+   "posicao": [
+    1.852,
+    -3.01,
+    1.933
+   ]
+  },
+  {
+   "forame": "Fissura orbital superior",
+   "lado": "d",
+   "nervos": [
+    "nc3",
+    "nc4",
+    "n_oft",
+    "nc6"
+   ],
+   "referencia": [
+    "n_oft"
+   ],
+   "posicao": [
+    -2.074,
+    -2.41,
+    2.784
+   ]
+  },
+  {
+   "forame": "Forame redondo",
+   "lado": "e",
+   "nervos": [
+    "n_max"
+   ],
+   "referencia": [
+    "n_max"
+   ],
+   "posicao": [
+    1.98,
+    -3.548,
+    1.661
+   ]
+  },
+  {
+   "forame": "Forame redondo",
+   "lado": "d",
+   "nervos": [
+    "n_max"
+   ],
+   "referencia": [
+    "n_max"
+   ],
+   "posicao": [
+    -2.06,
+    -3.469,
+    1.35
+   ]
+  },
+  {
+   "forame": "Forame oval",
+   "lado": "e",
+   "nervos": [
+    "n_mand"
+   ],
+   "referencia": [
+    "n_mand"
+   ],
+   "posicao": [
+    2.351,
+    -3.825,
+    0.277
+   ]
+  },
+  {
+   "forame": "Forame oval",
+   "lado": "d",
+   "nervos": [
+    "n_mand"
+   ],
+   "referencia": [
+    "n_mand"
+   ],
+   "posicao": [
+    -2.71,
+    -3.985,
+    0.214
+   ]
+  },
+  {
+   "forame": "Meato acústico interno",
+   "lado": "e",
+   "nervos": [
+    "nc7",
+    "nc8"
+   ],
+   "referencia": [
+    "nc7",
+    "nc8"
+   ],
+   "posicao": [
+    2.612,
+    -3.448,
+    -1.936
+   ]
+  },
+  {
+   "forame": "Meato acústico interno",
+   "lado": "d",
+   "nervos": [
+    "nc7",
+    "nc8"
+   ],
+   "referencia": [
+    "nc7",
+    "nc8"
+   ],
+   "posicao": [
+    -2.601,
+    -3.292,
+    -1.959
+   ]
+  },
+  {
+   "forame": "Forame jugular",
+   "lado": "e",
+   "nervos": [
+    "nc9",
+    "nc10",
+    "nc11"
+   ],
+   "referencia": [
+    "nc9",
+    "nc10"
+   ],
+   "posicao": [
+    2.057,
+    -3.952,
+    -2.296
+   ]
+  },
+  {
+   "forame": "Forame jugular",
+   "lado": "d",
+   "nervos": [
+    "nc9",
+    "nc10",
+    "nc11"
+   ],
+   "referencia": [
+    "nc9",
+    "nc10"
+   ],
+   "posicao": [
+    -1.984,
+    -4.059,
+    -2.536
+   ]
+  },
+  {
+   "forame": "Canal do nervo hipoglosso",
+   "lado": "e",
+   "nervos": [
+    "nc12"
+   ],
+   "referencia": [
+    "nc12"
+   ],
+   "posicao": [
+    1.616,
+    -4.856,
+    -2.773
+   ]
+  },
+  {
+   "forame": "Canal do nervo hipoglosso",
+   "lado": "d",
+   "nervos": [
+    "nc12"
+   ],
+   "referencia": [
+    "nc12"
+   ],
+   "posicao": [
+    -1.391,
+    -4.919,
+    -2.766
+   ]
+  }
+ ]
+}

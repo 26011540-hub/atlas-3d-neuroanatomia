@@ -187,3 +187,11 @@ Base: Ângelo Machado, Neuroanatomia Funcional, 4ª ed. (Atheneu). No atlas, est
 - Nível novo no modelo: "Dec. pirâmides" (f 30,5 no eixo do tronco); o corte do modelo nesse nível pega pouco bulbo e muito cerebelo: a conferir.
 - Textos dos núcleos novos do MASSP (área tegmentar ventral, substância cinzenta periaquedutal, pedunculopontino, habenular lateral, rafe dorsal e mediano): escritos sem página do Machado; conferir e citar.
 - Os contornos na RM real são só os do MASSP; os núcleos dos nervos cranianos, tratos e lemniscos ainda não aparecem nela (falta desenhá-los: camada "Mímir, autoria própria" que o prompt pede para os desenhos à mão).
+
+## Reestruturação, Fase 3: pares cranianos (Visible Korean, 18/11/2026)
+- Fonte: Visible Korean male head (Kim e Park 2026, CC BY-NC 4.0, uso não comercial). A cabeça é de um homem de 67 anos; o atlas é de outro indivíduo: o registro afim pelas estruturas do encéfalo tem erro médio de 3 mm (p95 9 mm). Nervos podem passar alguns milímetros fora do tronco esculpido ou dos forames do atlas.
+- Lados: o eixo esquerda-direita do Visible Korean foi suposto pela regra da mão direita (as estruturas são bilaterais, então a forma não muda; só o lado de uma eventual assimetria).
+- Ligação dos arquivos do VK aos itens do atlas (tabela NERVOS em scripts/process/vk_nervos.py), a conferir: o nervo do canal pterigóideo foi posto junto do petroso maior; o "nerve to mastication m." do VII (provavelmente ramo para o ventre posterior do digástrico e o estilo-hióideo) e o nervo para o estapédio foram postos em "ramos do facial"; o nervo mental foi posto junto do alveolar inferior.
+- Forames: posição calculada pelo Mímir (primeiro contato do nervo com o osso); nomes e nervos de cada forame pelo Machado, a conferir: lâmina cribriforme (I); canal óptico (II); fissura orbital superior (III, IV, V1, VI); forame redondo (V2); forame oval (V3); meato acústico interno (VII, VIII); forame jugular (IX, X, XI); canal do hipoglosso (XII). O forame estilomastóideo (saída do VII do crânio) e o forame magno (raiz espinal do XI) ainda não estão marcados.
+- Cores dos pares (uma por nervo) são do Mímir; os textos novos (cóclea, labirinto, meato, ossículos, ossos) foram escritos sem página do Machado: conferir.
+- OpenEar: adiado (pacotes de 3,7 a 13 GB); a orelha interna veio do próprio Visible Korean.
