@@ -21,3 +21,8 @@ prompts-claude-code-atlas-neuroanatomia.md
 
 # anotações pessoais do Gustavo (privadas)
 notas/
+
+# dados brutos e intermediários da pipeline (baixar de novo com scripts/download_sources.py)
+data/raw/
+data/processed/
+__pycache__/

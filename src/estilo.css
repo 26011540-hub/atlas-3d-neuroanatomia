@@ -193,6 +193,12 @@ details.grp li button.on { background: var(--accent); color: var(--accent-ink); 
 .tc2d[hidden] { display: none; }
 .tc2d .tct { font-weight: 600; font-size: 13px; margin-bottom: 5px; }
 .tc2d .tcimg canvas { width: 100%; max-height: 52vh; object-fit: contain; height: auto; display: block; cursor: pointer; border-radius: 6px; background: #0b1216; }
+.tc2d .tcrm canvas { width: 100%; max-height: 52vh; object-fit: contain; height: auto; display: block; cursor: pointer; border-radius: 6px; background: #000; image-rendering: auto; }
+.tc2d .tcrm[hidden], .tc2d .tcimg[hidden], .tc2d .tcfundo[hidden] { display: none; }
+.tc2d .tcfundo { margin: 0 0 6px; }
 .tc2d .tcdica { min-height: 16px; margin-top: 4px; color: #ffd23f; font-weight: 600; }
 .tc2d .tcs { color: #9fb2bc; font-size: 11.5px; }
 @media (max-width: 600px) { .tc2d { width: 52%; top: auto; bottom: 8px; right: 6px; padding: 5px; } .tc2d .tcs { display: none; } }
+.selo { display: inline-block; font: 700 10.5px var(--f-body); letter-spacing: .04em; padding: 0 5px; border-radius: 4px; margin-left: 4px; vertical-align: 1px; }
+.selo-nc { background: #f3d6a4; color: #5a3a00; }
+.selo-sa { background: #c9e3f5; color: #0d3a5c; }

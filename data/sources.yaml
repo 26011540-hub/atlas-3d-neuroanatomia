@@ -1,0 +1,432 @@
+# Manifesto de proveniência do Mímir
+# Regra: nada entra no app sem uma entrada aqui. CREDITS.md e a aba Créditos do app são gerados deste arquivo
+# (node scripts/gerar_creditos.mjs). Datas no formato AAAA-MM-DD.
+#
+# Duas listas:
+#   fontes: de onde vêm os dados (uma entrada por fonte, com licença e texto de crédito exato)
+#   assets: o que o app usa (arquivo ou família de geometria), cada um apontando para a(s) fonte(s)
+#
+# Campos de asset (prompt da reestruturação, regra 1): id, estrutura, fonte, url_original, doi, licenca,
+# credito_exato, comercial_permitido, share_alike, processamento, data_download.
+# Para não repetir, licenca/credito_exato/comercial_permitido/share_alike/url_original/doi vêm da fonte
+# indicada em `fonte`; o gerador de créditos junta tudo. Um asset pode sobrescrever qualquer campo.
+# credito_conferido: false = o texto de crédito e o DOI foram escritos de memória e precisam ser conferidos na página da fonte.
+
+projeto:
+  nome: "Mímir: Atlas 3D de Neuroanatomia"
+  autor: "Gustavo de Castro"          # o prompt da reestruturação usa "Gustavo de Castro Moreira": confirmar qual nome vai nos créditos
+  instituicao: "Universidade Estadual de Ponta Grossa (UEPG), curso de Medicina"
+  natureza: "Projeto de extensão de autoria própria, gratuito e não comercial"
+  espaco_referencia_atual: >-
+    Espaço próprio do Mímir (cm; X = esquerda, Y = superior, Z = anterior), derivado das coordenadas de superfície
+    do FreeSurfer do indivíduo do Brain for Blender: X = -x/10 - 0,1; giro de -10° em X; deslocamento Y +1,6 e Z +0,9;
+    só o hemisfério esquerdo é convertido e o direito é o espelho (modelo simétrico). Não é o MNI ICBM152.
+  espaco_referencia_alvo: "MNI ICBM152 2009c (assimétrico, 1 mm), a definir na Fase 1"
+
+fontes:
+  # ---------------- fontes já usadas no atlas atual ----------------
+  - id: brain_for_blender
+    nome: "Brain for Blender"
+    autores: "Anderson M. Winkler"
+    url_original: "https://brainder.org/brain-for-blender/"
+    doi: null
+    licenca: "CC BY-SA 3.0"
+    comercial_permitido: true
+    share_alike: true
+    credito_exato: "Brain for Blender, Anderson M. Winkler (brainder.org), CC BY-SA 3.0."
+    credito_conferido: true
+    usado_hoje: true
+    autorizada_no_prompt: false     # não está na lista de fontes autorizadas: decidir se fica ou é substituída (ver diagnóstico)
+  - id: mimir
+    nome: "Mímir (autoria própria)"
+    autores: "Gustavo de Castro"
+    url_original: "https://github.com/26011540-hub/atlas-3d-neuroanatomia"
+    doi: null
+    licenca: "CC BY-SA 3.0 (LICENSE atual; a decidir uma licença separada para o código e os textos, ver docs/diagnostico_fase0.md)"
+    comercial_permitido: true
+    share_alike: true
+    credito_exato: "Mímir, autoria própria de Gustavo de Castro: textos didáticos, rótulos em português, formas esquemáticas e roteiros de estudo, com base em Ângelo Machado, Neuroanatomia Funcional, 4ª ed."
+    credito_conferido: true
+    usado_hoje: true
+  - id: unicamp_gabarito
+    nome: "Neupatimagem, FCM-UNICAMP: atlas de cortes coronais e série axial de cerebelo e tronco"
+    url_original: "https://anatpat.unicamp.br/bineucerebrocoronalindice.html"
+    doi: null
+    licenca: "Direitos dos autores; vedado uso comercial e reprodução em bloco"
+    comercial_permitido: false
+    share_alike: false
+    credito_exato: "Gabarito dos cortes: Neupatimagem, Departamento de Anatomia Patológica, FCM-UNICAMP (anatpat.unicamp.br). Só os nomes das estruturas por corte; nenhuma imagem copiada."
+    credito_conferido: true
+    usado_hoje: true
+    tipo: referencia      # não fornece geometria nem imagem; só nomes e níveis
+  - id: machado
+    nome: "Ângelo Machado e Lucia Machado Haertel, Neuroanatomia Funcional, 4ª ed."
+    licenca: "Direitos reservados"
+    comercial_permitido: false
+    share_alike: false
+    credito_exato: "Texto de referência: Ângelo Machado e Lucia Machado Haertel, Neuroanatomia Funcional, 4ª ed. Cada estrutura cita capítulo e página."
+    credito_conferido: true
+    usado_hoje: true
+    tipo: referencia
+  - id: prometheus
+    nome: "Schünke, Schulte e Schumacher, Prometheus: Cabeça e Neuroanatomia"
+    licenca: "Direitos reservados"
+    comercial_permitido: false
+    share_alike: false
+    credito_exato: "Segunda fonte de conferência: Prometheus, Cabeça e Neuroanatomia, citado por página; nenhuma figura do livro está no atlas."
+    credito_conferido: true
+    usado_hoje: true
+    tipo: referencia
+
+  # ---------------- fontes autorizadas no prompt da reestruturação (ainda não baixadas) ----------------
+  - id: sereno2020
+    nome: "cerebmap20 (Sereno et al. 2020)"
+    url_original: "https://mri.sdsu.edu/sereno/cereb/data"
+    doi: "10.1073/pnas.2002896117"
+    licenca: "Permissão do autor por e-mail (17 nov. 2026), uso não comercial e educacional"
+    comercial_permitido: false
+    share_alike: false
+    credito_exato: "Superfície do córtex cerebelar, vérmis e núcleo denteado: Sereno MI, Diedrichsen J, Tachrount M, Testa-Silva G, d'Arceuil H, De Zeeuw C. PNAS 2020;117:19538–19543 (cerebmap20, https://mri.sdsu.edu/sereno/cereb/data). Utilizado com permissão do autor (comunicação pessoal, 17 nov. 2026)."
+    credito_conferido: true
+    downloads:
+      - arquivo: "cerebmap20.tgz"
+        url: "https://mri.sdsu.edu/sereno/cereb/data/cerebmap20.tgz"
+        tamanho_aprox: "565 MB (564.838.400 bytes)"
+        sha256: "e300062d63a3c680313cf6c99cb71d2ec8285e8d8fff601516ada6560de706ea"   # calculado no download de 2026-11-18; a fonte não publica checksum
+        data_download: "2026-11-18"
+    verificacao_link_2026_11_17: "pasta de dados ok (só cerebmap20.tgz); as pastas updates/vermis-labels e updates/dentate-nucleus dão 404"
+  - id: diedrichsen2009
+    nome: "Atlas probabilístico dos lóbulos e núcleos do cerebelo (Diedrichsen et al. 2009; SUIT)"
+    url_original: "https://github.com/DiedrichsenLab/cerebellar_atlases/tree/master/Diedrichsen_2009"
+    doi: "10.1016/j.neuroimage.2009.01.045"   # DOI escrito de memória; as referências abaixo vêm do atlas_description.json
+    licenca: "CC BY (Atribuição), conforme o README da coleção cerebellar_atlases (sem versão indicada)"
+    comercial_permitido: true
+    share_alike: false
+    credito_exato: "Lóbulos e núcleos do cerebelo: Diedrichsen J, Balsters JH, Flavell J, Cussans E, Ramnani N. A probabilistic atlas of the human cerebellum. NeuroImage 2009; e Diedrichsen J, Maderwald S, Küper M, et al. Imaging the deep cerebellar nuclei: a probabilistic atlas and normalization procedure. NeuroImage 2011. Coleção cerebellar_atlases do Diedrichsen Lab (CC BY)."
+    credito_conferido: true    # referências conferidas em atlas_description.json e licença no README do repositório (18/11/2026)
+    espaco: "MNI152NLin2009cSymC (MNISym), o MNI ICBM152 2009c simétrico"
+    downloads:
+      - arquivo: "atl-Anatom_space-MNISym_dseg.nii"
+        url: "https://raw.githubusercontent.com/DiedrichsenLab/cerebellar_atlases/master/Diedrichsen_2009/atl-Anatom_space-MNISym_dseg.nii"
+        tamanho_aprox: "1,2 MB (1.209.052 bytes)"
+      - arquivo: "atl-Anatom.tsv"
+        url: "https://raw.githubusercontent.com/DiedrichsenLab/cerebellar_atlases/master/Diedrichsen_2009/atl-Anatom.tsv"
+        tamanho_aprox: "767 bytes"
+      - arquivo: "atlas_description.json"
+        url: "https://raw.githubusercontent.com/DiedrichsenLab/cerebellar_atlases/master/Diedrichsen_2009/atlas_description.json"
+        tamanho_aprox: "1,4 kB"
+  - id: mni_icbm152_2009b
+    nome: "Molde MNI ICBM152 2009b não linear assimétrico (TemplateFlow, MNI152NLin2009bAsym)"
+    url_original: "https://github.com/templateflow/tpl-MNI152NLin2009bAsym"
+    doi: "10.1016/j.neuroimage.2010.07.033"   # Fonov et al. 2011; DOI escrito de memória
+    licenca: "Licença do MNI/McGill: uso, cópia, modificação e distribuição livres, com o aviso de copyright em todas as cópias"
+    comercial_permitido: true
+    share_alike: false
+    credito_exato: "Molde MNI ICBM152 2009b: Fonov V, Evans AC, Botteron K, Almli CR, McKinstry RC, Collins DL. Unbiased average age-appropriate atlases for pediatric studies. NeuroImage 2011. Copyright (C) 1993-2004 Louis Collins, McConnell Brain Imaging Centre, Montreal Neurological Institute, McGill University. Distribuído pelo TemplateFlow."
+    credito_conferido: false   # aviso de copyright conferido no LICENSE do repositório (18/11/2026); referência e DOI escritos de memória
+    uso: "só no processamento (registro do T1 do Lüsebrink ao espaço do MASSP); nenhum dado do molde vai para o atlas"
+    downloads:
+      - arquivo: "tpl-MNI152NLin2009bAsym_res-1_T1w.nii.gz"
+        url: "https://templateflow.s3.amazonaws.com/tpl-MNI152NLin2009bAsym/tpl-MNI152NLin2009bAsym_res-1_T1w.nii.gz"
+        tamanho_aprox: "108 MB (107.745.191 bytes)"
+  - id: lusebrink2021
+    nome: "Lüsebrink et al. 2021, 7 T (OpenNeuro ds003563)"
+    url_original: "https://openneuro.org/datasets/ds003563"
+    doi: "10.18112/openneuro.ds003563.v1.1.0"   # DOI do OpenNeuro (dataset_description.json, versão 1.1.0); o artigo é Sci Data 2021
+    licenca: "CC0"
+    comercial_permitido: true
+    share_alike: false
+    credito_exato: "T1 de 250 µm: Lüsebrink F, Mattern H, Yakupov R, Acosta-Cabronero J, Ashtarayeh M, Oeltze-Jafra S, Speck O. Comprehensive ultrahigh resolution whole brain in vivo MRI dataset as a human phantom. Sci Data 2021. OpenNeuro ds003563 v1.1.0, doi:10.18112/openneuro.ds003563.v1.1.0 (CC0)."
+    credito_conferido: true    # autores, licença e DOI conferidos em dataset_description.json pela API do OpenNeuro (18/11/2026); o DOI do artigo não foi conferido
+    downloads:
+      - arquivo: "sub-yv98_ses-4496_run-01+02+03+04_offline_reconstruction_denoised-BM4D-manual_T1w_biasCorrected.nii.gz"
+        url: "https://openneuro.org/crn/datasets/ds003563/snapshots/1.1.0/files/derivatives:sub-yv98:250um:averages:sub-yv98_ses-4496_run-01+02+03+04_offline_reconstruction_denoised-BM4D-manual_T1w_biasCorrected.nii.gz"
+        tamanho_aprox: "17 MB (17.806.186 bytes)"
+        nota: "apesar da pasta 250um/averages, o cabeçalho dá 0,7 mm isotrópico (320 x 320 x 224, uint16): média de 4 aquisições, ruído reduzido (BM4D), correção de campo; espaço nativo. O T1 de 250 µm de verdade é derivatives/sub-yv98/250um/registrations/original/sub-yv98_ses-3512+3555+3589+3637+3681_T1w_original.nii.gz (1,64 GB; 640 x 880 x 880, float32), segunda entrada abaixo"
+      - arquivo: "sub-yv98_ses-3512+3555+3589+3637+3681_T1w_original.nii.gz"
+        url: "https://openneuro.org/crn/datasets/ds003563/snapshots/1.1.0/files/derivatives:sub-yv98:250um:registrations:original:sub-yv98_ses-3512+3555+3589+3637+3681_T1w_original.nii.gz"
+        tamanho_aprox: "1,64 GB (1.635.074.006 bytes)"
+        nota: "T1 de 250 µm isotrópico (640 x 880 x 880, float32), espaço nativo; usado para as bolachas do tronco (só recortes vão para o atlas)"
+    verificacao_link_2026_11_17: "OpenNeuro ok; o DOI 10.25673/79458 leva ao repositório de Halle, que respondeu erro 500"
+  - id: cerebra_icbm152
+    nome: "CerebrA (Manera et al. 2020) sobre MNI ICBM152 2009c"
+    url_original: "https://doi.gin.g-node.org/10.12751/g-node.be5e62/"
+    doi: "10.12751/g-node.be5e62"
+    licenca: "Registro CC0; rótulos derivados do Mindboggle CC BY-NC-SA 3.0; template MNI com aviso de copyright próprio"
+    comercial_permitido: false
+    share_alike: true
+    credito_exato: "Manera AL, Dadar M, Fonov V, Collins DL. CerebrA, registration and manual label correction of Mindboggle-101 atlas for MNI-ICBM152 template. Sci Data 2020;7:237. Template MNI ICBM152 2009c: Fonov et al., NeuroImage 2011, Copyright (C) 1993–2009 Louis Collins, McConnell Brain Imaging Centre, Montreal Neurological Institute, McGill University."
+    credito_conferido: false   # texto e DOI escritos de memória; conferir na página da fonte ao baixar
+    verificacao_link_2026_11_17: "ok"
+  - id: massp2
+    nome: "MASSP 2.0 Lifespan Probabilistic Atlas (Bazin et al. 2025, AHEAD)"
+    url_original: "https://uvaauas.figshare.com/articles/dataset/MASSP_2_0_Lifespan_Probabilistic_Atlas/27291579"
+    doi: "10.21942/uva.27291579"
+    licenca: "CC BY 4.0"
+    comercial_permitido: true
+    share_alike: false
+    credito_exato: "Núcleos subcorticais e do tronco: Bazin PL, Forstmann BU, Alkemade A, Miletic S. MASSP 2.0 Lifespan Probabilistic Atlas. University of Amsterdam, 2024. doi:10.21942/uva.27291579.v2 (CC BY 4.0)."
+    credito_conferido: true    # autores, ano, DOI e licença conferidos na API do figshare (18/11/2026)
+    espaco: "MNI2009b (os voxels estão em RPS, não RAS, segundo a descrição)"
+    downloads:
+      - arquivo: "ahead-massp2_avg-maxlabel_decade-18to80.nii.gz"
+        url: "https://ndownloader.figshare.com/files/50077914"
+        tamanho_aprox: "1,6 MB"
+      - arquivo: "massp_2p0-label-list.txt"
+        url: "https://ndownloader.figshare.com/files/58258639"
+        tamanho_aprox: "2 kB"
+    verificacao_link_2026_11_17: "ok (figshare)"
+  - id: neudorfer2020
+    nome: "Neudorfer & Germann 2020, atlas do hipotálamo"
+    url_original: "https://zenodo.org/records/3942115"
+    doi: "10.5281/zenodo.3942115"
+    licenca: "CC BY 4.0"
+    comercial_permitido: true
+    share_alike: false
+    credito_exato: "Neudorfer C, Germann J, Elias GJB, et al. A high-resolution in vivo magnetic resonance imaging atlas of the human hypothalamic region. Sci Data 2020. Zenodo 3942115, CC BY 4.0."
+    credito_conferido: false   # texto e DOI escritos de memória; conferir na página da fonte ao baixar
+    verificacao_link_2026_11_17: "ok"
+  - id: allen_hra3d
+    nome: "Allen Human Reference Atlas 3D, 2020"
+    url_original: "https://download.alleninstitute.org/informatics-archive/allen_human_reference_atlas_3d_2020/version_1/"
+    doi: null
+    licenca: "CC BY 4.0"
+    comercial_permitido: true
+    share_alike: false
+    credito_exato: "Allen Human Reference Atlas – 3D, 2020 (RRID:SCR_017764), version 1.0.0, Allen Institute for Brain Science, CC BY 4.0."
+    credito_conferido: false   # texto e DOI escritos de memória; conferir na página da fonte ao baixar
+    verificacao_link_2026_11_17: "ok"
+  - id: hcp1065
+    nome: "HCP1065 Population-Averaged Tractography Atlas (Yeh 2022)"
+    url_original: "https://github.com/data-others/tract"
+    doi: "10.1038/s41467-022-32595-4"
+    licenca: "CC BY-SA 4.0"
+    comercial_permitido: true
+    share_alike: true
+    credito_exato: "Yeh FC. Population-based tract-to-region connectome of the human brain and its hierarchical topology. Nat Commun 2022;13:4933. Dados do Human Connectome Project (WU-Minn Consortium, 1U54MH091657). CC BY-SA 4.0."
+    credito_conferido: false   # texto e DOI escritos de memória; conferir na página da fonte ao baixar
+    verificacao_link_2026_11_17: "ok"
+  - id: julich_brain
+    nome: "Julich-Brain v3.1 (EBRAINS)"
+    url_original: "https://search.kg.ebrains.eu/"
+    doi: null      # preencher com o DOI exato do mapa usado (núcleos cerebelares)
+    licenca: "CC BY-NC-SA 4.0"
+    comercial_permitido: false
+    share_alike: true
+    credito_exato: "Julich-Brain Atlas v3.1, Amunts K et al., EBRAINS, CC BY-NC-SA 4.0 (citar o DOI de cada mapa usado)."
+    credito_conferido: false   # texto e DOI escritos de memória; conferir na página da fonte ao baixar
+    verificacao_link_2026_11_17: "não testado: EBRAINS exige busca por mapa"
+  - id: bigbrain2015
+    nome: "BigBrain Release 2015"
+    url_original: "https://ftp.bigbrainproject.org/bigbrain-ftp/BigBrainRelease.2015/"
+    doi: "10.1126/science.1235381"
+    licenca: "CC BY-NC-SA 4.0"
+    comercial_permitido: false
+    share_alike: true
+    credito_exato: "BigBrain: Amunts K, Lepage C, Borgeat L, et al. Science 2013;340:1472–1475. BigBrain Release 2015, CC BY-NC-SA 4.0."
+    credito_conferido: false   # texto e DOI escritos de memória; conferir na página da fonte ao baixar
+    verificacao_link_2026_11_17: "ok"
+  - id: visible_korean
+    nome: "Visible Korean, cabeça masculina"
+    url_original: "https://sites.google.com/ajou.ac.kr/anatomy"
+    doi: "10.5281/zenodo.22759852"
+    licenca: "CC BY-NC 4.0"
+    comercial_permitido: false
+    share_alike: false
+    credito_exato: "Visible Korean, Ajou University (Park JS, Chung MS et al.), Zenodo 10.5281/zenodo.22759852, CC BY-NC 4.0."
+    credito_conferido: false   # texto e DOI escritos de memória; conferir na página da fonte ao baixar
+    verificacao_link_2026_11_17: "ok"
+  - id: bodyparts3d
+    nome: "BodyParts3D"
+    url_original: "https://dbarchive.biosciencedbc.jp/en/bodyparts3d/download.html"
+    doi: null
+    licenca: "CC BY 4.0 (conferir a página de licença no download)"
+    comercial_permitido: true
+    share_alike: false
+    credito_exato: "BodyParts3D, © The Database Center for Life Science, CC BY 4.0."
+    credito_conferido: false   # texto e DOI escritos de memória; conferir na página da fonte ao baixar
+    verificacao_link_2026_11_17: "ok"
+  - id: topbrain
+    nome: "TopBrain 2025/2026"
+    url_original: "https://zenodo.org/records/21972006"
+    doi: "10.5281/zenodo.21972006"
+    licenca: "Livre com citação; uso comercial só com permissão"
+    comercial_permitido: false
+    share_alike: false
+    credito_exato: "TopBrain, Zenodo 21972006 (citar o artigo indicado na página do registro)."
+    credito_conferido: false   # texto e DOI escritos de memória; conferir na página da fonte ao baixar
+    verificacao_link_2026_11_17: "ok"
+  - id: jhu_arterial
+    nome: "Territórios arteriais JHU (Liu et al. 2023)"
+    url_original: "https://www.nitrc.org/projects/arterialatlas/"
+    doi: "10.1038/s41597-022-01923-0"
+    licenca: "CC BY-SA 4.0"
+    comercial_permitido: true
+    share_alike: true
+    credito_exato: "Liu CF, Hsu J, Xu X, et al. Digital 3D Brain MRI Arterial Territories Atlas. Sci Data 2023;10:74. CC BY-SA 4.0."
+    credito_conferido: false   # texto e DOI escritos de memória; conferir na página da fonte ao baixar
+    verificacao_link_2026_11_17: "ok"
+  - id: halle_cranio
+    nome: "Crânio de Halle (micro-CT)"
+    url_original: "https://zenodo.org/records/6108435"
+    doi: "10.5281/zenodo.6108435"
+    licenca: "CC BY 4.0"
+    comercial_permitido: true
+    share_alike: false
+    credito_exato: "Crânio de Halle, micro-CT, Zenodo 10.5281/zenodo.6108435, CC BY 4.0 (citar os autores indicados no registro)."
+    credito_conferido: false   # texto e DOI escritos de memória; conferir na página da fonte ao baixar
+    verificacao_link_2026_11_17: "ok"
+  - id: openear
+    nome: "OpenEar (Sieber et al. 2019)"
+    url_original: "https://zenodo.org/records/1473724"
+    doi: "10.5281/zenodo.1473724"
+    licenca: "CC BY 4.0"
+    comercial_permitido: true
+    share_alike: false
+    credito_exato: "Sieber D, Erfurt P, John S, et al. The OpenEar library of 3D models of the human temporal bone based on computed tomography and micro-slicing. Sci Data 2019;6:180297. Zenodo 1473724, CC BY 4.0."
+    credito_conferido: false   # texto e DOI escritos de memória; conferir na página da fonte ao baixar
+    verificacao_link_2026_11_17: "ok"
+  - id: fipat_ta2017
+    nome: "FIPAT, Terminologia Neuroanatomica (2017)"
+    url_original: "https://fipat.library.dal.ca/"
+    doi: null
+    licenca: "Termos em domínio público"
+    comercial_permitido: true
+    share_alike: false
+    credito_exato: "Nomenclatura: FIPAT. Terminologia Neuroanatomica. Federative International Programme for Anatomical Terminology, 2017."
+    credito_conferido: false   # texto e DOI escritos de memória; conferir na página da fonte ao baixar
+    tipo: referencia
+    verificacao_link_2026_11_17: "o site não respondeu (tempo esgotado); tentar de novo"
+
+assets:
+  # ---------------- o que o app usa hoje ----------------
+  - id: cortex_glb
+    arquivo: "dados_brainder/cortex.glb"
+    estrutura: "Córtex cerebral por região Desikan-Killiany (33 itens: giros, ínsula, parede medial) e malhas subcorticais (núcleos da base, tálamo, amígdala, hipocampo, ventrículos, tronco, cerebelo)"
+    fonte: brain_for_blender
+    processamento: >-
+      Superfícies pial e inflada (Desikan-Killiany) e subcorticais do Brain for Blender; só o hemisfério esquerdo;
+      decimação para 150 mil triângulos por hemisfério (meshoptimizer); mudança de eixos e escala para cm; giro de -10° em X;
+      deslocamento; recoloração. O direito é o espelho do esquerdo no app. Script: scripts/converter_brainder.mjs.
+    data_download: null     # não registrado na época; preencher se houver o recibo
+    estruturas_ids: [cc_cut, dien_wall, gang, gbsts, gcalc, gcing, gcun, gfi_op, gfi_or, gfi_tr, gfm, gfsm, gfs, gfus, ginsula, gling, gocc, gor, gparahip, gpara, gpolof, gpos, gprec, gpre, gps, gpt, greto, gsm, gti, gtm, gts, gtt, gistmo,
+      v3, v4, mesenc, ponte, bulbo, accumbens, amigdala, caudado, gpe, gpi, putame, talamo, vlat_ant, vlat_cent, vlat_post, vlat_inf, hipo_corpo, pehipo]
+  - id: marcos_json
+    arquivo: "dados_brainder/marcos.json"
+    estrutura: "Centroides, bordas entre regiões e perfil do tronco calculados das malhas"
+    fonte: brain_for_blender
+    processamento: "Calculado das mesmas malhas por scripts/converter_brainder.mjs"
+    data_download: null
+  - id: derivados_brainder
+    arquivo: null           # gerado no app, a partir de cortex.glb
+    estrutura: "Lóbulos e fissuras do cerebelo, regiões da superfície do tronco (pirâmide, oliva, assoalho do IV ventrículo etc.), partes do ventrículo lateral e do hipocampo"
+    fonte: brain_for_blender
+    fonte_adicional: mimir
+    licenca: "CC BY-SA 3.0 (derivado do Brain for Blender)"
+    processamento: >-
+      No app (src/js/03-cortex-cerebelo.js, 04-tronco.js, 10-*.js): refinamento e suavização do cerebelo, divisão em lóbulos
+      por ângulo em volta do fastígio e marcação de regiões da superfície do tronco por posição. A divisão anatômica é autoria
+      própria (Mímir), seguindo Machado, cap. 5.
+    estruturas_ids: [cb_lingula, cb_central, cb_culmen, cb_declive, cb_folium, cb_tuber, cb_piramide, cb_uvula, cb_nodulo, cb_asa, cb_quadant, cb_quadpost, cb_semisup, cb_semiinf, cb_biventre, cb_tonsila, cb_floculo,
+      f_precent, f_preculm, f_prima, f_posclival, f_horiz, f_prepir, f_pospir, f_postlat,
+      fossaip, sulmedped, areavest, estrias, sullim, sulmedfr, eminmed, fossarom, colfac, fovsup, baseponte, sulbp, locus, sulbas, fcun, tubcun, sulantlat, sulpostlat, sulmedpost, decpir, areapostrema, obex, trighipo, tubgrac, sulintpost, fgrac, trigvago, fovinf, oliva, fismedant, piramide]
+  - id: esquemas_mimir
+    arquivo: null           # geometria gerada pelo código em src/js/
+    estrutura: "240 itens esquemáticos: artérias, veias e seios, nervos cranianos, ramos e gânglios, núcleos dos nervos cranianos, grandes vias, corpo caloso por partes, cápsulas e claustro, fórnice, comissuras, diencéfalo, hipófise, vias ópticas, núcleos do cerebelo, núcleos e feixes internos do tronco, sistema límbico, sulcos, meninges, medula, líquor"
+    fonte: mimir
+    processamento: "Formas desenhadas no código (tubos, fitas, elipsoides deformados) sobre as malhas do Brain for Blender, com posição e trajeto pelo Machado e conferência no Prometheus; formas aproximadas listadas em REVISAR.md"
+    data_download: null
+  - id: faces_dos_cortes
+    arquivo: null           # calculado no navegador
+    estrutura: "Faces das bolachas (12 cortes coronais) e dos cortes transversais do tronco"
+    fonte: mimir
+    processamento: "Interseção das malhas do app com o plano de corte (src/js/14-bolachas.js); gabarito de níveis e nomes: Unicamp; nenhuma imagem de terceiros"
+  - id: esquemas_medula
+    arquivo: null
+    estrutura: "Cortes esquemáticos da medula cervical, torácica e lombar"
+    fonte: mimir
+    processamento: "Desenho paramétrico (src/js/14-cortes-tronco.js), pelo Machado e pelas Notas de estudo do autor"
+  - id: gabarito_unicamp
+    arquivo: "src/js/01-gabarito.js"
+    estrutura: "Lista de estruturas por face dos 12 cortes coronais"
+    fonte: unicamp_gabarito
+    fonte_adicional: mimir
+    processamento: "Nomes transcritos das páginas da Unicamp e ligados aos ids do Mímir (gabarito/montar_gabarito.cjs)"
+
+  # ---------------- reestruturação, Fase 1: cerebelo ----------------
+  - id: cerebelo_sereno_folhas
+    arquivo: "models/cerebelo_sereno_folhas.glb"
+    estrutura: "Córtex cerebelar com as folhas (superfície pial do cerebmap20, os dois hemisférios e o vérmis)"
+    fonte: sereno2020
+    fonte_adicional: [diedrichsen2009, mimir]
+    processamento: >-
+      surf/rh.pial do cerebmap20 (9,2 milhões de triângulos); escala real x0,38 (0,19/0,50 mm, README e rescale2actual.tcl);
+      registro de semelhança ao cerebelo do Brain for Blender (eixos principais + ICP/Umeyama; transformação e erro em
+      data/processed/sereno_registro.json); FreeSurfer -> espaço do Mímir (cm); decimação quádrica para cerca de 700 mil
+      triângulos (pymeshlab); compressão meshopt (gltfpack). Lóbulos: atlas SUIT
+      (Diedrichsen 2009) registrado à envoltória do Sereno e passado a cada vértice pelo voxel mais próximo (índice no canal
+      vermelho de COLOR_0; scripts/process/suit_cerebelo.py); nos lóbulos I-IV, verme e hemisfério pela classificação do Mímir.
+      Scripts: scripts/process/sereno_cerebelo.py e scripts/process/comprimir.mjs.
+    transformacao:
+      descricao: "mm do cerebmap20 em escala real -> cm do Mímir (registro de semelhança ao cerebelo do Brain for Blender, depois paraAtlas e centralização na linha média do atlas, 3.5 mm em X)"
+      matriz_4x4: [[-0.11993, -0.000555, 0.002838, 0.048705], [0.002875, -0.035396, 0.114588, -3.431128], [0.000308, 0.114622, 0.035399, -4.730534], [0, 0, 0, 1]]
+      escala_do_registro: 1.200     # o cerebelo do Sereno (peça ex vivo) ficou 20% maior para casar com o do atlas
+      erro_medio_mm: 1.36
+      erro_p95_mm: 4.02
+      espaco_destino: "Mímir (cm). Ainda não é o MNI ICBM152 2009c: ver docs/diagnostico_fase0.md, decisão 3"
+    data_download: "2026-11-18"
+  - id: cerebelo_sereno_estudo
+    arquivo: "models/cerebelo_sereno_estudo.glb"
+    estrutura: "Superfície lisa do cerebelo para estudo (envoltória da superfície pial, sem as folhas)"
+    fonte: sereno2020
+    fonte_adicional: [diedrichsen2009, mimir]
+    processamento: >-
+      Mesma superfície pial e mesmo registro do nível folhas; envoltória por volume: rasterização da pial em grade de 0,4 mm,
+      fechamento morfológico de 1,6 mm (fecha os sulcos entre as folhas), preenchimento, gaussiana de 1 voxel, marching
+      cubes (scikit-image), Taubin 15 iterações, decimação para cerca de 160 mil triângulos (pymeshlab); compressão meshopt
+      (gltfpack). Script: scripts/process/sereno_cerebelo.py (função envoltoria). Lóbulos do SUIT como no nível folhas.
+    data_download: "2026-11-18"
+  - id: cerebelo_suit_nucleos
+    arquivo: "models/cerebelo_suit_nucleos.glb"
+    estrutura: "Núcleos do cerebelo: denteado, interpósito e fastigial, esquerdo e direito (compartimento mais provável do atlas SUIT)"
+    fonte: diedrichsen2009
+    processamento: >-
+      atl-Anatom_space-MNISym_dseg.nii, rótulos 29-34; gaussiana de 0,6 voxel e marching cubes (scikit-image) por rótulo;
+      MNI -> Mímir pela transformação abaixo; o fastigial é muito pequeno no mapa de compartimento mais provável (16 e 40
+      triângulos). No app, aparecem nos modos do cerebelo real no lugar dos esquemas (o interpósito como item próprio). Script: scripts/process/suit_cerebelo.py.
+    transformacao:
+      descricao: "MNI ICBM152 2009c simétrico (mm) -> Mímir (cm): superfície do cerebelo do SUIT registrada por semelhança à envoltória do Sereno, depois paraAtlas"
+      matriz_4x4: [[-0.106846, 0.000352, -0.002324, -0.004341], [-0.002309, 0.004073, 0.10677, 0.971455], [0.00044, 0.106794, -0.004064, 1.493604], [0, 0, 0, 1]]
+      escala_do_registro: 1.069
+      giro_graus: 7.9
+      erro_medio_mm: 2.46
+      erro_p95_mm: 7.45
+    data_download: "2026-11-18"
+  - id: massp_nucleos
+    arquivo: "models/massp_nucleos.glb"
+    estrutura: "Núcleos do tronco e vizinhos: substância negra, núcleo rubro, subtalâmico, colículos, corpos geniculados, área tegmentar ventral, substância cinzenta periaquedutal, pedunculopontino, habenular lateral, rafe dorsal e mediano"
+    fonte: massp2
+    fonte_adicional: mimir
+    processamento: >-
+      ahead-massp2_avg-maxlabel_decade-18to80.nii.gz (compartimento mais provável, 0,5 mm, MNI2009b); por rótulo: gaussiana de
+      0,8 voxel, marching cubes (scikit-image), Taubin 5 iterações; MNI -> Mímir pela afim abaixo; compressão meshopt
+      (gltfpack). Scripts: scripts/process/mni_para_mimir.py, scripts/process/massp_nucleos.py.
+    transformacao:
+      descricao: "MNI2009b (mm, RAS) -> Mímir (cm): afim por ICP das superfícies subcorticais do MASSP (caudado, putâmen, pálido, tálamo, amígdala, accumbens, ventrículos) contra as do atlas (Brain for Blender, lado esquerdo e espelho)"
+      matriz_4x4: [[-0.09605, -0.00026, 0.0004, -0.018583], [-0.000069, 0.006345, 0.07684, 0.31898], [-0.00267, 0.088509, 0.005612, 0.878074], [0, 0, 0, 1]]
+      erro_medio_mm: 2.22
+      erro_p95_mm: 5.94
+    data_download: "2026-11-18"
+  - id: bolachas_tronco_rm
+    pasta: "models/bolachas_tronco"
+    estrutura: "Cortes do tronco na RM real, 8 níveis clássicos (colículo superior ao bulbo na decussação das pirâmides): T1 de fundo (WebP) e mapa de rótulos do MASSP (PNG)"
+    fonte: lusebrink2021
+    fonte_adicional: [massp2, mimir]
+    processamento: >-
+      T1 de 250 µm (sub-yv98_ses-3512+3555+3589+3637+3681_T1w_original) registrado ao molde MNI2009b por SimpleITK
+      (rígido, afim na cabeça e afim numa caixa do tronco, informação mútua; escalas 0.943, 0.930, 0.796); recorte do tronco
+      reamostrado a 0,25 mm em MNI (B-spline); cortes perpendiculares ao eixo do aqueduto e do IV ventrículo, janela de 50 mm a
+      0,1 mm por pixel; níveis escolhidos pelo Mímir a partir dos marcos do MASSP (a conferir). Scripts:
+      scripts/process/lusebrink_mni.py, scripts/process/bolachas_tronco.py. O molde MNI só foi usado no registro.
+    data_download: "2026-11-18"
+

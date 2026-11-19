@@ -1,0 +1,9 @@
+# Pipeline de dados do Mímir (Python 3.10+). Instalar com: python -m pip install -r scripts/requirements.txt
+PyYAML>=6.0
+numpy>=1.26
+nibabel>=5.2
+scikit-image>=0.22
+trimesh>=4.0
+pymeshlab>=2023.12
+scipy>=1.11
+SimpleITK==2.5.8        # registro de imagens (Fase 2)

@@ -1,0 +1,696 @@
+{
+ "fonte_fundo": "lusebrink2021 (T1 250 µm, registro afim ao MNI2009b)",
+ "fonte_rotulos": "massp2",
+ "niveis": [
+  {
+   "id": "colsup",
+   "nome": "Mesencéfalo, nível do colículo superior",
+   "centro_mni": [
+    0.0,
+    -23.084635732945717,
+    -9.075294540524286
+   ],
+   "u_mni": [
+    -1.0,
+    0.0,
+    0.0
+   ],
+   "v_mni": [
+    -0.0,
+    -0.9128182518949205,
+    0.4083660600582539
+   ],
+   "centro_mimir": [
+    -0.016213750887139295,
+    -0.5248495316597389,
+    -1.2160482736896794
+   ],
+   "u_mimir": [
+    0.09604951442623927,
+    6.925986927889055e-05,
+    0.0026699634370053243
+   ],
+   "v_mimir": [
+    0.00040050087195635904,
+    0.025586882292422015,
+    -0.07850047229889824
+   ],
+   "lado_mm": 50.0,
+   "px_mm": 0.1,
+   "rotulos": [
+    5,
+    6,
+    7,
+    8,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    23,
+    24,
+    26,
+    27,
+    34,
+    35,
+    42,
+    43,
+    44,
+    45,
+    46,
+    47,
+    48,
+    49,
+    50,
+    51,
+    52,
+    53,
+    58,
+    60,
+    61,
+    62,
+    63
+   ]
+  },
+  {
+   "id": "colinf",
+   "nome": "Mesencéfalo, nível do colículo inferior",
+   "centro_mni": [
+    0.0,
+    -27.384635732945718,
+    -15.475294540524285
+   ],
+   "u_mni": [
+    -1.0,
+    0.0,
+    0.0
+   ],
+   "v_mni": [
+    -0.0,
+    -0.9128182518949205,
+    0.4083660600582539
+   ],
+   "centro_mimir": [
+    -0.017655626612640245,
+    -1.0439132273989529,
+    -1.6325537375961143
+   ],
+   "u_mimir": [
+    0.09604951442623927,
+    6.925986927889055e-05,
+    0.0026699634370053243
+   ],
+   "v_mimir": [
+    0.00040050087195635904,
+    0.025586882292422015,
+    -0.07850047229889824
+   ],
+   "lado_mm": 50.0,
+   "px_mm": 0.1,
+   "rotulos": [
+    5,
+    6,
+    18,
+    19,
+    20,
+    23,
+    24,
+    26,
+    27,
+    28,
+    29,
+    32,
+    33,
+    48,
+    49,
+    50,
+    51,
+    52,
+    53,
+    58,
+    59
+   ]
+  },
+  {
+   "id": "ponte_alta",
+   "nome": "Ponte, parte alta (istmo)",
+   "centro_mni": [
+    0.0,
+    -26.15305678557729,
+    -23.675294540524284
+   ],
+   "u_mni": [
+    -1.0,
+    0.0,
+    0.0
+   ],
+   "v_mni": [
+    -0.0,
+    -0.9128182518949205,
+    0.4083660600582539
+   ],
+   "centro_mimir": [
+    -0.02125471054957824,
+    -1.6661899540403964,
+    -1.5695686001963696
+   ],
+   "u_mimir": [
+    0.09604951442623927,
+    6.925986927889055e-05,
+    0.0026699634370053243
+   ],
+   "v_mimir": [
+    0.00040050087195635904,
+    0.025586882292422015,
+    -0.07850047229889824
+   ],
+   "lado_mm": 50.0,
+   "px_mm": 0.1,
+   "rotulos": [
+    18,
+    19,
+    20,
+    26,
+    27,
+    28,
+    29,
+    49,
+    50,
+    51,
+    53,
+    59
+   ]
+  },
+  {
+   "id": "ponte_media",
+   "nome": "Ponte, parte média",
+   "centro_mni": [
+    0.0,
+    -29.732004153998346,
+    -31.675294540524284
+   ],
+   "u_mni": [
+    -1.0,
+    0.0,
+    0.0
+   ],
+   "v_mni": [
+    -0.0,
+    -0.9128182518949205,
+    0.4083660600582539
+   ],
+   "centro_mimir": [
+    -0.023523771147577952,
+    -2.303623012092193,
+    -1.9312342284864863
+   ],
+   "u_mimir": [
+    0.09604951442623927,
+    6.925986927889055e-05,
+    0.0026699634370053243
+   ],
+   "v_mimir": [
+    0.00040050087195635904,
+    0.025586882292422015,
+    -0.07850047229889824
+   ],
+   "lado_mm": 50.0,
+   "px_mm": 0.1,
+   "rotulos": [
+    18
+   ]
+  },
+  {
+   "id": "ponte_baixa",
+   "nome": "Ponte, parte baixa",
+   "centro_mni": [
+    0.0,
+    -34.22376977431432,
+    -39.26692848046603
+   ],
+   "u_mni": [
+    -1.0,
+    0.0,
+    0.0
+   ],
+   "v_mni": [
+    -0.0,
+    -0.9128182518949205,
+    0.4083660600582539
+   ],
+   "centro_mimir": [
+    -0.025392330873621305,
+    -2.915469187851568,
+    -2.3714003290755015
+   ],
+   "u_mimir": [
+    0.09604951442623927,
+    6.925986927889055e-05,
+    0.0026699634370053243
+   ],
+   "v_mimir": [
+    0.00040050087195635904,
+    0.025586882292422015,
+    -0.07850047229889824
+   ],
+   "lado_mm": 50.0,
+   "px_mm": 0.1,
+   "rotulos": [
+    18
+   ]
+  },
+  {
+   "id": "bulbo_oliva",
+   "nome": "Bulbo, nível da oliva",
+   "centro_mni": [
+    0.0,
+    -38.715535394630294,
+    -46.85856242040778
+   ],
+   "u_mni": [
+    -1.0,
+    0.0,
+    0.0
+   ],
+   "v_mni": [
+    -0.0,
+    -0.9128182518949205,
+    0.4083660600582539
+   ],
+   "centro_mimir": [
+    -0.02726089059966466,
+    -3.5273153636109438,
+    -2.8115664296645164
+   ],
+   "u_mimir": [
+    0.09604951442623927,
+    6.925986927889055e-05,
+    0.0026699634370053243
+   ],
+   "v_mimir": [
+    0.00040050087195635904,
+    0.025586882292422015,
+    -0.07850047229889824
+   ],
+   "lado_mm": 50.0,
+   "px_mm": 0.1,
+   "rotulos": [
+    18
+   ]
+  },
+  {
+   "id": "dec_lemnisco",
+   "nome": "Bulbo, decussação dos lemniscos",
+   "centro_mni": [
+    0.0,
+    -43.672750845788556,
+    -53.04183030029127
+   ],
+   "u_mni": [
+    -1.0,
+    0.0,
+    0.0
+   ],
+   "v_mni": [
+    -0.0,
+    -0.9128182518949205,
+    0.4083660600582539
+   ],
+   "centro_mimir": [
+    -0.02844531687900169,
+    -4.033895524821421,
+    -3.2850247990161643
+   ],
+   "u_mimir": [
+    0.09604951442623927,
+    6.925986927889055e-05,
+    0.0026699634370053243
+   ],
+   "v_mimir": [
+    0.00040050087195635904,
+    0.025586882292422015,
+    -0.07850047229889824
+   ],
+   "lado_mm": 50.0,
+   "px_mm": 0.1,
+   "rotulos": []
+  },
+  {
+   "id": "dec_piramide",
+   "nome": "Bulbo, decussação das pirâmides",
+   "centro_mni": [
+    0.0,
+    -47.26977962399926,
+    -58.63346424023302
+   ],
+   "u_mni": [
+    -1.0,
+    0.0,
+    0.0
+   ],
+   "v_mni": [
+    -0.0,
+    -0.9128182518949205,
+    0.4083660600582539
+   ],
+   "centro_mimir": [
+    -0.02974661145554512,
+    -4.486383436067848,
+    -3.6347744925326504
+   ],
+   "u_mimir": [
+    0.09604951442623927,
+    6.925986927889055e-05,
+    0.0026699634370053243
+   ],
+   "v_mimir": [
+    0.00040050087195635904,
+    0.025586882292422015,
+    -0.07850047229889824
+   ],
+   "lado_mm": 50.0,
+   "px_mm": 0.1,
+   "rotulos": []
+  }
+ ],
+ "rotulos_massp": {
+  "1": {
+   "nome": "Caudate",
+   "sigla": "cau",
+   "lado": "l"
+  },
+  "2": {
+   "nome": "Caudate",
+   "sigla": "cau",
+   "lado": "r"
+  },
+  "3": {
+   "nome": "Subthalamic nucleus",
+   "sigla": "stn",
+   "lado": "l"
+  },
+  "4": {
+   "nome": "Subthalamic nucleus",
+   "sigla": "stn",
+   "lado": "r"
+  },
+  "5": {
+   "nome": "Substantia nigra",
+   "sigla": "sn",
+   "lado": "l"
+  },
+  "6": {
+   "nome": "Substantia nigra",
+   "sigla": "sn",
+   "lado": "r"
+  },
+  "7": {
+   "nome": "Red nucleus",
+   "sigla": "rn",
+   "lado": "l"
+  },
+  "8": {
+   "nome": "Red nucleus",
+   "sigla": "rn",
+   "lado": "r"
+  },
+  "9": {
+   "nome": "Globus pallidus pars interna",
+   "sigla": "gpi",
+   "lado": "l"
+  },
+  "10": {
+   "nome": "Globus pallidus pars interna",
+   "sigla": "gpi",
+   "lado": "r"
+  },
+  "11": {
+   "nome": "Globus pallidus pars externa",
+   "sigla": "gpe",
+   "lado": "l"
+  },
+  "12": {
+   "nome": "Globus pallidus pars externa",
+   "sigla": "gpe",
+   "lado": "r"
+  },
+  "13": {
+   "nome": "Thalamus",
+   "sigla": "tha",
+   "lado": "l"
+  },
+  "14": {
+   "nome": "Thalamus",
+   "sigla": "tha",
+   "lado": "r"
+  },
+  "15": {
+   "nome": "Lateral ventricle",
+   "sigla": "vent",
+   "lado": "l"
+  },
+  "16": {
+   "nome": "Lateral ventricle",
+   "sigla": "vent",
+   "lado": "r"
+  },
+  "17": {
+   "nome": "Third ventricle",
+   "sigla": "vent",
+   "lado": "3"
+  },
+  "18": {
+   "nome": "Fourth ventricle",
+   "sigla": "vent",
+   "lado": "4"
+  },
+  "19": {
+   "nome": "Amygdala",
+   "sigla": "amg",
+   "lado": "l"
+  },
+  "20": {
+   "nome": "Amygdala",
+   "sigla": "amg",
+   "lado": "r"
+  },
+  "21": {
+   "nome": "Internal capsule",
+   "sigla": "ic",
+   "lado": "l"
+  },
+  "22": {
+   "nome": "Internal capsule",
+   "sigla": "ic",
+   "lado": "r"
+  },
+  "23": {
+   "nome": "Ventral tegmental area",
+   "sigla": "vta",
+   "lado": "l"
+  },
+  "24": {
+   "nome": "Ventral tegmental area",
+   "sigla": "vta",
+   "lado": "r"
+  },
+  "25": {
+   "nome": "Fornix",
+   "sigla": "fx",
+   "lado": "lr"
+  },
+  "26": {
+   "nome": "Periaqueductal gray",
+   "sigla": "pag",
+   "lado": "l"
+  },
+  "27": {
+   "nome": "Periaqueductal gray",
+   "sigla": "pag",
+   "lado": "r"
+  },
+  "28": {
+   "nome": "Pedunculopontine nucleus",
+   "sigla": "ppn",
+   "lado": "l"
+  },
+  "29": {
+   "nome": "Pedunculopontine nucleus",
+   "sigla": "ppn",
+   "lado": "r"
+  },
+  "30": {
+   "nome": "Claustrum",
+   "sigla": "cl",
+   "lado": "l"
+  },
+  "31": {
+   "nome": "Claustrum",
+   "sigla": "cl",
+   "lado": "r"
+  },
+  "32": {
+   "nome": "Inferior colliculus",
+   "sigla": "ico",
+   "lado": "l"
+  },
+  "33": {
+   "nome": "Inferior colliculus",
+   "sigla": "ico",
+   "lado": "r"
+  },
+  "34": {
+   "nome": "Superior colliculus",
+   "sigla": "sco",
+   "lado": "l"
+  },
+  "35": {
+   "nome": "Superior colliculus",
+   "sigla": "sco",
+   "lado": "r"
+  },
+  "36": {
+   "nome": "Lateral habenula",
+   "sigla": "lh",
+   "lado": "l"
+  },
+  "37": {
+   "nome": "Lateral habenula",
+   "sigla": "lh",
+   "lado": "r"
+  },
+  "38": {
+   "nome": "Putamen",
+   "sigla": "put",
+   "lado": "l"
+  },
+  "39": {
+   "nome": "Putamen",
+   "sigla": "put",
+   "lado": "r"
+  },
+  "40": {
+   "nome": "Accumbens",
+   "sigla": "acc",
+   "lado": "l"
+  },
+  "41": {
+   "nome": "Accumbens",
+   "sigla": "acc",
+   "lado": "r"
+  },
+  "42": {
+   "nome": "Cornu ammonis 1",
+   "sigla": "ca1",
+   "lado": "l"
+  },
+  "43": {
+   "nome": "Cornu ammonis 1",
+   "sigla": "ca1",
+   "lado": "r"
+  },
+  "44": {
+   "nome": "Cornu ammonis 2,3",
+   "sigla": "ca23",
+   "lado": "l"
+  },
+  "45": {
+   "nome": "Cornu ammonis 2,3",
+   "sigla": "ca23",
+   "lado": "r"
+  },
+  "46": {
+   "nome": "Dentate gyrus",
+   "sigla": "dg",
+   "lado": "l"
+  },
+  "47": {
+   "nome": "Dentate gyrus",
+   "sigla": "dg",
+   "lado": "r"
+  },
+  "48": {
+   "nome": "Pre/pro subiculum",
+   "sigla": "presub",
+   "lado": "l"
+  },
+  "49": {
+   "nome": "Pre/pro subiculum",
+   "sigla": "presub",
+   "lado": "r"
+  },
+  "50": {
+   "nome": "Subiculum",
+   "sigla": "sub",
+   "lado": "l"
+  },
+  "51": {
+   "nome": "Subiculum",
+   "sigla": "sub",
+   "lado": "r"
+  },
+  "52": {
+   "nome": "Uncus",
+   "sigla": "unc",
+   "lado": "l"
+  },
+  "53": {
+   "nome": "Uncus",
+   "sigla": "unc",
+   "lado": "r"
+  },
+  "54": {
+   "nome": "Anterior commissure",
+   "sigla": "ac",
+   "lado": "lr"
+  },
+  "55": {
+   "nome": "Posterior commissure",
+   "sigla": "pc",
+   "lado": "lr"
+  },
+  "56": {
+   "nome": "Cholinergic forebrain nuclei",
+   "sigla": "chn",
+   "lado": "l"
+  },
+  "57": {
+   "nome": "Cholinergic forebrain nuclei",
+   "sigla": "chn",
+   "lado": "r"
+  },
+  "58": {
+   "nome": "Dorsal raphe nucleus",
+   "sigla": "drn",
+   "lado": "lr"
+  },
+  "59": {
+   "nome": "Medial raphe nucleus",
+   "sigla": "mrn",
+   "lado": "lr"
+  },
+  "60": {
+   "nome": "Lateral geniculate nucleus",
+   "sigla": "lgn",
+   "lado": "l"
+  },
+  "61": {
+   "nome": "Lateral geniculate nucleus",
+   "sigla": "lgn",
+   "lado": "r"
+  },
+  "62": {
+   "nome": "Medial geniculate nucleus",
+   "sigla": "mgn",
+   "lado": "l"
+  },
+  "63": {
+   "nome": "Medial geniculate nucleus",
+   "sigla": "mgn",
+   "lado": "r"
+  }
+ }
+}

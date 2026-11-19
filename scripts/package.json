@@ -8,5 +8,11 @@
     "embutir": "node embutir_glb.mjs",
     "servir": "node servidor.mjs"
   },
-  "dependencies": { "meshoptimizer": "^0.22.0" }
+  "dependencies": {
+    "meshoptimizer": "^0.22.0",
+    "yaml": "^2.6.1"
+  },
+  "devDependencies": {
+    "gltfpack": "^0.23.0"
+  }
 }

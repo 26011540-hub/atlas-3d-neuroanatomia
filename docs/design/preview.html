@@ -1,0 +1,118 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mímir: sistema de design</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root { --bg: #0b1216; --panel: #121d24; --ink: #e3eef2; --muted: #8ba3af; --line: #22343e; --accent: #52c6d6; --f-tit: 'Bricolage Grotesque', system-ui, sans-serif; --f-body: 'Source Sans 3', system-ui, sans-serif; }
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.5 var(--f-body); }
+main { max-width: 1180px; margin: 0 auto; padding: 28px 16px 60px; }
+h1 { font: 700 30px var(--f-tit); margin: 0 0 4px; } h1 i { font-style: normal; color: var(--accent); }
+h2 { font: 700 19px var(--f-tit); margin: 34px 0 10px; }
+p.sub { color: var(--muted); margin: 0 0 18px; max-width: 760px; }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 12px; }
+.sis { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 12px; }
+.sis h3 { font: 600 14px var(--f-body); margin: 0 0 8px; display: flex; justify-content: space-between; align-items: baseline; }
+.sis h3 small { color: var(--muted); font-weight: 400; font-size: 12px; }
+.tons { display: flex; gap: 4px; }
+.tons div { flex: 1; height: 42px; border-radius: 7px; position: relative; }
+.tons span { position: absolute; left: 4px; bottom: 2px; font: 600 10px var(--f-body); color: rgba(0,0,0,.65); }
+.tons span.cl { color: rgba(255,255,255,.85); }
+.nomes { font-size: 12px; color: var(--muted); margin-top: 6px; }
+#cena { width: 100%; height: 360px; border-radius: 12px; border: 1px solid var(--line); display: block; background: radial-gradient(120% 100% at 50% 35%, #182a33, #080e12); }
+.legmat { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 8px; font-size: 13px; color: var(--muted); }
+.legmat b { color: var(--ink); display: block; }
+.rotulos { display: flex; flex-wrap: wrap; gap: 14px; align-items: center; background: #0f1a20; border: 1px solid var(--line); border-radius: 12px; padding: 18px; }
+.rot { font: 600 12.5px var(--f-body); padding: 3px 9px; border-radius: 999px; background: rgba(8,14,18,.86); color: #eaf7f9; border: 1px solid rgba(255,255,255,.16); display: inline-flex; gap: 6px; align-items: center; }
+.rot i { width: 9px; height: 9px; border-radius: 50%; display: inline-block; }
+.rot em { font-style: italic; font-weight: 400; color: #9fb2bc; }
+.rot.sel { background: #ffd23f; color: #111; border-color: #ffd23f; }
+.pin { width: 22px; height: 22px; border-radius: 50%; background: rgba(8,14,18,.9); border: 2px solid #fff; color: #fff; font: 700 12px var(--f-body); display: inline-grid; place-items: center; }
+.selo { display: inline-block; font: 700 10.5px var(--f-body); padding: 0 5px; border-radius: 4px; }
+.selo-nc { background: #f3d6a4; color: #5a3a00; } .selo-sa { background: #c9e3f5; color: #0d3a5c; } .selo-eu { background: #d9f2d0; color: #1f4d12; }
+table { border-collapse: collapse; width: 100%; font-size: 13.5px; } td, th { border-bottom: 1px solid var(--line); padding: 6px 8px; text-align: left; vertical-align: top; } th { color: var(--muted); font-weight: 600; }
+code { font-size: 12.5px; background: #0f1a20; padding: 1px 5px; border-radius: 4px; }
+</style>
+<main>
+  <h1>Mímir<i>.</i> sistema de design</h1>
+  <p class="sub">Proposta da Fase 0. Nada aqui foi aplicado ao atlas ainda. Uma cor-base por sistema, com 3 tons (mais claro, base, mais escuro) para diferenciar as partes de um mesmo sistema; vias ascendentes em paleta fria e descendentes em paleta quente; materiais por tecido; contorno de destaque; rótulos em latim e português.</p>
+
+  <h2>Paleta por sistema</h2>
+  <div class="grid" id="paleta"></div>
+
+  <h2>Materiais (arraste para girar)</h2>
+  <canvas id="cena"></canvas>
+  <div class="legmat">
+    <div><b>Substância cinzenta: fosca</b>rugosidade 0,85, sem brilho. Córtex, núcleos, tronco, cerebelo.</div>
+    <div><b>Substância branca: acetinada</b>rugosidade 0,45, leve verniz (clearcoat 0,25). Vias, cápsulas, corpo caloso, fórnice, nervos.</div>
+    <div><b>Contexto: translúcido</b>opacidade 0,22, sem escrita de profundidade. Córtex ao estudar estruturas profundas, ventrículos.</div>
+  </div>
+  <p class="sub" style="margin-top:10px">Destaque da seleção: contorno de 2,5 px na cor de acento (#52c6d6) e leve brilho na própria cor; nada de emissivo branco que apaga a cor. A peça do meio está selecionada.</p>
+
+  <h2>Rótulos</h2>
+  <div class="rotulos">
+    <span class="rot"><i style="background:#c9a26b"></i>Núcleo denteado <em>Nucleus dentatus</em></span>
+    <span class="rot"><i style="background:#9a6fd0"></i>Hipocampo <em>Hippocampus</em></span>
+    <span class="rot sel"><i style="background:#111"></i>Putame <em>Putamen</em></span>
+    <span class="pin">7</span><span class="pin" style="background:#ffd23f;color:#111">3</span>
+    <span class="selo selo-nc">NC</span><span class="selo selo-sa">SA</span><span class="selo selo-eu">Mímir</span>
+  </div>
+  <p class="sub" style="margin-top:8px">Fonte dos rótulos: Source Sans 3, 600, 12,5 px; nome em latim em itálico e mais claro (Terminologia Neuroanatomica, FIPAT 2017). Títulos: Bricolage Grotesque 700. Pinos numerados de 22 px com borda branca. Selos de licença: NC, SA e "Mímir" (autoria própria).</p>
+
+  <h2>Regras</h2>
+  <table>
+    <tr><th>Item</th><th>Regra</th></tr>
+    <tr><td>Cor por sistema</td><td>Cada estrutura usa um dos 3 tons do seu sistema; estruturas vizinhas do mesmo sistema alternam claro e escuro. Os giros do córtex continuam com cores próprias por lobo.</td></tr>
+    <tr><td>Vias</td><td>Ascendentes (sensitivas) em azul, ciano e verde-azulado; descendentes (motoras) em vermelho, laranja e magenta. Decussações destacadas com tom mais escuro.</td></tr>
+    <tr><td>Vasos</td><td>Artérias do vermelho-escuro (troncos calibrosos) ao vermelho-claro (ramos finos); veias e seios do azul-escuro ao azul-claro, pelo calibre.</td></tr>
+    <tr><td>Contraste</td><td>Rótulos sempre em pílula escura sobre o 3D; texto do painel com contraste AA nos temas claro e escuro.</td></tr>
+    <tr><td>Origem visível</td><td>Selo de licença (NC/SA) e selo "Mímir" no painel de cada estrutura, a partir do manifesto data/sources.yaml.</td></tr>
+  </table>
+</main>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+const SIS = [
+  ['Cerebelo', 'lobos anterior, posterior, floculonodular', ['#e3b07a', '#c9a26b', '#9fb26f']],
+  ['Núcleos da base', 'caudado, putame, pálido', ['#f0b24e', '#e0913a', '#f5d08a']],
+  ['Sistema límbico', 'hipocampo, amígdala, cíngulo', ['#c3a3ec', '#9a6fd0', '#6e4aa8']],
+  ['Tálamo e hipotálamo', 'diencéfalo', ['#f2a9bb', '#e0708c', '#b84a66']],
+  ['Tronco encefálico', 'mesencéfalo, ponte, bulbo', ['#d7a277', '#b9845c', '#8e6040']],
+  ['Nervos cranianos', 'I a XII, gânglios', ['#f4dc7a', '#e7c64a', '#b8961f']],
+  ['Vias ascendentes', 'paleta fria', ['#7fb6ef', '#3f8fe0', '#22a6b8']],
+  ['Vias descendentes', 'paleta quente', ['#f08a6a', '#d23c3c', '#d65fa0']],
+  ['Artérias', 'por calibre', ['#e26a5e', '#c8302c', '#8f1b18']],
+  ['Veias e seios', 'por calibre', ['#7aa1ec', '#2f5fb8', '#1d3d7a']],
+  ['Ossos', 'crânio, forames', ['#f4efe2', '#e8e1d0', '#c9bfa8']],
+  ['Meninges', 'dura-máter e pregas', ['#d8cfc4', '#b8a99a', '#8c7c6c']]
+];
+const lum = h => { const n = parseInt(h.slice(1), 16), r = n >> 16, g = (n >> 8) & 255, b = n & 255; return (0.299 * r + 0.587 * g + 0.114 * b) / 255; };
+document.getElementById('paleta').innerHTML = SIS.map(s => `<div class="sis"><h3>${s[0]} <small>${s[1]}</small></h3><div class="tons">${s[2].map(c => `<div style="background:${c}"><span class="${lum(c) < 0.45 ? 'cl' : ''}">${c}</span></div>`).join('')}</div></div>`).join('');
+
+// três materiais lado a lado, com contorno de destaque na peça do meio
+const cv = document.getElementById('cena'), r = new THREE.WebGLRenderer({ canvas: cv, antialias: true, alpha: true });
+r.setPixelRatio(Math.min(2, devicePixelRatio || 1));
+const cena = new THREE.Scene(), cam = new THREE.PerspectiveCamera(32, 2, 0.1, 100); cam.position.set(0, 0.6, 9);
+cena.add(new THREE.HemisphereLight(0xffffff, 0x6f7a84, 0.55)); const l = new THREE.DirectionalLight(0xffffff, 0.9); l.position.set(-3, 4, 4); cena.add(l);
+const geo = new THREE.TorusKnotGeometry(0.8, 0.3, 160, 24);
+const mats = [
+  new THREE.MeshStandardMaterial({ color: '#c9a26b', roughness: 0.85, metalness: 0 }),
+  new THREE.MeshPhysicalMaterial({ color: '#f1ebe1', roughness: 0.45, metalness: 0, clearcoat: 0.25, clearcoatRoughness: 0.5 }),
+  new THREE.MeshStandardMaterial({ color: '#e0913a', roughness: 0.6, transparent: true, opacity: 0.22, depthWrite: false })
+];
+const pecas = mats.map((m, i) => { const o = new THREE.Mesh(geo, m); o.position.x = (i - 1) * 2.9; cena.add(o); return o; });
+// contorno: casca invertida um pouco maior, só as faces de trás, na cor de acento
+const contorno = new THREE.Mesh(geo, new THREE.MeshBasicMaterial({ color: '#52c6d6', side: THREE.BackSide }));
+contorno.scale.setScalar(1.035); pecas[1].add(contorno);
+const dentro = new THREE.Mesh(new THREE.SphereGeometry(0.45, 32, 20), new THREE.MeshStandardMaterial({ color: '#9a6fd0', roughness: 0.85 })); pecas[2].add(dentro);
+let rx = 0.3, ry = 0, arr = null;
+cv.addEventListener('pointerdown', e => arr = [e.clientX, e.clientY]); addEventListener('pointerup', () => arr = null);
+addEventListener('pointermove', e => { if (!arr) return; ry += (e.clientX - arr[0]) * 0.01; rx += (e.clientY - arr[1]) * 0.01; arr = [e.clientX, e.clientY]; });
+function frame() {
+  const w = cv.clientWidth, h = cv.clientHeight; if (cv.width !== Math.round(w * r.getPixelRatio())) { r.setSize(w, h, false); cam.aspect = w / h; cam.updateProjectionMatrix(); }
+  ry += 0.004; pecas.forEach(p => { p.rotation.set(rx, ry, 0); }); r.render(cena, cam); requestAnimationFrame(frame);
+}
+frame();
+</script>
