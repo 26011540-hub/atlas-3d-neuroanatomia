@@ -320,6 +320,7 @@ details.grp li button.on { background: var(--accent); color: var(--accent-ink); 
           <div class="row" style="gap:8px;margin:2px 0 6px;flex-wrap:wrap"><span class="lbl">Núcleos do tronco</span><span class="seg" id="mspSeg"><button type="button" data-msp="esquema" aria-pressed="true" title="Esquemas do Mímir">Esquema</button><button type="button" data-msp="massp" aria-pressed="false" title="Forma real média do atlas MASSP 2.0 (97 pessoas)">MASSP</button></span><span class="muted" id="mspStatus" style="font-size:12px"></span></div>
           <div class="row" style="gap:8px;margin:2px 0 6px;flex-wrap:wrap"><span class="lbl">Pares cranianos</span><span class="seg" id="vkSeg"><button type="button" data-vkn="esquema" aria-pressed="true" title="Nervos desenhados do Mímir">Esquema</button><button type="button" data-vkn="nervos" aria-pressed="false" title="Nervos reais do Visible Korean, uma cor por par (uso não comercial)">Só nervos</button><button type="button" data-vkn="completo" aria-pressed="false" title="Nervos reais com núcleos, base do crânio e forames">Nervo + núcleo + forame</button></span><span class="muted" id="vkStatus" style="font-size:12px"></span></div>
           <div class="row" style="gap:8px;margin:2px 0 6px;flex-wrap:wrap"><span class="lbl">Grandes vias</span><span class="seg" id="hcpSeg"><button type="button" data-hcp="esquema" aria-pressed="true" title="Vias desenhadas do Mímir">Esquema</button><button type="button" data-hcp="hcp" aria-pressed="false" title="Fibras reais do atlas de tratografia HCP1065 (média de 1065 pessoas)">HCP1065</button></span><span class="muted" id="hcpStatus" style="font-size:12px"></span></div>
+          <div class="row" style="gap:8px;margin:2px 0 6px;flex-wrap:wrap"><span class="lbl">Núcleos profundos</span><span class="seg" id="f5Seg"><button type="button" data-f5="esquema" aria-pressed="true" title="Esquemas do Mímir">Esquema</button><button type="button" data-f5="real" aria-pressed="false" title="Núcleos da base, hipocampo e amígdala (MASSP), núcleos do tálamo (Allen) e do hipotálamo (Neudorfer)">Atlas reais</button></span><span class="muted" id="f5Status" style="font-size:12px"></span></div>
           <div id="bistLista" class="bist-lista"></div>
           <label class="row"><input type="checkbox" id="sulcosOn"><span class="lbl">Mostrar os sulcos (linhas sobre o córtex)</span></label>
           <label class="row"><input type="checkbox" id="rotOn"><span class="lbl">Mostrar rótulos no modelo</span></label>
@@ -351,6 +352,8 @@ details.grp li button.on { background: var(--accent); color: var(--accent-ink); 
           <li><b>Atlas probabilístico dos lóbulos e núcleos do cerebelo (Diedrichsen et al. 2009; SUIT)</b>. Lóbulos e núcleos do cerebelo: Diedrichsen J, Balsters JH, Flavell J, Cussans E, Ramnani N. A probabilistic atlas of the human cerebellum. NeuroImage 2009; e Diedrichsen J, Maderwald S, Küper M, et al. Imaging the deep cerebellar nuclei: a probabilistic atlas and normalization procedure. NeuroImage 2011. Coleção cerebellar_atlases do Diedrichsen Lab (CC BY). <a href="https://github.com/DiedrichsenLab/cerebellar_atlases/tree/master/Diedrichsen_2009" target="_blank" rel="noopener">github.com/DiedrichsenLab/cerebellar_atlases/tree/master/Diedrichsen_2009</a></li>
           <li><b>Lüsebrink et al. 2021, 7 T (OpenNeuro ds003563)</b>. T1 de 250 µm: Lüsebrink F, Mattern H, Yakupov R, Acosta-Cabronero J, Ashtarayeh M, Oeltze-Jafra S, Speck O. Comprehensive ultrahigh resolution whole brain in vivo MRI dataset as a human phantom. Sci Data 2021. OpenNeuro ds003563 v1.1.0, doi:10.18112/openneuro.ds003563.v1.1.0 (CC0). <a href="https://openneuro.org/datasets/ds003563" target="_blank" rel="noopener">openneuro.org/datasets/ds003563</a></li>
           <li><b>MASSP 2.0 Lifespan Probabilistic Atlas (Bazin et al. 2025, AHEAD)</b>. Núcleos subcorticais e do tronco: Bazin PL, Forstmann BU, Alkemade A, Miletic S. MASSP 2.0 Lifespan Probabilistic Atlas. University of Amsterdam, 2024. doi:10.21942/uva.27291579.v2 (CC BY 4.0). <a href="https://uvaauas.figshare.com/articles/dataset/MASSP_2_0_Lifespan_Probabilistic_Atlas/27291579" target="_blank" rel="noopener">uvaauas.figshare.com/articles/dataset/MASSP_2_0_Lifespan_Probabilistic_Atlas/27291579</a></li>
+          <li><b>Neudorfer &amp; Germann 2020, atlas do hipotálamo</b>. Hipotálamo: Neudorfer C, Germann J, Elias GJB, Gramer R, Boutet A, et al. A high-resolution in vivo magnetic resonance imaging atlas of the human hypothalamic region. Sci Data 2020. Zenodo, doi:10.5281/zenodo.3942115 (CC BY 4.0). <a href="https://zenodo.org/records/3942115" target="_blank" rel="noopener">zenodo.org/records/3942115</a></li>
+          <li><b>Allen Human Reference Atlas 3D, 2020</b>. Núcleos do tálamo: Allen Human Reference Atlas – 3D, 2020 (RRID:SCR_017764), version 1.0.0, Allen Institute for Brain Science, CC BY 4.0. <a href="https://download.alleninstitute.org/informatics-archive/allen_human_reference_atlas_3d_2020/version_1/" target="_blank" rel="noopener">download.alleninstitute.org/informatics-archive/allen_human_reference_atlas_3d_2020/version_1</a></li>
           <li><b>HCP1065 Population-Averaged Tractography Atlas (Yeh 2022)</b> <span class="selo selo-sa" title="Derivados sob a mesma licença">SA</span>. Grandes vias: Yeh FC. Population-based tract-to-region connectome of the human brain and its hierarchical topology. Nat Commun 2022;13:4933. doi:10.1038/s41467-022-32595-4 (atlas HCP1065, CC BY-SA 4.0). Dados fornecidos pelo Human Connectome Project, WU-Minn Consortium (Principal Investigators: David Van Essen e Kamil Ugurbil; 1U54MH091657), financiado pelos 16 institutos e centros do NIH que apoiam o NIH Blueprint for Neuroscience Research e pelo McDonnell Center for Systems Neuroscience da Washington University. <a href="https://github.com/data-others/tract" target="_blank" rel="noopener">github.com/data-others/tract</a></li>
           <li><b>Visible Korean, cabeça masculina</b> <span class="selo selo-nc" title="Uso não comercial">NC</span>. Nervos cranianos e estruturas da cabeça: Kim CY, Park JS. Visible Korean male head dataset: sectioned images, segmented images, 7.0 T MRI data, and 3D models. Zenodo, 2026. doi:10.5281/zenodo.22759852 (CC BY-NC 4.0). <a href="https://sites.google.com/ajou.ac.kr/anatomy" target="_blank" rel="noopener">sites.google.com/ajou.ac.kr/anatomy</a></li>
         </ul>
@@ -4363,6 +4366,191 @@ select = function (id, opt) {
     applyAppearance(); marca();
   } else if (HCP.isoAuto) { HCP.isoAuto = false; state.isolate = false; const c = document.getElementById('iso'); if (c) c.checked = false; applyAppearance(); }
 };
+/* ===== NÚCLEOS DA BASE, LÍMBICO, TÁLAMO E HIPOTÁLAMO DE ATLAS ABERTOS (Fase 5) =====
+   MASSP 2.0 (Bazin et al. 2024, CC BY 4.0): núcleos da base, amígdala, claustro, hipocampo e fórnice.
+   Allen Human Reference Atlas 3D 2020 (CC BY 4.0): núcleos do tálamo e zona incerta.
+   Neudorfer et al. 2020 (CC BY 4.0): núcleos do hipotálamo, corpos mamilares, trato mamilotalâmico.
+   Malhas de scripts/process/fase5_nucleos.py, no espaço do atlas pela afim do MNI. Seletor "Núcleos profundos:
+   Esquema | Atlas reais": no modo real, os esquemas dos mesmos itens saem. Cores do tálamo pela função:
+   motores (VA, VL) quentes, sensitivos (VPL, VPM) azuis como as vias ascendentes, límbicos (anterior, MD) rosados. */
+const F5_NOVOS = {
+  // tálamo (grupo dien)
+  tal_anterior: ['Núcleos anteriores do tálamo', 'dien', '#e58fb8', 'Grupo anterior, no tubérculo anterior do tálamo. Recebe o trato mamilotalâmico e projeta ao giro do cíngulo: faz parte do circuito de Papez.'],
+  tal_ld: ['Núcleo lateral dorsal do tálamo', 'dien', '#d77fae', 'Núcleo do grupo lateral, parte dorsal; ligado ao sistema límbico e ao córtex do cíngulo.'],
+  tal_md: ['Núcleo mediodorsal do tálamo', 'dien', '#c96a9c', 'Grande núcleo do grupo medial. Liga-se ao córtex pré-frontal e ao sistema límbico (amígdala).'],
+  tal_reuniens: ['Núcleo reuniens (da linha média)', 'dien', '#f2c1d6', 'Núcleo da linha média, ventral; ligado ao hipocampo e ao córtex pré-frontal.'],
+  tal_linha_media: ['Núcleos da linha média do tálamo', 'dien', '#f6d6e3', 'Pequenos núcleos junto à parede do III ventrículo e à aderência intertalâmica.'],
+  tal_va: ['Núcleo ventral anterior do tálamo', 'dien', '#ef8a5c', 'Recebe do globo pálido e da substância negra e projeta ao córtex pré-motor: circuito motor dos núcleos da base.'],
+  tal_vl: ['Núcleo ventral lateral do tálamo', 'dien', '#e0623f', 'Recebe do cerebelo (núcleo denteado, pelo pedúnculo cerebelar superior) e do pálido e projeta ao córtex motor.'],
+  tal_vpl: ['Núcleo ventral posterolateral do tálamo', 'dien', '#3f8fe0', 'Relé da sensibilidade do corpo: recebe o lemnisco medial e o espinotalâmico e projeta ao giro pós-central.'],
+  tal_vpm: ['Núcleo ventral posteromedial do tálamo', 'dien', '#7fb6ef', 'Relé da sensibilidade da cabeça: recebe os lemniscos trigeminais (e a gustação) e projeta ao giro pós-central.'],
+  tal_lp: ['Núcleo lateral posterior do tálamo', 'dien', '#a47cc9', 'Núcleo do grupo lateral, parte dorsal posterior; ligado ao córtex parietal de associação.'],
+  tal_pulvinar: ['Pulvinar', 'dien', '#8f6bc0', 'Maior núcleo do tálamo, na parte posterior; liga-se ao córtex de associação parietal, temporal e occipital.'],
+  tal_cm: ['Núcleo centromediano do tálamo', 'dien', '#b9a3d9', 'Núcleo intralaminar, na lâmina medular interna; liga-se ao estriado e à formação reticular.'],
+  tal_pf: ['Núcleo parafascicular do tálamo', 'dien', '#cdbbe4', 'Núcleo intralaminar, medial ao centromediano.'],
+  zona_incerta: ['Zona incerta', 'dien', '#9aa3ad', 'Faixa de substância cinzenta do subtálamo, entre o fascículo talâmico e o fascículo lenticular.'],
+  // hipotálamo (grupo dien)
+  hip_preoptico: ['Núcleo pré-óptico medial', 'dien', '#f08aa0', 'Área pré-óptica, na parte mais anterior do hipotálamo.'],
+  hip_paraventricular: ['Núcleo paraventricular do hipotálamo', 'dien', '#e5607e', 'Junto à parede do III ventrículo. Produz ocitocina e vasopressina (trato hipotálamo-hipofisário) e fatores de liberação.'],
+  hip_supraoptico: ['Núcleo supraóptico', 'dien', '#d94f6e', 'Acima do trato óptico. Produz vasopressina e ocitocina, levadas à neuro-hipófise.'],
+  hip_supraquiasmatico: ['Núcleo supraquiasmático', 'dien', '#f4a2b2', 'Acima do quiasma óptico: relógio biológico (ritmo circadiano), recebe fibras da retina.'],
+  hip_anterior: ['Área hipotalâmica anterior', 'dien', '#ec7f95', 'Região anterior do hipotálamo, ligada à regulação da temperatura.'],
+  hip_periventricular: ['Núcleos periventriculares do hipotálamo', 'dien', '#f7c3cc', 'Camada fina de neurônios junto à parede do III ventrículo.'],
+  hip_ventromedial: ['Núcleo ventromedial do hipotálamo', 'dien', '#c9506c', 'Na região tuberal; ligado à saciedade.'],
+  hip_dorsomedial: ['Núcleo dorsomedial do hipotálamo', 'dien', '#d86a83', 'Na região tuberal, acima do ventromedial.'],
+  hip_arqueado: ['Núcleo arqueado (infundibular)', 'dien', '#b84462', 'Na base do infundíbulo; produz fatores que controlam a adeno-hipófise.'],
+  hip_lateral: ['Área hipotalâmica lateral', 'dien', '#e88aa8', 'Parte lateral do hipotálamo, atravessada pelo feixe prosencefálico medial; ligada à fome.'],
+  hip_tuberomamilar: ['Núcleo tuberomamilar', 'dien', '#c7708a', 'Na região mamilar; neurônios histaminérgicos ligados à vigília.'],
+  hip_posterior: ['Núcleo posterior do hipotálamo', 'dien', '#a8586f', 'Na região mamilar, acima dos corpos mamilares.'],
+  nleito_estria: ['Núcleo do leito da estria terminal', 'limbic', '#b07ad6', 'Núcleo ao longo da estria terminal, junto à comissura anterior; ligado à amígdala.'],
+  banda_diagonal: ['Banda diagonal (de Broca)', 'limbic', '#c59ae2', 'Faixa de fibras e neurônios da área septal e do prosencéfalo basal.'],
+  // núcleos da base e límbico
+  hip_ca1: ['Hipocampo: CA1', 'limbic', '#8f63c4', 'Campo CA1 do corno de Ammon, o mais vulnerável à falta de oxigênio; projeta ao subículo.'],
+  hip_ca23: ['Hipocampo: CA2 e CA3', 'limbic', '#a37ad0', 'Campos CA2 e CA3 do corno de Ammon; recebem as fibras musgosas do giro denteado.'],
+  presubiculo: ['Pré-subículo e parassubículo', 'limbic', '#b997dd', 'Transição entre o subículo e o córtex entorrinal.'],
+  prosenc_colinergico: ['Núcleos colinérgicos do prosencéfalo basal', 'deep', '#7f8fd6', 'Neurônios colinérgicos do prosencéfalo basal (área septal, banda diagonal, núcleo basal de Meynert), que projetam ao córtex e ao hipocampo.'],
+};
+Object.entries(F5_NOVOS).forEach(([id, [nome, grp, cor, f]]) => M(id, nome, grp, cor, f, '', ''));
+REF(Object.keys(F5_NOVOS).filter(id => /^tal_|^zona/.test(id)), 'Forma: Allen Human Reference Atlas 3D 2020 (CC BY 4.0). Texto: a conferir no Machado (cap. 25, tálamo).');
+REF(Object.keys(F5_NOVOS).filter(id => /^hip_(pre|para|sup|ant|peri|ven|dor|arq|lat|tub|pos)|nleito|banda/.test(id)), 'Forma: Neudorfer C et al., Sci Data 2020 (CC BY 4.0). Texto: a conferir no Machado (cap. 26, hipotálamo).');
+REF(['hip_ca1', 'hip_ca23', 'presubiculo', 'prosenc_colinergico'], 'Forma: MASSP 2.0, Bazin PL et al. 2024 (CC BY 4.0). Texto: a conferir no Machado (cap. 27).');
+const F5 = { modo: 'esquema', carga: null, ids: new Set() };
+function f5Carregar() {
+  if (F5.carga) return F5.carga;
+  if (!cbsLoader) { cbsLoader = new THREE.GLTFLoader(); if (window.MeshoptDecoder) cbsLoader.setMeshoptDecoder(window.MeshoptDecoder); }
+  F5.carga = new Promise((ok, falha) => cbsLoader.load('models/fase5_nucleos.glb', g => {
+    g.scene.updateMatrixWorld(true);
+    g.scene.traverse(o => {
+      if (!o.isMesh) return;
+      const nome = o.name.includes('__') ? o.name : ((o.parent && o.parent.name) || ''), [id, lado] = nome.split('__');
+      if (!META[id]) return;
+      const m = new THREE.Mesh(cbsGeo(o), stdMat(META[id].color, { roughness: 0.6 }));
+      m.userData.f5 = true; m.userData.semBolacha = true; register(id, m, lado === 'd' ? -1 : (lado === 'e' ? 1 : 0)); F5.ids.add(id);
+    });
+    ok();
+  }, undefined, falha));
+  return F5.carga;
+}
+function setNucleosReais(modo) {
+  F5.modo = modo;
+  // o tálamo inteiro fica transparente em volta dos núcleos (o Allen não rotula todo o tálamo)
+const _apF5 = applyAppearance;
+applyAppearance = function () { _apF5(); if (F5.modo !== 'real') return; ALLMESH.forEach(m => { if (m.userData.id === 'talamo' && !m.userData.f5 && state.sel !== 'talamo') { m.material.opacity = Math.min(m.material.opacity, 0.18); m.material.depthWrite = false; } }); };
+document.querySelectorAll('[data-f5]').forEach(b => b.setAttribute('aria-pressed', b.dataset.f5 === modo ? 'true' : 'false'));
+  const st = document.getElementById('f5Status');
+  if (modo === 'esquema') { if (st) st.textContent = ''; applyVisibility(); applyAppearance(); return; }
+  if (st) st.textContent = 'Carregando os núcleos reais…';
+  f5Carregar().then(() => { if (st) st.textContent = ''; ['deep', 'limbic', 'dien'].forEach(k => state.groupOn[k] = true); syncLayerUI(); applyVisibility(); applyAppearance(); })
+    .catch(e => { if (st) st.textContent = 'Não foi possível carregar models/fase5_nucleos.glb.'; console.warn(e); setNucleosReais('esquema'); });
+}
+const _visF5 = applyVisibility;
+applyVisibility = function () {
+  _visF5();
+  const real = F5.modo === 'real';
+  ALLMESH.forEach(m => {
+    const u = m.userData;
+    if (u.f5) { m.visible = real && m.visible; return; }
+    if (real && F5.ids.has(u.id) && !u.massp && !u.hcp && !u.vk && !u.suit) m.visible = false;   // o esquema do mesmo item sai
+  });
+};
+document.querySelectorAll('[data-f5]').forEach(b => b.addEventListener('click', () => setNucleosReais(b.dataset.f5)));
+/* ===== MODO CIRCUITO (Fase 5): Papez e alças direta e indireta dos núcleos da base =====
+   Esquema próprio do Mímir sobre as estruturas reais (MASSP, Allen, Neudorfer) quando carregadas, ou sobre os esquemas.
+   O trajeto passa pelo centro de cada estação (no hemisfério esquerdo); fórnice e giro do cíngulo entram como vários
+   pontos ao longo do seu comprimento. Um tubo fino mostra a alça, setas e pulsos de luz mostram o sentido da condução,
+   as estações ficam acesas e o resto apagado. Estações pelo Machado (cap. 25 a 27; texto de v_papez e v_nb). */
+const CIRCUITOS = {
+  papez: { nome: 'Circuito de Papez', via: 'v_papez', cor: '#d65fa0', fechado: true,
+    passos: [['subiculo'], ['fornice', 4, 'posterior'], ['mamilar'], ['f_mamtal'], ['tal_anterior'], ['gcing', 4, 'anterior'], ['gparahip'], ['hip_ca1']],
+    texto: 'Hipocampo → fórnice → corpo mamilar → trato mamilotalâmico → núcleos anteriores do tálamo → giro do cíngulo → giro para-hipocampal → hipocampo' },
+  direta: { nome: 'Alça direta dos núcleos da base', via: 'v_nb', cor: '#2fa37a', fechado: true,
+    passos: [['gpre'], ['putame'], ['gpi'], ['tal_vl'], ['tal_va'], ['gpre']],
+    texto: 'Córtex motor → putâmen → globo pálido interno → tálamo (VA e VL) → córtex motor. Facilita o movimento.' },
+  indireta: { nome: 'Alça indireta dos núcleos da base', via: 'v_nb', cor: '#d23c3c', fechado: true,
+    passos: [['gpre'], ['putame'], ['gpe'], ['subtal'], ['gpi'], ['tal_vl'], ['gpre']],
+    texto: 'Córtex motor → putâmen → globo pálido externo → núcleo subtalâmico → globo pálido interno → tálamo (VA e VL) → córtex motor. Freia o movimento.' },
+};
+const CIR = { ativo: null, grupo: null, pulsos: [], curva: null, t: 0, ultimo: 0 };
+// pontos de uma estação no hemisfério esquerdo (x > 0): o centro, ou n pontos ao longo do eixo anteroposterior
+function cirPontos(id, n, comeco) {
+  const it = ITEMS[id]; if (!it) return [];
+  const real = it.meshes.filter(m => m.userData.f5 || m.userData.massp), lista = real.length ? real : it.meshes.filter(m => !m.userData.hcp && !m.userData.vk);
+  const P = [], v = new THREE.Vector3();
+  lista.forEach(m => { m.updateMatrixWorld(); const p = m.geometry.attributes.position, passo = Math.max(1, Math.floor(p.count / 1500)); for (let i = 0; i < p.count; i += passo) { v.fromBufferAttribute(p, i).applyMatrix4(m.matrixWorld); if (v.x > 0.02) P.push(v.clone()); } });
+  if (!P.length) return [];
+  // giros do córtex: só a parte de cima (o centro do giro pré-central fica baixo, perto do sulco lateral)
+  if (lista.some(m => m.userData.cortex) && id === 'gpre') { const ys = P.map(q => q.y).sort((x, y) => x - y), corte = ys[Math.floor(ys.length * 0.7)]; P.splice(0, P.length, ...P.filter(q => q.y >= corte)); }
+  if (!n) { const c = new THREE.Vector3(); P.forEach(q => c.add(q)); return [c.divideScalar(P.length)]; }
+  let z0 = Infinity, z1 = -Infinity; P.forEach(q => { z0 = Math.min(z0, q.z); z1 = Math.max(z1, q.z); });
+  const faixas = Array.from({ length: n }, () => [new THREE.Vector3(), 0]);
+  P.forEach(q => { const k = Math.min(n - 1, Math.floor((q.z - z0) / (z1 - z0 + 1e-6) * n)); faixas[k][0].add(q); faixas[k][1]++; });
+  const out = faixas.filter(f => f[1]).map(f => f[0].divideScalar(f[1]));
+  return comeco === 'anterior' ? out.reverse() : out;                       // posterior = do z menor para o maior
+}
+function cirLimpar() {
+  if (CIR.grupo) { scene.remove(CIR.grupo); CIR.grupo.traverse(o => { if (o.geometry) o.geometry.dispose(); }); }
+  CIR.grupo = null; CIR.pulsos = []; CIR.curva = null;
+}
+function setCircuito(nome) {
+  cirLimpar(); CIR.ativo = CIRCUITOS[nome] ? nome : null;
+  document.querySelectorAll('[data-cir]').forEach(b => b.setAttribute('aria-pressed', b.dataset.cir === (CIR.ativo || '') ? 'true' : 'false'));
+  const st = document.getElementById('cirTexto');
+  if (!CIR.ativo) { if (st) st.textContent = ''; state.realce = null; applyAppearance(); marca(); return; }
+  const C = CIRCUITOS[nome];
+  const montar = () => {
+    const pts = []; C.passos.forEach(([id, n, comeco]) => cirPontos(id, n, comeco).forEach(p => pts.push(p)));
+    if (pts.length < 3) { if (st) st.textContent = 'Faltam estruturas para desenhar este circuito.'; return; }
+    if (C.fechado && pts[0].distanceTo(pts[pts.length - 1]) < 0.05) pts.pop();
+    const curva = new THREE.CatmullRomCurve3(pts, C.fechado, 'centripetal', 0.5); CIR.curva = curva;
+    const g = new THREE.Group(), cor = new THREE.Color(C.cor);
+    g.add(new THREE.Mesh(new THREE.TubeGeometry(curva, 400, 0.05, 8, C.fechado), new THREE.MeshStandardMaterial({ color: cor, emissive: cor, emissiveIntensity: 0.35, roughness: 0.4, transparent: true, opacity: 0.85 })));
+    const cone = new THREE.ConeGeometry(0.11, 0.3, 14), matSeta = new THREE.MeshStandardMaterial({ color: cor, emissive: cor, emissiveIntensity: 0.5, roughness: 0.35 });
+    for (let k = 0; k < 10; k++) { const t = (k + 0.5) / 10, s = new THREE.Mesh(cone, matSeta); s.position.copy(curva.getPointAt(t)); s.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), curva.getTangentAt(t)); g.add(s); }
+    const bola = new THREE.SphereGeometry(0.075, 14, 10), matPulso = new THREE.MeshBasicMaterial({ color: '#ffffff' });
+    for (let k = 0; k < 5; k++) { const p = new THREE.Mesh(bola, matPulso); p.userData.fase = k / 5; g.add(p); CIR.pulsos.push(p); }
+    // o circuito fica sempre à frente das estruturas (como num esquema): sem teste de profundidade, desenhado por último
+    g.traverse(o => { if (o.material) { o.material.depthTest = false; o.material.depthWrite = false; o.material.transparent = true; } o.renderOrder = 20; });
+    CIR.grupo = g; scene.add(g);
+    if (st) st.textContent = C.texto;
+    select(C.via, { focus: false });
+    state.realce = Object.fromEntries(C.passos.map(p => [p[0], 1]).concat([[C.via, 1]]));
+    if (!state.isolate) { state.isolate = true; const c = document.getElementById('iso'); if (c) c.checked = true; }
+    applyAppearance(); marca(); CIR.ultimo = performance.now(); requestAnimationFrame(cirAnimar);
+  };
+  // as estações do tálamo (VA, VL) e do hipocampo só existem nos atlas reais: carrega-os antes
+  if (typeof setNucleosReais === 'function' && F5.modo !== 'real') { setNucleosReais('real'); f5Carregar().then(() => setTimeout(montar, 50)); } else montar();
+}
+function cirAnimar(t) {
+  if (!CIR.ativo || !CIR.curva) return;
+  const dt = Math.min(0.05, (t - CIR.ultimo) / 1000); CIR.ultimo = t; CIR.t = (CIR.t + dt * 0.07) % 1;   // uma volta em cerca de 14 s
+  CIR.pulsos.forEach(p => p.position.copy(CIR.curva.getPointAt((CIR.t + p.userData.fase) % 1)));
+  marca(); requestAnimationFrame(cirAnimar);
+}
+// desfaz o circuito quando o usuário escolhe outra estrutura
+const _selCir = select;
+select = function (id, opt) { _selCir(id, opt); if (CIR.ativo && id !== CIRCUITOS[CIR.ativo].via) { const r = state.realce; setCircuito(null); state.realce = r; } };
+(function () {
+  const seg = document.getElementById('f5Seg'); if (!seg) return;
+  const linha = document.createElement('div'); linha.className = 'row'; linha.style.cssText = 'gap:8px;margin:2px 0 6px;flex-wrap:wrap';
+  linha.innerHTML = '<span class="lbl">Circuitos</span><span class="seg" id="cirSeg"><button type="button" data-cir="" aria-pressed="true">Nenhum</button>' +
+    Object.entries(CIRCUITOS).map(([k, c]) => `<button type="button" data-cir="${k}" aria-pressed="false" title="${c.nome}">${k === 'papez' ? 'Papez' : k === 'direta' ? 'Alça direta' : 'Alça indireta'}</button>`).join('') +
+    '</span><span class="muted" id="cirTexto" style="font-size:12px;flex-basis:100%"></span>';
+  seg.closest('.row').after(linha);
+  linha.querySelectorAll('[data-cir]').forEach(b => b.addEventListener('click', () => setCircuito(b.dataset.cir || null)));
+})();
+// durante o circuito: só as estações e o tubo; o esquema antigo da mesma via sai e o resto quase some
+const _apCir = applyAppearance;
+applyAppearance = function () {
+  _apCir();
+  if (!CIR.ativo) return;
+  const C = CIRCUITOS[CIR.ativo], R = state.realce || {};
+  ALLMESH.forEach(m => {
+    const u = m.userData, mat = m.material;
+    if (u.id === C.via && !u.hcp) { mat.opacity = 0; mat.depthWrite = false; return; }
+    if (!R[u.id] && !R[u.pai]) { mat.opacity = Math.min(mat.opacity, u.cortex ? 0.05 : 0.04); mat.depthWrite = false; }
+  });
+};
+if (/debug/.test(location.hash)) window.cirDebug = { CIR, cirPontos };
 /* ===== INTERFACE ===== */
 const $ = (s, r) => (r || document).querySelector(s);
 const $$ = (s, r) => Array.from((r || document).querySelectorAll(s));

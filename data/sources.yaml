@@ -183,8 +183,19 @@ fontes:
     licenca: "CC BY 4.0"
     comercial_permitido: true
     share_alike: false
-    credito_exato: "Neudorfer C, Germann J, Elias GJB, et al. A high-resolution in vivo magnetic resonance imaging atlas of the human hypothalamic region. Sci Data 2020. Zenodo 3942115, CC BY 4.0."
-    credito_conferido: false   # texto e DOI escritos de memória; conferir na página da fonte ao baixar
+    credito_exato: "Hipotálamo: Neudorfer C, Germann J, Elias GJB, Gramer R, Boutet A, et al. A high-resolution in vivo magnetic resonance imaging atlas of the human hypothalamic region. Sci Data 2020. Zenodo, doi:10.5281/zenodo.3942115 (CC BY 4.0)."
+    credito_conferido: true    # autores, licença e registro conferidos na API do Zenodo (19/11/2026); o título do artigo foi escrito de memória
+    espaco: "MNI152 2009b"
+    downloads:
+      - arquivo: "MNI152b_atlas_labels_0.25mm.nii.gz"
+        url: "https://zenodo.org/api/records/3942115/files/MNI152b_atlas_labels_0.25mm.nii.gz/content"
+        tamanho_aprox: "4,2 MB"
+      - arquivo: "Volumes_names-labels.csv"
+        url: "https://zenodo.org/api/records/3942115/files/Volumes_names-labels.csv/content"
+        tamanho_aprox: "1 kB"
+      - arquivo: "README.txt"
+        url: "https://zenodo.org/api/records/3942115/files/README.txt/content"
+        tamanho_aprox: "3 kB"
     verificacao_link_2026_11_17: "ok"
   - id: allen_hra3d
     nome: "Allen Human Reference Atlas 3D, 2020"
@@ -193,8 +204,19 @@ fontes:
     licenca: "CC BY 4.0"
     comercial_permitido: true
     share_alike: false
-    credito_exato: "Allen Human Reference Atlas – 3D, 2020 (RRID:SCR_017764), version 1.0.0, Allen Institute for Brain Science, CC BY 4.0."
-    credito_conferido: false   # texto e DOI escritos de memória; conferir na página da fonte ao baixar
+    credito_exato: "Núcleos do tálamo: Allen Human Reference Atlas – 3D, 2020 (RRID:SCR_017764), version 1.0.0, Allen Institute for Brain Science, CC BY 4.0."
+    credito_conferido: false   # conferir no README.pdf baixado (espaço, versão e texto de citação pedido)
+    downloads:
+      - arquivo: "annotation_full.nii.gz"
+        url: "https://download.alleninstitute.org/informatics-archive/allen_human_reference_atlas_3d_2020/version_1/annotation_full.nii.gz"
+        tamanho_aprox: "1,8 MB (1.815.762 bytes)"
+      - arquivo: "README.pdf"
+        url: "https://download.alleninstitute.org/informatics-archive/allen_human_reference_atlas_3d_2020/version_1/README.pdf"
+        tamanho_aprox: "170 kB"
+        nota: "PDF fica fora do git (.gitignore)"
+      - arquivo: "ontologia_16.json"
+        url: "http://api.brain-map.org/api/v2/structure_graph_download/16.json"
+        tamanho_aprox: "alguns MB"
     verificacao_link_2026_11_17: "ok"
   - id: hcp1065
     nome: "HCP1065 Population-Averaged Tractography Atlas (Yeh 2022)"
@@ -514,3 +536,13 @@ assets:
       O GLB do nível folhas (com os lóbulos do SUIT em COLOR_0) simplificado pelo gltfpack para 36% dos triângulos
       (-si 0.36; a simplificação mantém vértices originais, então os rótulos continuam válidos); compressão meshopt.
     data_download: "2026-11-18"
+  - id: fase5_nucleos
+    arquivo: "models/fase5_nucleos.glb"
+    estrutura: "Núcleos da base (caudado, putâmen, pálido externo e interno, accumbens), amígdala, claustro, hipocampo (CA1, CA2-3, giro denteado, subículo, pré-subículo), unco, fórnice, prosencéfalo basal colinérgico; núcleos do tálamo e zona incerta; núcleos do hipotálamo, corpos mamilares, trato mamilotalâmico, núcleo do leito da estria terminal, banda diagonal e núcleo basal de Meynert"
+    fonte: massp2
+    fonte_adicional: [allen_hra3d, neudorfer2020, mimir]
+    processamento: >-
+      MASSP 2.0 (maxlabel, 0,5 mm), Allen HRA 3D 2020 (annotation_full, 0,5 mm) e Neudorfer 2020 (MNI152b, 0,25 mm), todos
+      em MNI 2009b; por rótulo e lado: recorte da caixa, gaussiana, marching cubes (scikit-image), Taubin 6; MNI -> Mímir
+      pela afim de mni_para_mimir.py; compressão meshopt. Script: scripts/process/fase5_nucleos.py.
+    data_download: "2026-11-19"
