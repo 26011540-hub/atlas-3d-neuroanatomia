@@ -2702,7 +2702,7 @@ function campoSVG(c) {
 }   // ficam translúcidos quando a camada dos nervos está ligada, para mostrar os núcleos
 
 const state = { sel: null, isolate: true, cortexOp: 1, groupOn: {}, hideL: false, hideR: false, quiz: null, inflada: false, fluxo: false, territ: false, avc: false, lesao: false, les: null, separado: false, troncoIso: false, nervos: 'inteiro', bisturi: false, removidos: new Set(), pilhaRem: [], rotulos: false, ocultar: false, sulcos: false, licao: null, lingua: 'pt', qmodo: 'est' };
-Object.keys(GROUPS).forEach(k => state.groupOn[k] = (k === 'cortex'));
+Object.keys(GROUPS).forEach(k => state.groupOn[k] = (k === 'cortex' || k === 'art' || k === 'stem'));   // abertura: córtex, artérias reais e tronco com o cerebelo real
 
 /* ===== LÍQUOR (Machado, cap. 8) ===== */
 // extremos da malha real do IV ventrículo: ponto mais caudal (abertura mediana) e ponta do recesso lateral
