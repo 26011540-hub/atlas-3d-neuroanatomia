@@ -227,3 +227,9 @@ Base: Ângelo Machado, Neuroanatomia Funcional, 4ª ed. (Atheneu). No atlas, est
 - Cortes dos pedúnculos na vista ventral desenhados por cima da superfície real (a malha do Sereno cobre os pedúnculos do atlas).
 - Teto do IV ventrículo: parede dorsal da malha real; véu medular inferior e tela corioide não separados.
 - Comparação visual com Machado 5.4 e 5.6 e Duus 5.1 e 5.2 pendente: referencias/cerebelo/ vazia.
+
+## Reforma do cerebelo, Fase 2 (20/11/2026)
+- Denteado do Sereno indisponível (updates/dentate-nucleus dá 404): pedir ao autor se quiser a malha real; o crédito em sources.yaml cita núcleo denteado.
+- Núcleos no mesmo nível horizontal (livros); no SUIT o interpósito e o fastigial ficam 0,5 a 0,8 cm acima do denteado.
+- Corte horizontal em y = -2,97 cm no espaço do atlas; o plano 1 do Duus pode ser oblíquo (eixo do tronco).
+- Aferências e eferências dos núcleos: texto do roteiro (Duus, p. 184), conferir no livro.

@@ -123,7 +123,7 @@ function cbsCores(geo) {
 }
 // cores do modo, com o lóbulo ou o lobo selecionado aceso em amarelo
 // partes do cerebelo real que são pedaços da mesma malha: ao escolher uma, a malha continua opaca e a parte acende
-const cbsParte = id => !!id && id !== 'cb_sereno' && (/^cb_/.test(id) || id === 'vermis');
+const cbsParte = id => !!id && id !== 'cb_sereno' && id !== 'cb_cbm' && (/^cb_/.test(id) || id === 'vermis');
 function cbsCorChave() { return CBS.modo + '|' + CBS.colorir + '|' + CBS.ladoFunc + '|' + (state.cbHover || ''); }
 function cbsAplicarCores(m, lobos) {
   const g = m.geometry, cor = g.userData.cores, A = g.attributes.color.array, sel = state.sel;

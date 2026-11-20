@@ -224,3 +224,5 @@ details.grp li button.on { background: var(--accent); color: var(--accent-ink); 
 .cbficha .desc { color: #cfdfe2; line-height: 1.4; }
 .cbficha .x { font: 600 16px var(--f-body); background: none; border: 0; color: #eaf7f9; cursor: pointer; line-height: 1; }
 .cbpainel.min .lin:not(:first-child):not(.vis), .cbpainel.min .cbleg { display: none; }
+.cbpainel input[type=range] { width: 80px; vertical-align: middle; accent-color: #00a9b4; }
+.cbpainel label { white-space: nowrap; }

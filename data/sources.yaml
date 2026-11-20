@@ -547,6 +547,16 @@ assets:
       O GLB do nível folhas (com os lóbulos do SUIT em COLOR_0) simplificado pelo gltfpack para 36% dos triângulos
       (-si 0.36; a simplificação mantém vértices originais, então os rótulos continuam válidos); compressão meshopt.
     data_download: "2026-11-18"
+  - id: cerebelo_sereno_branca
+    arquivo: "models/cerebelo_sereno_branca.glb"
+    estrutura: "Corpo medular do cerebelo (superfície branca do cerebmap20, com as lâminas brancas das folhas)"
+    fonte: sereno2020
+    fonte_adicional: [mimir]
+    processamento: >-
+      surf/rh.white do cerebmap20; escala real x0,38; a mesma transformação do córtex (matriz_total de
+      data/processed/sereno_registro.json); decimação quádrica para cerca de 300 mil triângulos (pymeshlab);
+      compressão meshopt (gltfpack). scripts/process/sereno_corpo_medular.py (reforma do cerebelo, Fase 2).
+    data_download: "2026-11-18"
   - id: fase5_nucleos
     arquivo: "models/fase5_nucleos.glb"
     estrutura: "Núcleos da base (caudado, putâmen, pálido externo e interno, accumbens), amígdala, claustro, hipocampo (CA1, CA2-3, giro denteado, subículo, pré-subículo), unco, fórnice, prosencéfalo basal colinérgico; núcleos do tálamo e zona incerta; núcleos do hipotálamo, corpos mamilares, trato mamilotalâmico, núcleo do leito da estria terminal, banda diagonal e núcleo basal de Meynert"

@@ -89,9 +89,15 @@ blob('rubro', [0.5, -0.6, -1.5], [0.25, 0.25, 0.27], null, { amp: 0.04, seed: 49
   const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3)); g.setIndex(idx); g.computeVertexNormals();
   [1, -1].forEach(sx => { const m = new THREE.Mesh(g, stdMat(META.denteado.color, { roughness: 0.55 })); m.position.set(1.75 * sx, -3.0, -4.75); m.rotation.y = -0.35 * sx; if (sx < 0) m.scale.x = -1; register('denteado', m, sx); });
 })();
-blob('emboliforme', [1.18, -2.95, -4.45], [0.07, 0.12, 0.32], [0, 0.35, 0], { amp: 0.12, seed: 2 });
-blob('globoso', [0.82, -2.98, -4.33], [0.09, 0.09, 0.1], null, { amp: 0.1, seed: 3 });
-blob('globoso', [0.8, -3.05, -4.66], [0.08, 0.08, 0.09], null, { amp: 0.1, seed: 5 });
+// emboliforme em cunha (Duus, p. 184): mais grosso na frente, junto ao hilo do denteado, afinando para trás
+{ const g = blobGeo([0.12, 0.13, 0.32], { amp: 0.06, seed: 2 }), p = g.attributes.position;
+  for (let i = 0; i < p.count; i++) { const t = 0.3 + 0.7 * (p.getZ(i) / 0.32 + 1) / 2; p.setX(i, p.getX(i) * t); p.setY(i, p.getY(i) * (0.55 + 0.45 * t)); }
+  g.computeVertexNormals();
+  [1, -1].forEach(sx => { const m = new THREE.Mesh(g, stdMat(META.emboliforme.color, { roughness: 0.6 })); m.position.set(1.18 * sx, -2.95, -4.45); m.rotation.y = 0.35 * sx; if (sx < 0) m.scale.x = -1; register('emboliforme', m, sx); }); }
+// globosos: em geral 2 ou 3 massas arredondadas (Duus, p. 184), em fila de frente para trás
+blob('globoso', [0.84, -2.97, -4.27], [0.085, 0.085, 0.095], null, { amp: 0.1, seed: 3 });
+blob('globoso', [0.8, -3.02, -4.5], [0.08, 0.08, 0.09], null, { amp: 0.1, seed: 5 });
+blob('globoso', [0.78, -3.06, -4.72], [0.07, 0.07, 0.08], null, { amp: 0.1, seed: 11 });
 blob('fastigial', [0.24, -2.86, -4.45], [0.1, 0.11, 0.2], null, { amp: 0.1, seed: 7 });
 // ventrículos
 tube('aqueduto', [[0, -0.15, -1.6], [0, -0.6, -2.25], [0, -1.2, -2.65], [0, -1.7, -2.9]], 0.1, 0.1, { mid: true });

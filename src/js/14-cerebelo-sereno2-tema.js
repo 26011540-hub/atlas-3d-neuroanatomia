@@ -232,7 +232,7 @@ function cbtFicha(id) {
   const ver = r.hemisferio || r.verme, par = ver && META[ver] ? META[ver].name : '';
   el.innerHTML = '<div class="lin cab"><b>' + esc(m.name) + '</b><button type="button" class="x" aria-label="Fechar a ficha">×</button></div>' +
     lin('Sinônimos:', (r.sinonimos || m.sin || []).join('; ')) + lin('Larsell:', r.larsell) + lin('Lobo:', r.lobo) + lin('Zona:', r.zona) +
-    lin('Divisão funcional:', div) + lin('Função:', fun) + lin(r.hemisferio ? 'No hemisfério:' : (r.verme ? 'No verme:' : ''), par) +
+    lin('Divisão funcional:', div) + lin('Função:', fun) + lin('Aferências:', r.aferencias) + lin('Eferências:', r.eferencias) + lin('Sai pelo:', r.pedunculo) + lin(r.hemisferio ? 'No hemisfério:' : (r.verme ? 'No verme:' : ''), par) +
     (r.separa ? lin('Separa:', r.separa.map(q => META[q] ? META[q].name : q).join(' e ')) : '') + (m.f ? '<div class="lin desc">' + esc(m.f) + '</div>' : '') +
     (/a confirmar/i.test(r.nota || '') ? lin('Nota:', r.nota) : '');
   el.hidden = false; el.querySelector('.x').addEventListener('click', () => { el.hidden = true; });
@@ -293,13 +293,15 @@ stepRotulos = function () {
     if (b) lista.push({ id: a.id, p: b.p, n: CBT.rot === 'todos' ? null : b.n, pri: 2 });
   });
   CBT.fisMalhas.filter(f => f.visible).forEach(f => { if (f.userData.cbtLen > 2.5 && !tapado(f.userData)) lista.push({ id: f.userData.id, p: f.userData.cbtMeio, n: f.userData.cbtNr, pri: CBT_FIS_FORTE[f.userData.id] ? 3 : 1, fis: true }); });
-  const extras = CBT.rot === 'todos' ? ['teto_v4', 'veusup', 'abmed', 'ablat', 'pcs', 'pcm', 'pci', 'denteado', 'interposito', 'fastigial'] : ((CBT.vista === 'ventral' || CBT.vista === 'anterior') ? ['teto_v4', 'veusup', 'abmed', 'ablat', 'pcs', 'pcm', 'pci'] : []);   // núcleos (por dentro) só em Mostrar todos
+  const extras = CBT.rot === 'todos' ? ['teto_v4', 'veusup', 'abmed', 'ablat', 'pcs', 'pcm', 'pci', 'denteado', 'interposito', 'fastigial'] : ((CBT.vista === 'ventral' || CBT.vista === 'anterior') ? ['teto_v4', 'veusup', 'abmed', 'ablat', 'pcs', 'pcm', 'pci'] : []);
+  if (typeof CBI !== 'undefined' && (CBI.corte || CBI.t.cortex >= 40)) extras.push(...(CBI.interp ? ['denteado', 'interposito', 'fastigial'] : ['denteado', 'emboliforme', 'globoso', 'fastigial']));   // núcleos à vista: corte ou córtex transparente   // núcleos (por dentro) só em Mostrar todos
   if (state.sel && extras.indexOf(state.sel) < 0 && ITEMS[state.sel] && !CBS_RANK[state.sel] && !/^f_/.test(state.sel)) extras.push(state.sel);
-  extras.forEach(id => { const it = ITEMS[id]; if (!it) return; it.meshes.filter(q => q.visible && q.parent && q.parent.visible).slice(0, 2).forEach(q => { const b = new THREE.Box3().setFromObject(q); lista.push({ id, p: b.getCenter(new THREE.Vector3()), n: null, pri: 1 }); }); });
+  extras.forEach(id => { const it = id === 'interposito' && CBI.nuc === 'formas' ? { meshes: ITEMS.emboliforme.meshes } : ITEMS[id]; if (!it) return; it.meshes.filter(q => q.visible && q.parent && q.parent.visible).slice(0, 2).forEach(q => { const b = new THREE.Box3().setFromObject(q); lista.push({ id, p: b.getCenter(new THREE.Vector3()), n: null, pri: 1 }); }); });
   const w = canvas.clientWidth, h = canvas.clientHeight, caixas = [], usados = new Set();
   lista.sort((a, b) => (b.id === state.sel) - (a.id === state.sel) || b.pri - a.pri);
   lista.forEach(a => {
     if (!state.groupOn[META[a.id] ? META[a.id].grp : 'cereb'] && !(a.id === 'teto_v4')) return;
+    if (a.pri === 2 && typeof CBI !== 'undefined' && (CBI.corte || CBI.t.cortex >= 40)) return;   // por dentro: os rótulos dos lóbulos saem para os núcleos aparecerem
     if (CBT.rot === 'vista' && a.n) { _vc.copy(camera.position).sub(a.p).normalize(); if (_vc.dot(a.n) < 0.4) return; }
     _pr.copy(a.p).project(camera); if (_pr.z > 1 || Math.abs(_pr.x) > 0.98 || Math.abs(_pr.y) > 0.98) return;
     const x = (_pr.x + 1) / 2 * w, y = (1 - _pr.y) / 2 * h, txt = nomeVisivel(a.id) ? nomeL(a.id) : '?', lw = (txt.length * 6.6 + 18) / 2, lh = 10;
