@@ -22,13 +22,13 @@ function tbCarregar() {
   });
   return TB.carga;
 }
-function setArteriasModo(modo) {
+function setArteriasModo(modo, inicial) {
   TB.modo = modo;
   document.querySelectorAll('[data-tb]').forEach(b => b.setAttribute('aria-pressed', b.dataset.tb === modo ? 'true' : 'false'));
   const st = document.getElementById('tbStatus');
   if (modo === 'esquema') { if (st) st.textContent = ''; applyVisibility(); applyAppearance(); marca(); return; }
   if (st) st.textContent = 'Carregando as artérias do TopBrain…';
-  tbCarregar().then(() => { if (st) st.textContent = ''; if (!state.groupOn.art) { state.groupOn.art = true; syncLayerUI(); } applyVisibility(); applyAppearance(); marca(); })
+  tbCarregar().then(() => { if (st) st.textContent = ''; if (!inicial && !state.groupOn.art) { state.groupOn.art = true; syncLayerUI(); } applyVisibility(); applyAppearance(); marca(); })
     .catch(e => { if (st) st.textContent = 'Não foi possível carregar models/topbrain_vasos.glb.'; console.warn(e); setArteriasModo('esquema'); });
 }
 const _visTb = applyVisibility;
@@ -47,7 +47,7 @@ applyAppearance = function () { _apTb(); if (TB.modo !== 'real' || state.territ)
 (function () {
   const lg = document.getElementById('willis'); if (!lg) return;
   const linha = document.createElement('div'); linha.className = 'row'; linha.style.cssText = 'gap:8px;margin:4px 0 6px;flex-wrap:wrap';
-  linha.innerHTML = '<span class="lbl">Artérias</span><span class="seg"><button type="button" data-tb="esquema" aria-pressed="true" title="Artérias desenhadas do Mímir">Esquema</button><button type="button" data-tb="real" aria-pressed="false" title="Artérias reais de uma angio-RM (TopBrain), cor pelo calibre">TopBrain</button></span>' +
+  linha.innerHTML = '<span class="lbl">Artérias</span><span class="seg"><button type="button" data-tb="esquema" aria-pressed="false" title="Artérias desenhadas do Mímir">Esquema</button><button type="button" data-tb="real" aria-pressed="true" title="Artérias reais de uma angio-RM (TopBrain), cor pelo calibre">TopBrain</button></span>' +
     '<button type="button" class="btn" id="tbWillis" aria-pressed="false" title="No modo TopBrain, mostra só o polígono de Willis">Só o polígono</button><span class="muted" id="tbStatus" style="font-size:12px"></span>';
   lg.closest('.btnrow').after(linha);
   linha.querySelectorAll('[data-tb]').forEach(b => b.addEventListener('click', () => setArteriasModo(b.dataset.tb)));
@@ -56,3 +56,5 @@ applyAppearance = function () { _apTb(); if (TB.modo !== 'real' || state.territ)
     if (TB.soWillis && TB.modo !== 'real') setArteriasModo('real'); else { applyVisibility(); applyAppearance(); marca(); }
   });
 })();
+// o atlas abre com as artérias reais (o esquema continua no botão Esquema)
+setTimeout(() => setArteriasModo('real', true), 0);

@@ -43,10 +43,12 @@ function setFonteTerritorios(fonte) {
 (function () {
   const lg = document.getElementById('legenda'); if (!lg) return;
   const linha = document.createElement('div'); linha.className = 'row'; linha.style.cssText = 'gap:8px;margin:2px 0 6px;flex-wrap:wrap';
-  linha.innerHTML = '<span class="lbl">Fonte dos territórios</span><span class="seg"><button type="button" data-jhu="esquema" aria-pressed="true" title="Divisão descrita no Machado (cap. 18)">Esquema</button><button type="button" data-jhu="jhu" aria-pressed="false" title="Atlas de territórios arteriais do JHU (Liu et al. 2023): lesões de 1.298 pacientes com AVC">Atlas JHU</button></span>';
+  linha.innerHTML = '<span class="lbl">Fonte dos territórios</span><span class="seg"><button type="button" data-jhu="esquema" aria-pressed="false" title="Divisão descrita no Machado (cap. 18)">Esquema</button><button type="button" data-jhu="jhu" aria-pressed="true" title="Atlas de territórios arteriais do JHU (Liu et al. 2023): lesões de 1.298 pacientes com AVC">Atlas JHU</button></span>';
   lg.after(linha);
   linha.querySelectorAll('[data-jhu]').forEach(b => b.addEventListener('click', () => {
-    const ct = document.getElementById('territ'); if (ct && !ct.checked) { ct.checked = true; ct.dispatchEvent(new Event('change')); }
+    const ct = document.getElementById('territ'); if (ct && !ct.checked && !b.dataset.semLigar) { ct.checked = true; ct.dispatchEvent(new Event('change')); }
     setFonteTerritorios(b.dataset.jhu);
   }));
 })();
+// os territórios abrem pela fonte real (JHU): carrega em segundo plano; o esquema do Machado continua no botão Esquema
+setTimeout(() => setFonteTerritorios('jhu'), 0);
