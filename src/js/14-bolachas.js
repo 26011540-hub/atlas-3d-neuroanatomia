@@ -307,7 +307,7 @@ function bolMontarFoco() {
   bolFoco.frente = bolPlano(A.tex, false); bolFoco.frente.position.set(BOL_CX, BOL_CY, zf - 0.004); bolFoco.frente.userData = { bol: n, face: 'a', foco: 1 }; bolGrp.add(bolFoco.frente);
   if (f.b !== null) { const B = bolFace(f.b); if (!B.tex) bolPintar(B, bolOpts(n).b); bolFoco.tras = bolPlano(B.tex, true); bolFoco.tras.position.set(BOL_CX, BOL_CY, zt + 0.004); bolFoco.tras.userData = { bol: n, face: 'b', foco: 1 }; bolGrp.add(bolFoco.tras); }
 }
-const BOL_GRUPOS_FOCO = ['cortex', 'deep', 'limbic', 'dien', 'vent', 'stem'];
+const BOL_GRUPOS_FOCO = ['cortex', 'deep', 'limbic', 'dien', 'vent', 'stem', 'cereb', 'ped'];
 function bolCamera() {
   const B = state.bol;
   if (B.foco) { const f = bolFaces(B.n), zc = f.b !== null ? (f.a + f.b) / 2 : bolMeio(B.n); camGoal.target.set(0, 0.6, zc); camGoal.dist = 30; camGoal.theta = B.face === 'b' ? Math.PI - 0.35 : 0.35; camGoal.phi = Math.PI / 2 - 0.22; }

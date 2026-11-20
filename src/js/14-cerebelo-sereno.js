@@ -111,14 +111,31 @@ function cbsCores(geo) {
   geo.setAttribute('color', new THREE.BufferAttribute(simples.slice(), 3));
 }
 // cores do modo, com o lóbulo ou o lobo selecionado aceso em amarelo
+// partes do cerebelo real que são pedaços da mesma malha: ao escolher uma, a malha continua opaca e a parte acende
+const cbsParte = id => !!id && id !== 'cb_sereno' && (/^cb_/.test(id) || id === 'vermis');
 function cbsAplicarCores(m, lobos) {
   const g = m.geometry, cor = g.userData.cores, A = g.attributes.color.array, sel = state.sel; A.set(lobos ? cor.lobos : cor.simples);
-  if (sel && (/^cb_/.test(sel) && sel !== 'cb_sereno')) { const L = g.userData.lobulo, Lo = g.userData.lobo;
-    for (let i = 0; i < L.length; i++) if (L[i] === sel || Lo[i] === sel) { A[i * 3] = A[i * 3] * 0.45 + 0.55; A[i * 3 + 1] = A[i * 3 + 1] * 0.45 + 0.5; A[i * 3 + 2] *= 0.35; } }
+  if (cbsParte(sel)) {
+    const L = g.userData.lobulo, Lo = g.userData.lobo, verme = sel === 'vermis';
+    for (let i = 0; i < L.length; i++) {
+      const k = i * 3;
+      if (L[i] === sel || Lo[i] === sel || (verme && CB_VERME_SET.has(L[i]))) { A[k] = A[k] * 0.45 + 0.55; A[k + 1] = A[k + 1] * 0.45 + 0.5; A[k + 2] *= 0.35; }   // a parte escolhida acende
+      else { const y = A[k] * 0.3 + A[k + 1] * 0.59 + A[k + 2] * 0.11, v = 0.2 + y * 0.35; A[k] = A[k] * 0.15 + v * 0.85; A[k + 1] = A[k + 1] * 0.15 + v * 0.85; A[k + 2] = A[k + 2] * 0.15 + v * 0.85; }   // o resto fica cinza e apagado, sem sumir
+    }
+  }
   g.attributes.color.needsUpdate = true; m.userData.corSel = sel; m.userData.corModo = CBS.modo;
 }
 const _apCbs = applyAppearance;
-applyAppearance = function () { _apCbs(); if (CBS.modo !== 'atlas') { const nivel = cbsNivel(CBS.modo), m = CBS.malhas[nivel]; if (m && (m.userData.corSel !== state.sel || m.userData.corModo !== CBS.modo)) cbsAplicarCores(m, CBS.modo === 'lobos'); } };
+applyAppearance = function () {
+  _apCbs();
+  if (CBS.modo === 'atlas') return;
+  const nivel = cbsNivel(CBS.modo), m = CBS.malhas[nivel];
+  if (m && (m.userData.corSel !== state.sel || m.userData.corModo !== CBS.modo)) cbsAplicarCores(m, CBS.modo === 'lobos');
+  // a malha real inteira é "o cerebelo": com uma parte dele escolhida ela não pode ficar transparente (era o aspecto picotado)
+  if (cbsParte(state.sel)) Object.values(CBS.malhas).forEach(q => { q.material.opacity = 1; q.material.transparent = false; q.material.depthWrite = true; q.material.emissiveIntensity = 0; });
+  // a cor do cerebelo real vem de cada vértice: o material fica branco (a aparência geral o pintava de castanho, o que multiplicava e escurecia as cores dos lóbulos)
+  if (!state.territ) Object.values(CBS.malhas).forEach(q => q.material.color.set('#ffffff'));
+};
 // troca de nível de detalhe quando a câmera se aproxima ou se afasta
 const _pcCbs = placeCamera;
 placeCamera = function () { _pcCbs(); if (CBS.modo === 'atlas' || CBS.modo === 'estudo') return; const n = cbsNivel(CBS.modo); if (n !== CBS.ultimo) { CBS.ultimo = n; applyVisibility(); applyAppearance(); } };
@@ -129,7 +146,7 @@ function setCerebeloModo(modo, inicial) {
   const nivel = modo === 'estudo' ? 'estudo' : (CBS.malhas.folhas ? 'folhas' : 'leve'), st = document.getElementById('cbsStatus');
   if (st) st.textContent = CBS.malhas[nivel] ? '' : 'Carregando o cerebelo real…';
   cbsCarregarNucleos();
-  cbsCarregar(nivel).then(m => { if (st) st.textContent = ''; if (nivel === 'leve' && !CBS_TOQUE) cbsCarregar('folhas').then(() => { CBS.ultimo = null; applyVisibility(); applyAppearance(); marca(); }).catch(e => console.warn(e)); cbsAplicarCores(m, modo === 'lobos'); if (!inicial && !state.groupOn.stem) { state.groupOn.stem = true; syncLayerUI(); } applyVisibility(); applyAppearance(); })
+  cbsCarregar(nivel).then(m => { if (st) st.textContent = ''; if (nivel === 'leve' && !CBS_TOQUE) cbsCarregar('folhas').then(() => { CBS.ultimo = null; applyVisibility(); applyAppearance(); marca(); }).catch(e => console.warn(e)); cbsAplicarCores(m, modo === 'lobos'); if (!inicial && !state.groupOn.cereb) { state.groupOn.cereb = true; syncLayerUI(); } applyVisibility(); applyAppearance(); })
     .catch(e => { if (st) st.textContent = 'Não foi possível carregar ' + CBS_ARQ[nivel] + '.'; console.warn(e); CBS.modo = 'atlas'; setCerebeloModo('atlas'); });
 }
 // visibilidade: com o cerebelo real, o do atlas (lóbulos e fissuras) some; só o nível escolhido aparece

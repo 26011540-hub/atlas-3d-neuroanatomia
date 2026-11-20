@@ -105,7 +105,7 @@ function setTroncoIso(on) {
   state.troncoIso = !!on; $('#tiBtn').setAttribute('aria-pressed', on ? 'true' : 'false'); $('#modoExplorar').setAttribute('aria-pressed', on ? 'false' : 'true'); $('#grpVistas').hidden = !!on; $('#tipainel').hidden = !on;
   if (on) {
     state.licao = null; renderLicao(); state.sel = null;
-    Object.keys(GROUPS).forEach(k => state.groupOn[k] = (k === 'stem' || k === 'nc')); syncLayerUI();
+    Object.keys(GROUPS).forEach(k => state.groupOn[k] = (k === 'stem' || k === 'cereb' || k === 'ped' || k === 'nc')); syncLayerUI();
     if (state.nervos === 'inteiro') setNervos('curto');
     state.hideL = state.hideR = false; syncHemiUI(); vistaTronco('ventral');
   } else { Object.keys(GROUPS).forEach(k => state.groupOn[k] = (k === 'cortex' || k === 'art')); syncLayerUI(); setNervos('inteiro'); setView('lateral'); }
@@ -122,20 +122,20 @@ $('#sepBtn').addEventListener('click', () => setSeparado(!state.separado));
 $('#rotOn').addEventListener('change', e => { state.rotulos = e.target.checked; });
 $('#rotOcultar').addEventListener('change', e => { state.ocultar = e.target.checked; Object.keys(REVELADO).forEach(k => delete REVELADO[k]); renderInfo(); renderLicao(); });
 $('#cavernoso').addEventListener('click', () => {
-  Object.keys(GROUPS).forEach(k => state.groupOn[k] = (k === 'nc' || k === 'art' || k === 'ven' || k === 'stem' || k === 'dien'));
+  Object.keys(GROUPS).forEach(k => state.groupOn[k] = (k === 'nc' || k === 'art' || k === 'ven' || k === 'stem' || k === 'cereb' || k === 'ped' || k === 'dien'));
   state.sel = 'scav'; state.isolate = true; $('#iso').checked = true; syncLayerUI();
   state.realce = { aci: 1, nc3: 1, nc4: 1, n_oft: 1, nc6: 1, sinterc: 1, hipofise: 1, g_trig: 1 };   // o que atravessa o seio ou corre na sua parede (cap. 8, p. 73)
   setView('anterior'); camGoal.theta = 0.75; camGoal.phi = 1.25; camGoal.target.set(1.2, -2.2, 1.6); camGoal.dist = 15;
   applyVisibility(); applyAppearance(); renderInfo(); markList();
 });
 $('#nervos').addEventListener('click', () => {
-  Object.keys(GROUPS).forEach(k => state.groupOn[k] = (k === 'cortex' || k === 'stem' || k === 'nc'));
+  Object.keys(GROUPS).forEach(k => state.groupOn[k] = (k === 'cortex' || k === 'stem' || k === 'cereb' || k === 'ped' || k === 'nc'));
   state.cortexOp = 0.1; $('#op').value = 0.1; $('#opv').textContent = '10%';
   state.sel = null; syncLayerUI(); setView('inferior'); camGoal.target.set(0, -3.0, -0.8); camGoal.dist = 24;
   applyVisibility(); applyAppearance(); renderInfo(); markList();
 });
 $('#verVias').addEventListener('click', () => {
-  Object.keys(GROUPS).forEach(k => state.groupOn[k] = (k === 'cortex' || k === 'stem' || k === 'vias'));
+  Object.keys(GROUPS).forEach(k => state.groupOn[k] = (k === 'cortex' || k === 'stem' || k === 'cereb' || k === 'ped' || k === 'vias'));
   state.cortexOp = 0.15; $('#op').value = 0.15; $('#opv').textContent = '15%';
   state.sel = null; state.les = null; syncLayerUI(); setView('lateral'); camGoal.dist = 34;
   applyVisibility(); applyAppearance(); renderInfo(); markList();
@@ -159,7 +159,7 @@ function buildList() {
   let h = '';
   Object.keys(GROUPS).forEach(g => {
     h += '<details class="grp" data-g="' + g + '"><summary><span class="sw" style="background:' + GROUPS[g].color + '"></span>' + esc(GROUPS[g].name) + '<span class="cnt">' + byGroup[g].length + '</span></summary><ul>';
-    byGroup[g].forEach(id => { h += '<li><button type="button" data-id="' + id + '">' + esc(META[id].name) + '</button></li>'; });
+    byGroup[g].forEach(id => { const sin = (META[id].sin || []).join(' · '); h += '<li><button type="button" data-id="' + id + '"' + (sin ? ' title="' + esc(sin) + '"' : '') + '>' + esc(META[id].name) + (sin ? '<span hidden> ' + esc(sin) + '</span>' : '') + '</button></li>'; });   // sinônimos do registro: entram na busca
     h += '</ul></details>';
   });
   listEl.innerHTML = h;
@@ -214,7 +214,7 @@ function nextQuestion() {
   if (modo === 'clique') {
     let pool;
     if (state.licao) { abrirLicao(state.licao.ti, state.licao.li); pool = state.licao.ids.filter(id => ITEMS[id] && ITEMS[id].meshes.length); }
-    else pool = LISTABLE.filter(id => ITEMS[id] && ITEMS[id].meshes.length && ['cortex', 'stem', 'dien', 'deep', 'limbic', 'nc', 'art', 'ven'].indexOf(META[id].grp) >= 0 && !/^(s_|f_|nu)/.test(id));
+    else pool = LISTABLE.filter(id => ITEMS[id] && ITEMS[id].meshes.length && ['cortex', 'stem', 'cereb', 'ped', 'dien', 'deep', 'limbic', 'nc', 'art', 'ven'].indexOf(META[id].grp) >= 0 && !/^(s_|f_|nu)/.test(id));
     const t = sorteia(pool);
     if (!state.licao) {
       const g = META[t].grp; state.groupOn[g] = true; syncLayerUI();
@@ -263,7 +263,7 @@ function mostrarResposta() {
     (OCLUSAO[q.target].deep || []).forEach(x => { state.groupOn[META[x].grp] = true; });
     syncLayerUI(); select(a);
   } else if (q.modo === 'les') {
-    state.lesao = true; $('#lesao').checked = true; state.groupOn.vias = true; state.groupOn.stem = true;
+    state.lesao = true; $('#lesao').checked = true; state.groupOn.vias = true; state.groupOn.stem = state.groupOn.cereb = state.groupOn.ped = true;
     state.cortexOp = Math.min(state.cortexOp, 0.15); $('#op').value = state.cortexOp; $('#opv').textContent = Math.round(state.cortexOp * 100) + '%';
     state.les = { via: q.les.v, k: q.les.k }; syncLayerUI(); select(q.les.v, { focus: false });
     const p = LES[q.les.v][q.les.k].p; camGoal.target.set(p[0], p[1], p[2]); camGoal.dist = Math.min(camGoal.dist, 26);
@@ -353,7 +353,7 @@ function abrirLicao(ti, li) {
   state.licao = { ti, li, ids: L.i.filter(id => ITEMS[id] && ITEMS[id].meshes.length), set: {} }; state.licao.ids.forEach(id => state.licao.set[id] = 1);
   state.sel = null; state.realce = null; state.les = null; state.lesao = false; $('#lesao').checked = false;
   setView(L.v); setSeparado(!!L.sep);
-  Object.keys(GROUPS).forEach(k => state.groupOn[k] = L.g.indexOf(k) >= 0);
+  Object.keys(GROUPS).forEach(k => state.groupOn[k] = L.g.indexOf(k) >= 0 || ((k === 'cereb' || k === 'ped') && L.g.indexOf('stem') >= 0));   // lições antigas: 'stem' inclui cerebelo e pedúnculos
   state.cortexOp = 1; $('#op').value = 1; $('#opv').textContent = '100%'; syncLayerUI();
   if (L.a) camGoal.target.set(L.a[0], L.a[1], L.a[2]);
   if (L.d) camGoal.dist = L.d; if (L.th !== undefined) camGoal.theta = L.th; if (L.ph !== undefined) camGoal.phi = L.ph;

@@ -14,7 +14,9 @@ const ler = f => fs.readFileSync(path.join(SRC, f), 'utf8').replace(/\r\n/g, '\n
 const lista = fs.readdirSync(path.join(SRC, 'js')).filter(f => /^\d\d-.*\.js$/.test(f)).sort();
 const depois = lista.filter(f => f > '14-interface.js' && f < '15');
 if (depois.length) { console.error('erro: estes arquivos ordenam depois de 14-interface.js e ficariam fora do escopo principal:', depois.join(', ')); process.exit(1); }
-const js = lista.map(f => ler('js/' + f)).join('');
+// registro das estruturas do cerebelo (data/registro_cerebelo.json): embutido como constante antes dos módulos
+const REG = JSON.parse(fs.readFileSync(path.join(RAIZ, 'data', 'registro_cerebelo.json'), 'utf8'));
+const js = 'const REG_CEREBELO = ' + JSON.stringify(REG) + ';\n' + lista.map(f => ler('js/' + f)).join('');
 
 // sintaxe: falha aqui, antes de gerar um atlas quebrado
 const tmp = path.join(os.tmpdir(), 'mimir-chk.js');

@@ -26,3 +26,6 @@ notas/
 data/raw/
 data/processed/
 __pycache__/
+
+# imagens de referência dos livros (Machado, Duus) e prints: só para modelar, nunca publicar
+referencias/

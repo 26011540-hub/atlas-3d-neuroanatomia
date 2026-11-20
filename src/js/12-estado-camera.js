@@ -120,7 +120,7 @@ function pintarCortex() {
   ct.addEventListener('change', () => { state.territ = ct.checked; lg.hidden = !ct.checked; applyAppearance(); });
   ca.addEventListener('change', () => { state.avc = ca.checked; if (ca.checked && !state.groupOn.art) { state.groupOn.art = true; syncLayerUI(); applyVisibility(); } applyAppearance(); renderInfo(); });
   document.getElementById('willis').addEventListener('click', () => {
-    Object.keys(GROUPS).forEach(k => state.groupOn[k] = (k === 'cortex' || k === 'art' || k === 'stem'));
+    Object.keys(GROUPS).forEach(k => state.groupOn[k] = (k === 'cortex' || k === 'art' || k === 'stem' || k === 'cereb' || k === 'ped'));
     state.cortexOp = 0.12; document.getElementById('op').value = 0.1; document.getElementById('opv').textContent = '12%';
     state.sel = null; syncLayerUI(); setView('inferior'); camGoal.target.set(0, -1.6, -0.3); camGoal.dist = 24;
     applyVisibility(); applyAppearance(); renderInfo(); markList();
@@ -184,7 +184,7 @@ function setView(name) {
   camGoal.target.set(ALVO0[0], ALVO0[1], ALVO0[2]);
   state.vistaBase = name === 'base';
   if (name === 'base') {   // fossas do crânio vistas de cima: sem os hemisférios, com tronco, nervos, artérias da base e seios
-    Object.keys(GROUPS).forEach(k => state.groupOn[k] = (k === 'stem' || k === 'nc' || k === 'art' || k === 'ven'));
+    Object.keys(GROUPS).forEach(k => state.groupOn[k] = (k === 'stem' || k === 'cereb' || k === 'ped' || k === 'nc' || k === 'art' || k === 'ven'));
     state.sel = null; camGoal.target.set(0, -2.6, 0.2); camGoal.dist = 30;
     if (typeof syncLayerUI === 'function') syncLayerUI();
     applyAppearance(); if (typeof renderInfo === 'function') renderInfo();
