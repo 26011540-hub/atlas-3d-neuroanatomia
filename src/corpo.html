@@ -7,6 +7,7 @@
         <button class="chipbtn" type="button" id="modoExplorar" aria-pressed="true" title="Encéfalo inteiro, com camadas, lições e teste">Explorar</button>
         <button class="chipbtn" type="button" id="bolBtn" aria-pressed="false" title="Os 12 cortes coronais (bolachas) em 3D, com as estruturas de cada face pelo gabarito da Unicamp">Bolachas</button>
         <button class="chipbtn" type="button" id="tiBtn" aria-pressed="false" title="Só o tronco encefálico e a medula, organizados, com a origem dos pares cranianos">Tronco e medula</button>
+        <button class="chipbtn" type="button" id="cbBtn" aria-pressed="false" title="Cerebelo: vistas prontas, fissuras, cores por lóbulo, lobo ou função, rótulos e ficha (duplo clique)">Cerebelo</button>
       </div>
       <div class="grupo" role="group" aria-label="Vista" id="grpVistas">
         <span class="vrot">Vista</span>
@@ -33,6 +34,17 @@
       <div class="lin">Medula: <button type="button" data-tc="mc">Cervical</button><button type="button" data-tc="mt">Torácica</button><button type="button" data-tc="ml">Lombar</button><button type="button" data-tc="" aria-pressed="true">Sem corte</button></div>
       <div class="lin"><button type="button" id="tiSair">Voltar a explorar</button></div>
     </div>
+    <div class="tipainel cbpainel" id="cbpainel" hidden>
+      <div class="lin"><b>Cerebelo</b><button type="button" id="cbMais" class="bolmais" aria-expanded="true">Opções ▾</button></div>
+      <div class="lin">Tema: <button type="button" data-tema="realista" aria-pressed="true" title="Superfície real, cor única">Realista</button><button type="button" data-tema="esquematico" aria-pressed="false" title="Cores chapadas por lóbulo, lobo ou função (vale para o atlas todo)">Esquemático</button></div>
+      <div class="lin">Colorir por: <button type="button" data-cbcor="lobulos" aria-pressed="true">Lóbulos</button><button type="button" data-cbcor="lobos" aria-pressed="false">Lobos</button><button type="button" data-cbcor="funcional" aria-pressed="false" title="Zonas: verme, paravermiana e lateral; vestíbulo, espino e cerebrocerebelo (Duus, fig. 5.1)">Funcional</button></div>
+      <div class="lin vis">Vista: <button type="button" data-cbv="dorsal" title="Face dorsal (Machado, fig. 5.6)">Dorsal</button><button type="button" data-cbv="superior" title="Face superior (Duus, fig. 5.1)">Superior</button><button type="button" data-cbv="ventral" title="Face ventral, pedúnculos cortados (Machado, fig. 5.4; Duus, fig. 5.2)">Ventral</button><button type="button" data-cbv="anterior">Anterior</button><button type="button" id="cbDiv" title="Vista superior: metade pelas zonas funcionais, metade pelos lóbulos">Dividir ao meio</button></div>
+      <div class="lin">Fissuras: <button type="button" id="cbFis" aria-pressed="true">Mostrar</button> Rótulos: <button type="button" data-cbrot="vista" aria-pressed="true" title="Só os da face à vista">Da vista</button><button type="button" data-cbrot="todos" aria-pressed="false">Mostrar todos</button><button type="button" data-cbrot="nenhum" aria-pressed="false">Nenhum</button></div>
+      <div class="cbleg" id="cbLeg" hidden></div>
+      <div class="lin muted">Passe o mouse para realçar; clique para isolar; duplo clique abre a ficha.</div>
+      <div class="lin"><button type="button" id="cbSair">Voltar a explorar</button></div>
+    </div>
+    <div class="cbficha" id="cbficha" hidden></div>
     <div class="tipainel bolpainel" id="bolpainel" hidden>
       <div class="lin"><b>Bolachas</b><span id="bolN"></span><span id="bolStatus" class="bolst"></span><button type="button" id="bolMais" class="bolmais" aria-expanded="true">Opções ▾</button></div>
       <div class="lin bolnivel" id="bolNivel"></div>

@@ -126,7 +126,7 @@ details.grp li button.on { background: var(--accent); color: var(--accent-ink); 
 .qmodo { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 10px; }
 .qtxt { background: var(--bg); border: 1px solid var(--line); border-radius: 8px; padding: 8px 12px; margin: 0 0 10px; font-size: 14px; line-height: 1.45; }
 .rotulos { position: absolute; inset: 0; pointer-events: none; overflow: hidden; z-index: 4; }
-.rot { position: absolute; transform: translate(-50%, -50%); pointer-events: auto; cursor: pointer; font: 600 12px var(--f-body); color: var(--ink); background: color-mix(in srgb, var(--panel) 86%, transparent); border: 1px solid var(--line); border-radius: 6px; padding: 2px 7px; white-space: nowrap; max-width: 180px; overflow: hidden; text-overflow: ellipsis; }
+.rot { position: absolute; transform: translate(-50%, -50%); pointer-events: auto; cursor: pointer; font: 600 12px var(--f-body); color: var(--ink); background: color-mix(in srgb, var(--panel) 86%, transparent); border: 1px solid var(--line); border-radius: 6px; padding: 2px 7px; white-space: nowrap; max-width: 280px; overflow: hidden; text-overflow: ellipsis; }
 .rot.oculto { color: var(--muted); min-width: 22px; text-align: center; }
 .rot:hover { border-color: var(--accent); }
 .creditos { font-size: 13px; color: var(--muted); }
@@ -208,3 +208,19 @@ details.grp li button.on { background: var(--accent); color: var(--accent-ink); 
 .hcptipos button i { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
 .hcptipos button[aria-pressed="false"] { opacity: .45; }
 .hcptipos button[aria-pressed="false"] i { background: transparent !important; outline: 1px solid currentColor; }
+
+/* cerebelo (reforma, Fase 1): painel, rótulos sem corte, ficha */
+.cbpainel .muted, .cbficha .muted { color: #9fb6bb; }
+.cbleg { display: flex; flex-direction: column; gap: 3px; font-size: 12px; }
+.cbleg[hidden] { display: none; }
+.cbrot { max-width: none; overflow: visible; }
+.cbrot.fis { font-style: italic; background: rgba(40, 24, 16, .82); color: #ffe7c7; border-color: rgba(255, 220, 170, .35); }
+.cbrot.on { background: #00a9b4; color: #fff; border-color: #00a9b4; }
+.cbficha { position: absolute; right: 10px; top: 58px; z-index: 6; width: min(330px, calc(100% - 20px)); max-height: calc(100% - 80px); overflow: auto; padding: 10px 12px; border-radius: 10px; background: rgba(8, 14, 18, .9); color: #eaf7f9; font-size: 12.5px; display: flex; flex-direction: column; gap: 5px; }
+.cbficha[hidden] { display: none; }
+.cbficha .cab { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; }
+.cbficha .cab b { font-size: 14px; }
+.cbficha .k { color: #7fe3ec; font-weight: 600; }
+.cbficha .desc { color: #cfdfe2; line-height: 1.4; }
+.cbficha .x { font: 600 16px var(--f-body); background: none; border: 0; color: #eaf7f9; cursor: pointer; line-height: 1; }
+.cbpainel.min .lin:not(:first-child):not(.vis), .cbpainel.min .cbleg { display: none; }

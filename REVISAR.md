@@ -220,3 +220,10 @@ Base: Ângelo Machado, Neuroanatomia Funcional, 4ª ed. (Atheneu). No atlas, est
 - Cada vértice do córtex do atlas é levado ao MNI pela inversa da afim (erro de 2 a 5 mm) e procura o voxel rotulado mais próximo até 6 mm: as bordas podem estar alguns milímetros deslocadas.
 - Licença do atlas de territórios: escrita como CC BY-SA 4.0 de memória; o arquivo veio da cópia no OSF (o NITRC estava fora do ar); conferir no NITRC.
 - Artérias reais do TopBrain (paciente topcow_mr_025, angio-RM; 19/11/2026): `scripts/process/topbrain_vasos.py` -> `models/topbrain_vasos.glb` + `models/topbrain_vasos.json` (calibre de cada artéria). O registro por imagem (angio-RM contra o T1 do MNI) falhou (1 a 3 cm); ficou o alinhamento por 7 marcos do polígono de Willis (topo e base da basilar, comunicante anterior, fim das carótidas, junções P1-Pcom) contra os esquemas do atlas (data/alvos_willis.json): erro de 2,5 a 7,5 mm por marco. No app: seletor "Artérias: Esquema | TopBrain" (abaixo de "Ver o polígono de Willis"), cor por calibre e botão "Só o polígono"; as artérias reais entram nos itens do atlas, então o clique e o modo AVC funcionam com elas. A conferir: a escala do alinhamento (0,112 cm/mm) deixa os vasos cerca de 20% maiores que o resto do atlas, e as carótidas internas incluem a parte cavernosa (sifão), que no esquema não existe.
+
+## Reforma do cerebelo, Fase 1 (20/11/2026)
+- Paraflóculo não modelado: perguntar ao autor qual descrição do Duus seguir (tonsila e biventre como paraflóculo ou lóbulo acessório junto ao flóculo).
+- Zona paravermiana com largura aproximada (|x| de 1,3 a 2,3 cm).
+- Cortes dos pedúnculos na vista ventral desenhados por cima da superfície real (a malha do Sereno cobre os pedúnculos do atlas).
+- Teto do IV ventrículo: parede dorsal da malha real; véu medular inferior e tela corioide não separados.
+- Comparação visual com Machado 5.4 e 5.6 e Duus 5.1 e 5.2 pendente: referencias/cerebelo/ vazia.

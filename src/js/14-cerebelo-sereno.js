@@ -33,22 +33,29 @@ function cbsLobulo(suit, x, y, z) {
 // cada lóbulo do hemisfério e o lóbulo do verme que fica na mesma faixa (Machado, fig. 5.6)
 const CBS_HEMI_VERME = { cb_asa: 'cb_central', cb_quadant: 'cb_culmen', cb_quadpost: 'cb_declive', cb_semisup: 'cb_folium', cb_semiinf: 'cb_tuber', cb_biventre: 'cb_piramide', cb_tonsila: 'cb_uvula', cb_floculo: 'cb_nodulo' };
 const CBS_VERME_HEMI = Object.fromEntries(Object.entries(CBS_HEMI_VERME).map(([h, v]) => [v, h]));
-// cores do modo Lobos e lóbulos: uma família por lobo (anterior em amarelos e laranjas, posterior do vermelho ao azul,
-// floculonodular em verdes); o verme no mesmo tom do lóbulo vizinho, mais claro, para se destacar como faixa
+// cores do tema Esquemático, "Colorir por: Lóbulos" (reforma do cerebelo, Fase 1): uma família por lobo (anterior em
+// amarelos e laranjas, posterior do vermelho ao azul, floculonodular em verdes); cada lóbulo do verme um tom mais escuro
+// que o lóbulo do hemisfério da mesma faixa (Machado, fig. 5.6)
 const CBS_LOBULO_COR = {
-  cb_asa: '#e9b23c', cb_quadant: '#dd8a2e', cb_lingula: '#fff0a0', cb_central: '#ffd86b', cb_culmen: '#ffb45c',
-  cb_quadpost: '#cf5548', cb_semisup: '#b14f93', cb_semiinf: '#7563c2', cb_biventre: '#3f84cc', cb_tonsila: '#2fa7b5',
-  cb_declive: '#ff9b8f', cb_folium: '#f29ce0', cb_tuber: '#b8aaff', cb_piramide: '#94c6ff', cb_uvula: '#8ae6ec',
-  cb_floculo: '#5aa84c', cb_nodulo: '#b4ec98' };
+  cb_asa: '#f2c14e', cb_quadant: '#f0a33c', cb_lingula: '#c98a1a', cb_central: '#d9a02a', cb_culmen: '#d4861f',
+  cb_quadpost: '#e3604f', cb_semisup: '#c75aa3', cb_semiinf: '#8d73d6', cb_biventre: '#4f93db', cb_tonsila: '#33b3bd',
+  cb_declive: '#b8402f', cb_folium: '#9b3c7e', cb_tuber: '#6550b0', cb_piramide: '#2f6fb4', cb_uvula: '#1f8a93',
+  cb_floculo: '#6fbf5a', cb_nodulo: '#4a9a38' };
+// "Colorir por: Funcional" (Duus, fig. 5.1): zonas longitudinais. Verme e zona paravermiana = espinocerebelo; parte
+// lateral = cerebrocerebelo; lobo floculonodular = vestibulocerebelo. Largura da zona paravermiana: aproximação
+// (|x| de 1,3 a 2,3 cm), a confirmar com o autor.
+const CBS_ZONA_COR = { vestibulo: '#4caf50', verme: '#e4572e', paraverme: '#f3a35c', lateral: '#4f7fd8' };
+const CBS_PARAVERME = [1.3, 2.3];
+function cbsZona(L, lobo, ax) { return lobo === 'cb_fn' ? 'vestibulo' : (CB_VERME_SET.has(L) ? 'verme' : (ax < CBS_PARAVERME[1] ? 'paraverme' : 'lateral')); }
 const CB_VERME_SET = new Set(['cb_lingula', 'cb_central', 'cb_culmen', 'cb_declive', 'cb_folium', 'cb_tuber', 'cb_piramide', 'cb_uvula', 'cb_nodulo']);
 M('interposito', 'Núcleo interpósito', 'stem', '#6e8a3b', 'Zona intermédia do cerebelo, entre o denteado e o fastigial. Reúne o núcleo emboliforme (interpósito anterior) e os globosos (interpósito posterior), que o atlas SUIT não separa. Recebe da parte intermédia do córtex e projeta ao núcleo rubro.', 'Cerebelares.', '');
 REF(['interposito'], 'Forma: atlas SUIT, Diedrichsen J et al., NeuroImage 2009 e 2011 (CC BY). Texto: Machado, cap. 22, p. 208-209.');
 NOTA('interposito', 'Nos modos do cerebelo real, os núcleos vêm do atlas SUIT (compartimento mais provável em 23 pessoas): o emboliforme e os globosos aparecem juntos como interpósito. No modo Atlas continuam os esquemas do Mímir.');
-const CBS = { modo: 'atlas', malhas: {}, carregando: null, nucleos: null };
+const CBS = { modo: 'atlas', colorir: 'lobulos', ladoFunc: -1, malhas: {}, carregando: null, nucleos: null };
 const CBS_ARQ = { folhas: 'models/cerebelo_sereno_folhas.glb', leve: 'models/cerebelo_sereno_leve.glb', estudo: 'models/cerebelo_sereno_estudo.glb' };
 // níveis de detalhe das folhas: 'leve' (250 mil triângulos) de longe e em telas de toque; 'folhas' (700 mil) de perto
 const CBS_TOQUE = !!(window.matchMedia && matchMedia('(pointer: coarse)').matches), CBS_PERTO = 24;
-const CBS_LOBO_COR = { cb_ant: '#eba052', cb_post: '#c47a9c', cb_fn: '#6fb35f' };   // três tons bem distintos: os lobos se leem de longe; os lóbulos variam em volta deles
+const CBS_LOBO_COR = { cb_ant: '#f0a33c', cb_post: '#d65f7a', cb_fn: '#5cb85c' };   // três tons bem distintos: os lobos se leem de longe; os lóbulos variam em volta deles
 let cbsLoader = null;
 // Folhas e Lobos usam a malha com as folhas (no nível de detalhe da distância); Estudo, a envoltória lisa
 const cbsNivel = modo => { if (modo === 'estudo') return 'estudo'; const perto = !CBS_TOQUE && cam.dist <= CBS_PERTO && CBS.malhas.folhas; return perto || !CBS.malhas.leve ? (CBS.malhas.folhas || !CBS.malhas.leve ? 'folhas' : 'leve') : 'leve'; };
@@ -94,7 +101,7 @@ function cbsCarregar(nivel) {
 // cores por vértice: dois jogos, guardados para trocar de modo sem recalcular (cor única com sombra das folhas; lobos e lóbulos com as fissuras)
 function cbsCores(geo) {
   const p = geo.attributes.position, n = p.count, idx = geo.index ? geo.index.array : null, k = new Int8Array(n), lob = new Array(n);
-  const simples = new Float32Array(n * 3), lobos = new Float32Array(n * 3), c = new THREE.Color();
+  const simples = new Float32Array(n * 3), lobulos = new Float32Array(n * 3), lobos = new Float32Array(n * 3), funcional = new Float32Array(n * 3), c = new THREE.Color(), X = new Float32Array(n);
   const suit = geo.userData.suit;
   for (let i = 0; i < n; i++) lob[i] = cbsLobulo(suit ? suit[i] : 0, p.getX(i), p.getY(i), p.getZ(i));
   // bordas: entre lóbulos (clara) e entre lobos (escura): as fissuras prima e posterolateral
@@ -103,18 +110,27 @@ function cbsCores(geo) {
   const base = new THREE.Color(META.cb_sereno.color);
   for (let i = 0; i < n; i++) {
     simples[i * 3] = base.r; simples[i * 3 + 1] = base.g; simples[i * 3 + 2] = base.b;
-    const r = lob[i]; c.set(CBS_LOBULO_COR[r.L] || CBS_LOBO_COR[r.lobo] || '#c9a26b');
-    if (borda[i] === 2) c.multiplyScalar(0.45);   // só as fissuras entre lobos (prima e posterolateral) ganham linha; entre lóbulos basta a troca de cor
-    lobos[i * 3] = c.r; lobos[i * 3 + 1] = c.g; lobos[i * 3 + 2] = c.b;
+    const r = lob[i], esc = borda[i] === 2 ? 0.55 : 1; X[i] = p.getX(i);   // borda entre lobos um pouco mais escura; as fissuras vêm como curvas (14-cerebelo-sereno2-tema.js)
+    c.set(CBS_LOBULO_COR[r.L] || CBS_LOBO_COR[r.lobo] || '#c9a26b').multiplyScalar(esc); lobulos[i * 3] = c.r; lobulos[i * 3 + 1] = c.g; lobulos[i * 3 + 2] = c.b;
+    c.set(CBS_LOBO_COR[r.lobo] || '#c9a26b').multiplyScalar(esc); lobos[i * 3] = c.r; lobos[i * 3 + 1] = c.g; lobos[i * 3 + 2] = c.b;
+    c.set(CBS_ZONA_COR[cbsZona(r.L, r.lobo, Math.abs(X[i]))]); funcional[i * 3] = c.r; funcional[i * 3 + 1] = c.g; funcional[i * 3 + 2] = c.b;
   }
-  geo.userData.cores = { simples, lobos }; geo.userData.lobulo = lob.map(q => q.L); geo.userData.lobo = lob.map(q => q.lobo);
+  // "dividir ao meio" (vista superior, Duus fig. 5.1): uma metade pela zona funcional, a outra pelos lóbulos
+  const dividida = { get: lado => { const D = new Float32Array(n * 3); for (let i = 0; i < n; i++) { const F = X[i] * lado > 0 ? funcional : lobulos; D[i * 3] = F[i * 3]; D[i * 3 + 1] = F[i * 3 + 1]; D[i * 3 + 2] = F[i * 3 + 2]; } return D; } };
+  geo.userData.x = X;
+  geo.userData.cores = { simples, lobulos, lobos, funcional, dividida }; geo.userData.lobulo = lob.map(q => q.L); geo.userData.lobo = lob.map(q => q.lobo);
   geo.setAttribute('color', new THREE.BufferAttribute(simples.slice(), 3));
 }
 // cores do modo, com o lóbulo ou o lobo selecionado aceso em amarelo
 // partes do cerebelo real que são pedaços da mesma malha: ao escolher uma, a malha continua opaca e a parte acende
 const cbsParte = id => !!id && id !== 'cb_sereno' && (/^cb_/.test(id) || id === 'vermis');
+function cbsCorChave() { return CBS.modo + '|' + CBS.colorir + '|' + CBS.ladoFunc + '|' + (state.cbHover || ''); }
 function cbsAplicarCores(m, lobos) {
-  const g = m.geometry, cor = g.userData.cores, A = g.attributes.color.array, sel = state.sel; A.set(lobos ? cor.lobos : cor.simples);
+  const g = m.geometry, cor = g.userData.cores, A = g.attributes.color.array, sel = state.sel;
+  if (!lobos) A.set(cor.simples);
+  else if (CBS.colorir === 'dividida') { const k = 'div' + CBS.ladoFunc; if (!cor[k]) cor[k] = cor.dividida.get(CBS.ladoFunc); A.set(cor[k]); }
+  else A.set(cor[CBS.colorir] || cor.lobulos);
+  if (state.cbHover && state.cbHover !== sel) { const L = g.userData.lobulo, h = state.cbHover; for (let i = 0; i < L.length; i++) if (L[i] === h) { const k = i * 3; A[k] = A[k] * 0.62 + 0.38; A[k + 1] = A[k + 1] * 0.62 + 0.38; A[k + 2] = A[k + 2] * 0.62 + 0.36; } }   // passar o mouse: o lóbulo clareia
   if (cbsParte(sel)) {
     const L = g.userData.lobulo, Lo = g.userData.lobo, verme = sel === 'vermis';
     for (let i = 0; i < L.length; i++) {
@@ -123,14 +139,14 @@ function cbsAplicarCores(m, lobos) {
       else { const y = A[k] * 0.3 + A[k + 1] * 0.59 + A[k + 2] * 0.11, v = 0.2 + y * 0.35; A[k] = A[k] * 0.15 + v * 0.85; A[k + 1] = A[k + 1] * 0.15 + v * 0.85; A[k + 2] = A[k + 2] * 0.15 + v * 0.85; }   // o resto fica cinza e apagado, sem sumir
     }
   }
-  g.attributes.color.needsUpdate = true; m.userData.corSel = sel; m.userData.corModo = CBS.modo;
+  g.attributes.color.needsUpdate = true; m.userData.corSel = sel; m.userData.corModo = cbsCorChave();
 }
 const _apCbs = applyAppearance;
 applyAppearance = function () {
   _apCbs();
   if (CBS.modo === 'atlas') return;
   const nivel = cbsNivel(CBS.modo), m = CBS.malhas[nivel];
-  if (m && (m.userData.corSel !== state.sel || m.userData.corModo !== CBS.modo)) cbsAplicarCores(m, CBS.modo === 'lobos');
+  if (m && (m.userData.corSel !== state.sel || m.userData.corModo !== cbsCorChave())) cbsAplicarCores(m, CBS.modo === 'lobos');
   // a malha real inteira é "o cerebelo": com uma parte dele escolhida ela não pode ficar transparente (era o aspecto picotado)
   if (cbsParte(state.sel)) Object.values(CBS.malhas).forEach(q => { q.material.opacity = 1; q.material.transparent = false; q.material.depthWrite = true; q.material.emissiveIntensity = 0; });
   // a cor do cerebelo real vem de cada vértice: o material fica branco (a aparência geral o pintava de castanho, o que multiplicava e escurecia as cores dos lóbulos)
@@ -159,6 +175,7 @@ applyVisibility = function () {
     if (u.id === 'cb_sereno') { m.visible = real && u.cbsNivel === nivel && m.visible; return; }
     if (u.suit) { m.visible = real && m.visible; return; }                                           // núcleos do SUIT só com o cerebelo real
     if (real && /^(denteado|emboliforme|globoso|fastigial)$/.test(u.id)) { m.visible = false; return; }  // e os esquemas saem
+    if (u.cbsFis) return;                                                                            // fissuras como curvas: decididas em 14-cerebelo-sereno2-tema.js
     if (real && (u.pai === 'cerebelo' || u.pai === 'vermis' || /^cb_|^f_(pre|pri|pos|hor)/.test(u.id))) m.visible = false;
   });
 };

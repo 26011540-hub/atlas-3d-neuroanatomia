@@ -158,7 +158,7 @@ function stepRotulos() {
     let x = 0, y = 0, txt = '';
     if (ver) {
       x = (_p.x + 1) / 2 * w; y = (1 - _p.y) / 2 * h; txt = nomeVisivel(id) ? nomeL(id) : '?';
-      const lw = Math.min(180, txt.length * 6.6 + 16) / 2, lh = 10;
+      const lw = Math.min(280, txt.length * 6.6 + 16) / 2, lh = 10;
       if (CAIXAS.some(b => Math.abs(b[0] - x) < b[2] + lw && Math.abs(b[1] - y) < b[3] + lh)) ver = false;
       else CAIXAS.push([x, y, lw, lh]);
     }
