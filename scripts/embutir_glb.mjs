@@ -10,7 +10,11 @@ import { execFileSync } from 'node:child_process';
 const RAIZ = path.resolve(import.meta.dirname, '..');
 const SRC = path.join(RAIZ, 'src');
 const ler = f => fs.readFileSync(path.join(SRC, f), 'utf8').replace(/\r\n/g, '\n');
-const js = fs.readdirSync(path.join(SRC, 'js')).filter(f => /^\d\d-.*\.js$/.test(f)).sort().map(f => ler('js/' + f)).join('');
+// 14-interface.js fecha o escopo principal do atlas: um arquivo 14-* que ordene depois dele ficaria fora do escopo e quebraria a carga
+const lista = fs.readdirSync(path.join(SRC, 'js')).filter(f => /^\d\d-.*\.js$/.test(f)).sort();
+const depois = lista.filter(f => f > '14-interface.js' && f < '15');
+if (depois.length) { console.error('erro: estes arquivos ordenam depois de 14-interface.js e ficariam fora do escopo principal:', depois.join(', ')); process.exit(1); }
+const js = lista.map(f => ler('js/' + f)).join('');
 
 // sintaxe: falha aqui, antes de gerar um atlas quebrado
 const tmp = path.join(os.tmpdir(), 'mimir-chk.js');

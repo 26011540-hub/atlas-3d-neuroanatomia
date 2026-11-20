@@ -159,7 +159,7 @@ fontes:
     credito_conferido: false   # texto e DOI escritos de memória; conferir na página da fonte ao baixar
     verificacao_link_2026_11_17: "ok"
   - id: massp2
-    nome: "MASSP 2.0 Lifespan Probabilistic Atlas (Bazin et al. 2025, AHEAD)"
+    nome: "MASSP 2.0 Lifespan Probabilistic Atlas (Bazin et al. 2024, AHEAD)"
     url_original: "https://uvaauas.figshare.com/articles/dataset/MASSP_2_0_Lifespan_Probabilistic_Atlas/27291579"
     doi: "10.21942/uva.27291579"
     licenca: "CC BY 4.0"
