@@ -13,7 +13,7 @@ O que cada fonte oferece, a licença e como ela entra no atlas. Regra geral: **n
 | Fonte | O que oferece | Licença | Como entra |
 |---|---|---|---|
 | [Neupatimagem, FCM-UNICAMP: atlas de cortes coronais](https://anatpat.unicamp.br/bineucerebrocoronalindice.html) | 12 cortes coronais (face anterior e posterior), com as estruturas de cada face; séries [axial, sagital, superfície e medula](https://anatpat.unicamp.br/bineuro.html) | Direitos dos autores; uso comercial e reprodução em bloco vedados ([portal](https://anatpat.unicamp.br/neupimportal.html)) | Gabarito de níveis e de estruturas (só os nomes, em `GABARITO.md`) e modelo de forma e posição para desenhar as bolachas; link "ver a peça real na Unicamp" em cada corte; nenhuma foto copiada |
-| Notas de estudo de Gustavo de Castro (fotos de peças com anotações) | Sequência das bolachas estudadas em aula, tronco, cerebelo, ventrículos e medula | Material pessoal | Conferência do gabarito; transcrição local em `notas/` (fora do Git); nada publicado |
+| Notas de estudo de Gustavo de Castro Moreira (fotos de peças com anotações) | Sequência das bolachas estudadas em aula, tronco, cerebelo, ventrículos e medula | Material pessoal | Conferência do gabarito; transcrição local em `notas/` (fora do Git); nada publicado |
 
 ## Malhas 3D
 | Fonte | O que oferece | Licença | Como entra |

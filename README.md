@@ -1,8 +1,8 @@
 # Mímir: Atlas 3D de Neuroanatomia
 
-**Autor: Gustavo de Castro** · © 2026 · licença CC BY-SA 3.0 (ver [LICENSE](LICENSE))
+**Autor: Gustavo de Castro Moreira** · © 2026 · código MIT, conteúdo próprio CC BY-NC-SA 4.0, uso não comercial (ver [LICENSE](LICENSE))
 
-O Mímir é um atlas 3D interativo para estudo de neuroanatomia, criado por Gustavo de Castro, estudante de Medicina, com base em Ângelo Machado, *Neuroanatomia Funcional*, 4ª ed. Roda no navegador, em um único arquivo HTML, sem instalação.
+O Mímir é um atlas 3D interativo para estudo de neuroanatomia, criado por Gustavo de Castro Moreira, estudante de Medicina, com base em Ângelo Machado, *Neuroanatomia Funcional*, 4ª ed. Roda no navegador, em um único arquivo HTML, sem instalação.
 
 *Sobre o nome:* na mitologia nórdica, Mímir guarda a fonte da sabedoria e da memória; depois de sua morte, Odin conserva sua cabeça e continua a consultá-la. Uma cabeça que guarda o conhecimento.
 
@@ -43,7 +43,7 @@ Detalhes da conversão das malhas em [scripts/LEIAME.md](scripts/LEIAME.md); est
 - Textos: resumos a partir de Ângelo Machado, *Neuroanatomia Funcional*, 4ª ed. (Atheneu), com capítulo e página citados em cada item. O livro não está incluído neste repositório.
 - Programas: [three.js](https://threejs.org) r128 (MIT) e [meshoptimizer](https://github.com/zeux/meshoptimizer) (MIT).
 
-Por usar as malhas do Brain for Blender, o atlas é distribuído sob a mesma licença, **CC BY-SA 3.0**. Quem reutilizar deve citar o autor (Gustavo de Castro, com o link deste repositório), indicar as alterações e manter a mesma licença. O código foi escrito com o auxílio de inteligência artificial (Claude, da Anthropic), sob a direção do autor.
+Licenças (detalhes em [LICENSE](LICENSE)): **código sob MIT** ([LICENSE-CODE](LICENSE-CODE)); **textos, rótulos e esquemas de autoria própria sob [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.pt_BR)**; cada modelo de terceiros segue a licença da sua fonte ([CREDITS.md](CREDITS.md) e [docs/fontes_e_licencas.md](docs/fontes_e_licencas.md)). Como há fontes de uso não comercial, o atlas completo só pode ser usado e redistribuído para fins não comerciais. Quem reutilizar deve citar o autor (Gustavo de Castro Moreira, com o link deste repositório) e cada fonte. O código foi escrito com o auxílio de inteligência artificial (Claude, da Anthropic), sob a direção do autor.
 
 ## Como citar
-CASTRO, Gustavo de. *Mímir: Atlas 3D de Neuroanatomia*. 2026. Disponível em: https://github.com/26011540-hub/atlas-3d-neuroanatomia.
+MOREIRA, Gustavo de Castro. *Mímir: Atlas 3D de Neuroanatomia*. 2026. Disponível em: https://github.com/26011540-hub/atlas-3d-neuroanatomia.

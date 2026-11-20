@@ -2,7 +2,7 @@
 
 Gerado por `scripts/relatorio_fontes.mjs` a partir de `data/sources.yaml` em 2026-11-20. Não editar à mão: editar o manifesto e gerar de novo.
 
-Autor: Gustavo de Castro, Universidade Estadual de Ponta Grossa (UEPG), curso de Medicina.
+Autor: Gustavo de Castro Moreira, Universidade Estadual de Ponta Grossa (UEPG), curso de Medicina.
 
 ## 1. Método de rastreabilidade
 
@@ -93,4 +93,3 @@ Usadas só no processamento (nenhum dado delas vai para o atlas): Molde MNI ICBM
 - Créditos ainda não conferidos na página da fonte: Allen Human Reference Atlas 3D, 2020; Territórios arteriais JHU (Liu et al. 2023).
 - Fontes previstas no manifesto e ainda não usadas: CerebrA (Manera et al. 2020) sobre MNI ICBM152 2009c; Julich-Brain v3.1 (EBRAINS); BigBrain Release 2015; BodyParts3D; Crânio de Halle (micro-CT); OpenEar (Sieber et al. 2019).
 - Revisão anatômica dos alinhamentos, das divisões e dos textos novos: ver `REVISAR.md`.
-- Nome do autor nos créditos (`Gustavo de Castro`) a confirmar.

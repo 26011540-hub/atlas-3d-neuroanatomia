@@ -14,7 +14,7 @@
 
 projeto:
   nome: "Mímir: Atlas 3D de Neuroanatomia"
-  autor: "Gustavo de Castro"          # o prompt da reestruturação usa "Gustavo de Castro Moreira": confirmar qual nome vai nos créditos
+  autor: "Gustavo de Castro Moreira"   # confirmado pelo autor em 20/11/2026
   instituicao: "Universidade Estadual de Ponta Grossa (UEPG), curso de Medicina"
   natureza: "Projeto de extensão de autoria própria, gratuito e não comercial"
   espaco_referencia_atual: >-
@@ -39,13 +39,13 @@ fontes:
     autorizada_no_prompt: false     # não está na lista de fontes autorizadas: decidir se fica ou é substituída (ver diagnóstico)
   - id: mimir
     nome: "Mímir (autoria própria)"
-    autores: "Gustavo de Castro"
+    autores: "Gustavo de Castro Moreira"
     url_original: "https://github.com/26011540-hub/atlas-3d-neuroanatomia"
     doi: null
-    licenca: "CC BY-SA 3.0 (LICENSE atual; a decidir uma licença separada para o código e os textos, ver docs/diagnostico_fase0.md)"
-    comercial_permitido: true
+    licenca: "Conteúdo próprio: CC BY-NC-SA 4.0; código: MIT (LICENSE e LICENSE-CODE, decisão do autor em 20/11/2026)"
+    comercial_permitido: false
     share_alike: true
-    credito_exato: "Mímir, autoria própria de Gustavo de Castro: textos didáticos, rótulos em português, formas esquemáticas e roteiros de estudo, com base em Ângelo Machado, Neuroanatomia Funcional, 4ª ed."
+    credito_exato: "Mímir, autoria própria de Gustavo de Castro Moreira: textos didáticos, rótulos em português, formas esquemáticas e roteiros de estudo, com base em Ângelo Machado, Neuroanatomia Funcional, 4ª ed."
     credito_conferido: true
     usado_hoje: true
   - id: unicamp_gabarito

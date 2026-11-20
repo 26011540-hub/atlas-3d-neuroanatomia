@@ -75,7 +75,7 @@ md += `\n## 4. Material de terceiros e autoria própria
 const pend = terceiros.filter(f => f.credito_conferido === false);
 md += pend.length ? `- Créditos ainda não conferidos na página da fonte: ${pend.map(f => limpa(f.nome)).join('; ')}.\n` : '- Todos os créditos das fontes usadas foram conferidos.\n';
 if (naoUsadas.length) md += `- Fontes previstas no manifesto e ainda não usadas: ${naoUsadas.map(f => limpa(f.nome)).join('; ')}.\n`;
-md += `- Revisão anatômica dos alinhamentos, das divisões e dos textos novos: ver \`REVISAR.md\`.\n- Nome do autor nos créditos (\`${man.projeto ? man.projeto.autor : ''}\`) a confirmar.\n`;
+md += `- Revisão anatômica dos alinhamentos, das divisões e dos textos novos: ver \`REVISAR.md\`.\n`;
 
 fs.mkdirSync(path.join(RAIZ, 'docs'), { recursive: true });
 fs.writeFileSync(path.join(RAIZ, 'docs', 'fontes_e_licencas.md'), md);

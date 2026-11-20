@@ -1,28 +1,36 @@
 Mímir: Atlas 3D de Neuroanatomia
-Copyright (c) 2026 Gustavo de Castro
+Copyright (c) 2026 Gustavo de Castro Moreira
 
-Autor e titular: Gustavo de Castro.
+Autor e titular: Gustavo de Castro Moreira.
 Repositório original: https://github.com/26011540-hub/atlas-3d-neuroanatomia
 
-Esta obra é distribuída sob a licença Creative Commons Atribuição-CompartilhaIgual 3.0
-Não Adaptada (CC BY-SA 3.0):
-https://creativecommons.org/licenses/by-sa/3.0/legalcode
-Resumo em português: https://creativecommons.org/licenses/by-sa/3.0/deed.pt_BR
+O Mímir reúne partes com licenças diferentes. Cada parte segue a sua:
 
-Quem copiar, redistribuir ou adaptar esta obra deve:
-  1. dar crédito ao autor, Gustavo de Castro, com o link do repositório original;
-  2. indicar se fez alterações;
-  3. distribuir as adaptações sob a mesma licença (CC BY-SA 3.0).
+1. CÓDIGO (scripts/, src/js/, os arquivos .mjs, .py e .html que montam o atlas)
+   Licença MIT: ver LICENSE-CODE.
 
-Material de terceiros incluído:
-  - Malhas 3D do cérebro: "Brain for Blender", de Anderson M. Winkler (https://brainder.org),
-    licença CC BY-SA 3.0. As malhas foram decimadas, recoloridas e espelhadas. É por causa delas
-    que esta obra usa a mesma licença.
-  - three.js r128 e GLTFLoader (licença MIT), carregados por CDN, não incluídos aqui.
-  - meshoptimizer (licença MIT), usado só na conversão das malhas.
+2. CONTEÚDO DE AUTORIA PRÓPRIA (textos didáticos, rótulos em português, formas esquemáticas
+   desenhadas no código, roteiros de estudo, escolhas de divisão, cor e classificação, alinhamentos
+   e cálculos feitos para o atlas)
+   Licença Creative Commons Atribuição-NãoComercial-CompartilhaIgual 4.0 Internacional
+   (CC BY-NC-SA 4.0): https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode.pt
+   Quem copiar, redistribuir ou adaptar deve dar crédito ao autor (Gustavo de Castro Moreira,
+   com o link do repositório original), indicar as alterações, não usar para fins comerciais e
+   distribuir as adaptações sob a mesma licença.
 
-Os textos do atlas resumem Ângelo Machado, Neuroanatomia Funcional, 4ª ed. (Atheneu), com
-capítulo e página citados em cada item. O livro não faz parte desta obra nem deste repositório.
+3. MATERIAL DE TERCEIROS (modelos 3D, imagens e mapas na pasta models/ e as malhas do Brain for
+   Blender embutidas no atlas)
+   Cada arquivo segue a licença da sua fonte, registrada em data/sources.yaml e listada em
+   CREDITS.md e em docs/fontes_e_licencas.md. Entre elas há fontes de uso só não comercial
+   (Sereno et al. 2020, com permissão do autor; Visible Korean, CC BY-NC 4.0; TopBrain, uso
+   comercial só com permissão) e fontes que exigem compartilhar pela mesma licença (Brain for
+   Blender, CC BY-SA 3.0; HCP1065 e territórios arteriais do JHU, CC BY-SA 4.0).
 
-O código foi escrito com o auxílio de inteligência artificial (Claude, da Anthropic), sob a
-direção do autor.
+Por causa dessas fontes, o atlas completo, como está publicado, só pode ser usado e redistribuído
+para fins não comerciais, com os créditos de todas as fontes.
+
+Os textos do atlas resumem Ângelo Machado, Neuroanatomia Funcional, 4ª ed. (Atheneu), com capítulo
+e página citados em cada item. O livro não faz parte desta obra nem deste repositório.
+
+O código foi escrito com o auxílio de inteligência artificial (Claude, da Anthropic), sob a direção
+do autor.
