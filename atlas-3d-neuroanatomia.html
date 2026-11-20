@@ -356,6 +356,8 @@ details.grp li button.on { background: var(--accent); color: var(--accent-ink); 
           <li><b>Allen Human Reference Atlas 3D, 2020</b>. Núcleos do tálamo: Allen Human Reference Atlas – 3D, 2020 (RRID:SCR_017764), version 1.0.0, Allen Institute for Brain Science, CC BY 4.0. <a href="https://download.alleninstitute.org/informatics-archive/allen_human_reference_atlas_3d_2020/version_1/" target="_blank" rel="noopener">download.alleninstitute.org/informatics-archive/allen_human_reference_atlas_3d_2020/version_1</a></li>
           <li><b>HCP1065 Population-Averaged Tractography Atlas (Yeh 2022)</b> <span class="selo selo-sa" title="Derivados sob a mesma licença">SA</span>. Grandes vias: Yeh FC. Population-based tract-to-region connectome of the human brain and its hierarchical topology. Nat Commun 2022;13:4933. doi:10.1038/s41467-022-32595-4 (atlas HCP1065, CC BY-SA 4.0). Dados fornecidos pelo Human Connectome Project, WU-Minn Consortium (Principal Investigators: David Van Essen e Kamil Ugurbil; 1U54MH091657), financiado pelos 16 institutos e centros do NIH que apoiam o NIH Blueprint for Neuroscience Research e pelo McDonnell Center for Systems Neuroscience da Washington University. <a href="https://github.com/data-others/tract" target="_blank" rel="noopener">github.com/data-others/tract</a></li>
           <li><b>Visible Korean, cabeça masculina</b> <span class="selo selo-nc" title="Uso não comercial">NC</span>. Nervos cranianos e estruturas da cabeça: Kim CY, Park JS. Visible Korean male head dataset: sectioned images, segmented images, 7.0 T MRI data, and 3D models. Zenodo, 2026. doi:10.5281/zenodo.22759852 (CC BY-NC 4.0). <a href="https://sites.google.com/ajou.ac.kr/anatomy" target="_blank" rel="noopener">sites.google.com/ajou.ac.kr/anatomy</a></li>
+          <li><b>TopBrain 2025/2026</b> <span class="selo selo-nc" title="Uso não comercial">NC</span>. Artérias e veias reais: TopBrain Challenge Data Release, Zenodo 2026, doi:10.5281/zenodo.21972006 (uso aberto com citação; uso comercial só com permissão). Yang K, Shi P, Huang H, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv 2026. Yang K, Musio F, Ma Y, et al. The TopCoW Challenge: Topology-Aware Circle of Willis Segmentation for CT and MR Angiography. NEJM AI 2026;3(8). <a href="https://zenodo.org/records/21972006" target="_blank" rel="noopener">zenodo.org/records/21972006</a></li>
+          <li><b>Territórios arteriais JHU (Liu et al. 2023)</b> <span class="selo selo-sa" title="Derivados sob a mesma licença">SA</span>. Territórios arteriais: Liu CF, Hsu J, Xu X, et al. Digital 3D Brain MRI Arterial Territories Atlas. Sci Data 2023;10:74. doi:10.1038/s41597-022-01923-0. Arquivos do NITRC (nitrc.org/projects/arterialatlas), cópia no OSF (osf.io/e3r7b). <a href="https://www.nitrc.org/projects/arterialatlas/" target="_blank" rel="noopener">www.nitrc.org/projects/arterialatlas</a></li>
         </ul>
         <h3>Autoria própria</h3>
         <ul>
@@ -4499,6 +4501,8 @@ function setCircuito(nome) {
   const C = CIRCUITOS[nome];
   const montar = () => {
     const pts = []; C.passos.forEach(([id, n, comeco]) => cirPontos(id, n, comeco).forEach(p => pts.push(p)));
+    // sem pontos inválidos nem repetidos (duas estações quase no mesmo lugar quebram a curva centrípeta)
+    for (let i = pts.length - 1; i >= 0; i--) { const p = pts[i]; if (!isFinite(p.x + p.y + p.z) || (i > 0 && p.distanceTo(pts[i - 1]) < 0.03)) pts.splice(i, 1); }
     if (pts.length < 3) { if (st) st.textContent = 'Faltam estruturas para desenhar este circuito.'; return; }
     if (C.fechado && pts[0].distanceTo(pts[pts.length - 1]) < 0.05) pts.pop();
     const curva = new THREE.CatmullRomCurve3(pts, C.fechado, 'centripetal', 0.5); CIR.curva = curva;
@@ -4523,7 +4527,7 @@ function setCircuito(nome) {
 function cirAnimar(t) {
   if (!CIR.ativo || !CIR.curva) return;
   const dt = Math.min(0.05, (t - CIR.ultimo) / 1000); CIR.ultimo = t; CIR.t = (CIR.t + dt * 0.07) % 1;   // uma volta em cerca de 14 s
-  CIR.pulsos.forEach(p => p.position.copy(CIR.curva.getPointAt((CIR.t + p.userData.fase) % 1)));
+  try { CIR.pulsos.forEach(p => p.position.copy(CIR.curva.getPointAt((CIR.t + p.userData.fase) % 1))); } catch (e) { console.warn('circuito', e); return; }
   marca(); requestAnimationFrame(cirAnimar);
 }
 // desfaz o circuito quando o usuário escolhe outra estrutura
@@ -4551,6 +4555,116 @@ applyAppearance = function () {
   });
 };
 if (/debug/.test(location.hash)) window.cirDebug = { CIR, cirPontos };
+/* ===== ARTÉRIAS REAIS DO TOPBRAIN (Fase 6) =====
+   TopBrain Challenge Data Release (Zenodo 21972006; uso aberto com citação, comercial só com permissão), paciente
+   topcow_mr_025 (angio-RM). Malhas de scripts/process/topbrain_vasos.py, alinhadas ao atlas por 7 marcos do polígono
+   de Willis. Cada artéria entra no item do atlas que ela representa (acm, aca1, basilar...), então o clique, o modo
+   AVC e os territórios funcionam com ela. Cor por calibre: quanto mais grossa, mais escuro o vermelho. */
+const TB = { modo: 'esquema', carga: null, ids: new Set(), soWillis: false, info: null };
+const TB_FINO = new THREE.Color('#ff9a8c'), TB_GROSSO = new THREE.Color('#a8101c');
+const tbCor = raio => TB_FINO.clone().lerp(TB_GROSSO, Math.max(0, Math.min(1, (raio - 0.6) / 0.95)));
+function tbCarregar() {
+  if (TB.carga) return TB.carga;
+  if (!cbsLoader) { cbsLoader = new THREE.GLTFLoader(); if (window.MeshoptDecoder) cbsLoader.setMeshoptDecoder(window.MeshoptDecoder); }
+  TB.carga = Promise.all([new Promise((ok, falha) => cbsLoader.load('models/topbrain_vasos.glb', ok, undefined, falha)), fetch('models/topbrain_vasos.json').then(r => r.json())]).then(([g, J]) => {
+    TB.info = J.nos; g.scene.updateMatrixWorld(true);
+    g.scene.traverse(o => {
+      if (!o.isMesh) return;
+      const no = o.name.includes('__') ? o.name : ((o.parent && o.parent.name) || ''), info = J.nos[no];
+      if (!info || !META[info.item]) return;
+      const cor = tbCor(info.raio_mm), m = new THREE.Mesh(cbsGeo(o), stdMat('#' + cor.getHexString(), { roughness: 0.3, metalness: 0.05 }));
+      m.userData.tb = true; m.userData.semBolacha = true; m.userData.willis = info.willis; m.userData.tbCor = '#' + cor.getHexString();
+      register(info.item, m, info.lado === 'd' ? -1 : (info.lado === 'e' ? 1 : 0)); TB.ids.add(info.item);
+    });
+  });
+  return TB.carga;
+}
+function setArteriasModo(modo) {
+  TB.modo = modo;
+  document.querySelectorAll('[data-tb]').forEach(b => b.setAttribute('aria-pressed', b.dataset.tb === modo ? 'true' : 'false'));
+  const st = document.getElementById('tbStatus');
+  if (modo === 'esquema') { if (st) st.textContent = ''; applyVisibility(); applyAppearance(); marca(); return; }
+  if (st) st.textContent = 'Carregando as artérias do TopBrain…';
+  tbCarregar().then(() => { if (st) st.textContent = ''; if (!state.groupOn.art) { state.groupOn.art = true; syncLayerUI(); } applyVisibility(); applyAppearance(); marca(); })
+    .catch(e => { if (st) st.textContent = 'Não foi possível carregar models/topbrain_vasos.glb.'; console.warn(e); setArteriasModo('esquema'); });
+}
+const _visTb = applyVisibility;
+applyVisibility = function () {
+  _visTb();
+  const real = TB.modo === 'real';
+  ALLMESH.forEach(m => {
+    const u = m.userData;
+    if (u.tb) { m.visible = real && m.visible && (!TB.soWillis || u.willis); return; }
+    if (real && TB.ids.has(u.id)) m.visible = false;                         // o esquema da mesma artéria sai
+  });
+};
+// a aparência do atlas pinta pela cor do item; aqui volta a cor por calibre (o realce de seleção continua por cima)
+const _apTb = applyAppearance;
+applyAppearance = function () { _apTb(); if (TB.modo !== 'real' || state.territ) return; ALLMESH.forEach(m => { if (m.userData.tb && !(state.les && state.les.via === m.userData.id)) m.material.color.set(m.userData.tbCor); }); };
+(function () {
+  const lg = document.getElementById('willis'); if (!lg) return;
+  const linha = document.createElement('div'); linha.className = 'row'; linha.style.cssText = 'gap:8px;margin:4px 0 6px;flex-wrap:wrap';
+  linha.innerHTML = '<span class="lbl">Artérias</span><span class="seg"><button type="button" data-tb="esquema" aria-pressed="true" title="Artérias desenhadas do Mímir">Esquema</button><button type="button" data-tb="real" aria-pressed="false" title="Artérias reais de uma angio-RM (TopBrain), cor pelo calibre">TopBrain</button></span>' +
+    '<button type="button" class="btn" id="tbWillis" aria-pressed="false" title="No modo TopBrain, mostra só o polígono de Willis">Só o polígono</button><span class="muted" id="tbStatus" style="font-size:12px"></span>';
+  lg.closest('.btnrow').after(linha);
+  linha.querySelectorAll('[data-tb]').forEach(b => b.addEventListener('click', () => setArteriasModo(b.dataset.tb)));
+  document.getElementById('tbWillis').addEventListener('click', e => {
+    TB.soWillis = !TB.soWillis; e.currentTarget.setAttribute('aria-pressed', TB.soWillis ? 'true' : 'false');
+    if (TB.soWillis && TB.modo !== 'real') setArteriasModo('real'); else { applyVisibility(); applyAppearance(); marca(); }
+  });
+})();
+/* ===== TERRITÓRIOS ARTERIAIS DO JHU (Fase 6) =====
+   Liu CF et al., Digital 3D Brain MRI Arterial Territories Atlas, Sci Data 2023 (lesões de 1.298 pacientes com AVC).
+   models/jhu_territorios.bin/.json (scripts/process/jhu_territorios.py): rótulos em MNI a 2 mm. Cada vértice do córtex
+   é levado do espaço do atlas ao MNI (inversa da afim de mni_para_mimir.py) e recebe o território do voxel (ou do
+   vizinho rotulado mais próximo, até 6 mm, porque a superfície do atlas não coincide com a do molde).
+   Seletor "Fonte dos territórios: Esquema (Machado) | Atlas JHU": troca só as bordas; as cores e a legenda são as mesmas. */
+T_RGB[4] = [0.6, 0.38, 0.82]; T_RGB[5] = [0.23, 0.65, 0.42];   // corióidea anterior e vertebrobasilar (só aparecem com o JHU)
+const JHU = { fonte: 'esquema', carga: null };
+const JHU_CLASSE = { ACA: 1, ACM: 2, ACP: 3, ACI: 4, VB: 5 };
+function jhuCarregar() {
+  if (JHU.carga) return JHU.carga;
+  JHU.carga = Promise.all([fetch('models/jhu_territorios.json').then(r => r.json()), fetch('models/jhu_territorios.bin').then(r => r.arrayBuffer())]).then(([J, buf]) => {
+    const L = new Uint8Array(buf), [nx, ny, nz] = J.dim, cls = new Uint8Array(256);
+    Object.entries(J.rotulos).forEach(([k, r]) => { cls[+k] = r.classe ? JHU_CLASSE[r.classe] : 0; });
+    const M = new THREE.Matrix4(), V = new THREE.Matrix4();
+    M.set(...J.mni_para_mimir.flat()); V.set(...J.vox_para_mni.flat());
+    const ida = new THREE.Matrix4().copy(V).invert().multiply(new THREE.Matrix4().copy(M).invert());   // Mímir (cm) -> voxel
+    // no córtex cerebral não entra a classe vertebrobasilar (5): a vizinhança da face inferior do lobo temporal pegaria o cerebelo
+    const at = (i, j, k) => { if (i < 0 || j < 0 || k < 0 || i >= nx || j >= ny || k >= nz) return 0; const c = cls[L[i + nx * (j + ny * k)]]; return c === 5 ? 0 : c; };
+    const v = new THREE.Vector3();
+    cortexMeshes.forEach(m => {
+      if (!m.userData.dono) return;
+      if (m.userData.id === 'cc_cut' || m.userData.id === 'dien_wall') return;   // superfícies de corte (não são córtex): ficam neutras
+      const g = m.geometry, p0 = m.userData.p0, n = g.userData.terr.length, t = new Uint8Array(n);
+      for (let q = 0; q < n; q++) {
+        v.set(p0[q * 3], p0[q * 3 + 1], p0[q * 3 + 2]).applyMatrix4(m.matrix).applyMatrix4(ida);
+        const i = Math.round(v.x), j = Math.round(v.y), k = Math.round(v.z); let c = at(i, j, k);
+        for (let r = 1; !c && r <= 3; r++)                                     // vizinho rotulado mais próximo
+          for (let a = -r; a <= r && !c; a++) for (let b = -r; b <= r && !c; b++) for (let d = -r; d <= r && !c; d++) c = at(i + a, j + b, k + d);
+        t[q] = c || g.userData.terr[q];                                        // fora do atlas: fica o território do esquema
+      }
+      g.userData.terrEsq = g.userData.terr; g.userData.terrJHU = t;
+    });
+  });
+  return JHU.carga;
+}
+function setFonteTerritorios(fonte) {
+  JHU.fonte = fonte;
+  document.querySelectorAll('[data-jhu]').forEach(b => b.setAttribute('aria-pressed', b.dataset.jhu === fonte ? 'true' : 'false'));
+  const aplicar = () => { cortexMeshes.forEach(m => { const u = m.geometry.userData; if (u.terrJHU) u.terr = fonte === 'jhu' ? u.terrJHU : u.terrEsq; }); pintado = ''; applyAppearance(); marca(); };
+  if (fonte === 'jhu') jhuCarregar().then(aplicar).catch(e => { console.warn(e); setFonteTerritorios('esquema'); }); else aplicar();
+}
+(function () {
+  const lg = document.getElementById('legenda'); if (!lg) return;
+  const linha = document.createElement('div'); linha.className = 'row'; linha.style.cssText = 'gap:8px;margin:2px 0 6px;flex-wrap:wrap';
+  linha.innerHTML = '<span class="lbl">Fonte dos territórios</span><span class="seg"><button type="button" data-jhu="esquema" aria-pressed="true" title="Divisão descrita no Machado (cap. 18)">Esquema</button><button type="button" data-jhu="jhu" aria-pressed="false" title="Atlas de territórios arteriais do JHU (Liu et al. 2023): lesões de 1.298 pacientes com AVC">Atlas JHU</button></span>';
+  lg.after(linha);
+  linha.querySelectorAll('[data-jhu]').forEach(b => b.addEventListener('click', () => {
+    const ct = document.getElementById('territ'); if (ct && !ct.checked) { ct.checked = true; ct.dispatchEvent(new Event('change')); }
+    setFonteTerritorios(b.dataset.jhu);
+  }));
+})();
 /* ===== INTERFACE ===== */
 const $ = (s, r) => (r || document).querySelector(s);
 const $$ = (s, r) => Array.from((r || document).querySelectorAll(s));

@@ -292,8 +292,13 @@ fontes:
     licenca: "Livre com citação; uso comercial só com permissão"
     comercial_permitido: false
     share_alike: false
-    credito_exato: "TopBrain, Zenodo 21972006 (citar o artigo indicado na página do registro)."
-    credito_conferido: false   # texto e DOI escritos de memória; conferir na página da fonte ao baixar
+    credito_exato: "Artérias e veias reais: TopBrain Challenge Data Release, Zenodo 2026, doi:10.5281/zenodo.21972006 (uso aberto com citação; uso comercial só com permissão). Yang K, Shi P, Huang H, et al. TopBrain segmentation challenge for whole brain vessel anatomy. medRxiv 2026. Yang K, Musio F, Ma Y, et al. The TopCoW Challenge: Topology-Aware Circle of Willis Segmentation for CT and MR Angiography. NEJM AI 2026;3(8)."
+    credito_conferido: true    # termos de uso e citações conferidos na descrição do registro no Zenodo (19/11/2026)
+    downloads:
+      - arquivo: "TopBrain_Data_Release_Batches1n2nTA36_081726.zip"
+        url: "https://zenodo.org/api/records/21972006/files/TopBrain_Data_Release_Batches1n2nTA36_081726.zip/content"
+        tamanho_aprox: "1,87 GB (1.963.719.117 bytes)"
+        md5_fonte: "aab94bed377ad71bfbde3f7e26d652c5"
     verificacao_link_2026_11_17: "ok"
   - id: jhu_arterial
     nome: "Territórios arteriais JHU (Liu et al. 2023)"
@@ -302,8 +307,14 @@ fontes:
     licenca: "CC BY-SA 4.0"
     comercial_permitido: true
     share_alike: true
-    credito_exato: "Liu CF, Hsu J, Xu X, et al. Digital 3D Brain MRI Arterial Territories Atlas. Sci Data 2023;10:74. CC BY-SA 4.0."
-    credito_conferido: false   # texto e DOI escritos de memória; conferir na página da fonte ao baixar
+    credito_exato: "Territórios arteriais: Liu CF, Hsu J, Xu X, et al. Digital 3D Brain MRI Arterial Territories Atlas. Sci Data 2023;10:74. doi:10.1038/s41597-022-01923-0. Arquivos do NITRC (nitrc.org/projects/arterialatlas), cópia no OSF (osf.io/e3r7b)."
+    credito_conferido: false   # licença CC BY-SA 4.0 escrita de memória; conferir no arquivo baixado e no NITRC (fora do ar em 19/11/2026)
+    downloads:
+      - arquivo: "Arterial.zip"
+        url: "https://osf.io/download/e3r7b/"
+        tamanho_aprox: "0,7 MB (695.822 bytes)"
+        sha256_fonte: "77c398639eadf586faa06ed81c0181481bca010d5757952f00302a59a610080d"
+        nota: "cópia no OSF (neuroimaging core da Universidade do Arizona) dos arquivos do NITRC"
     verificacao_link_2026_11_17: "ok"
   - id: halle_cranio
     nome: "Crânio de Halle (micro-CT)"
@@ -545,4 +556,40 @@ assets:
       MASSP 2.0 (maxlabel, 0,5 mm), Allen HRA 3D 2020 (annotation_full, 0,5 mm) e Neudorfer 2020 (MNI152b, 0,25 mm), todos
       em MNI 2009b; por rótulo e lado: recorte da caixa, gaussiana, marching cubes (scikit-image), Taubin 6; MNI -> Mímir
       pela afim de mni_para_mimir.py; compressão meshopt. Script: scripts/process/fase5_nucleos.py.
+    data_download: "2026-11-19"
+  - id: jhu_territorios_bin
+    arquivo: "models/jhu_territorios.bin"
+    estrutura: "Territórios arteriais (ACA, ACM e partes, lenticuloestriadas, ACP e partes, corióideas, basilar, cerebelares), mapa de rótulos a 2 mm"
+    fonte: jhu_arterial
+    fonte_adicional: mimir
+    processamento: >-
+      ARTERIAL1_2mm.nii.gz (MNI do FSL) gravado como uint8 cru; classes do app (ACA, ACM, ACP, corióidea anterior,
+      vertebrobasilar) atribuídas pelo Mímir; no app, cada vértice do córtex é levado ao MNI pela inversa da afim de
+      mni_para_mimir.py. Script: scripts/process/jhu_territorios.py. Derivado de obra CC BY-SA (a conferir).
+    data_download: "2026-11-19"
+  - id: jhu_territorios_json
+    arquivo: "models/jhu_territorios.json"
+    estrutura: "Dimensões, afins e nomes dos territórios de models/jhu_territorios.bin"
+    fonte: jhu_arterial
+    fonte_adicional: mimir
+    processamento: "Gerado junto com jhu_territorios.bin por scripts/process/jhu_territorios.py."
+    data_download: "2026-11-19"
+  - id: topbrain_vasos
+    arquivo: "models/topbrain_vasos.glb"
+    estrutura: "Artérias reais de um paciente (TopBrain, angio-RM topcow_mr_025): polígono de Willis (basilar, P1-P2, carótidas internas, M1, comunicantes), A3, M2, M3, P3-P4, vertebrais, cerebelares superior, inferior anterior e inferior posterior, corióideas anteriores e oftálmicas"
+    fonte: topbrain
+    fonte_adicional: mimir
+    processamento: >-
+      Rótulos v1 da angio-RM do paciente 025 (todas as artérias do protocolo menos a calosa mediana, variante ausente);
+      por rótulo: recorte, gaussiana, marching cubes (scikit-image), Taubin 6; do paciente (LPS) para RAS e ao atlas por
+      semelhança calculada em 7 marcos do polígono de Willis contra os esquemas do atlas (erro de 2,5 a 7,5 mm);
+      calibre de cada artéria pela transformada de distância do rótulo; compressão meshopt. Script:
+      scripts/process/topbrain_vasos.py.
+    data_download: "2026-11-19"
+  - id: topbrain_vasos_info
+    arquivo: "models/topbrain_vasos.json"
+    estrutura: "Sigla, item do atlas, lado, calibre e centro de cada artéria de models/topbrain_vasos.glb"
+    fonte: topbrain
+    fonte_adicional: mimir
+    processamento: "Gerado junto com topbrain_vasos.glb por scripts/process/topbrain_vasos.py."
     data_download: "2026-11-19"

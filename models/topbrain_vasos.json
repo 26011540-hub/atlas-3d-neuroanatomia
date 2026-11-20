@@ -1,0 +1,421 @@
+{
+ "paciente": "topcow_mr_025",
+ "nos": {
+  "basilar__m__BA": {
+   "sigla": "BA",
+   "item": "basilar",
+   "lado": "m",
+   "raio_mm": 1.33,
+   "willis": true,
+   "centro": [
+    0.14,
+    -2.8,
+    -0.81
+   ],
+   "faces": 9924
+  },
+  "acp1__d__P1P2": {
+   "sigla": "R-P1P2",
+   "item": "acp1",
+   "lado": "d",
+   "raio_mm": 0.84,
+   "willis": true,
+   "centro": [
+    -1.48,
+    -0.91,
+    -1.6
+   ],
+   "faces": 10636
+  },
+  "acp1__e__P1P2": {
+   "sigla": "L-P1P2",
+   "item": "acp1",
+   "lado": "e",
+   "raio_mm": 0.95,
+   "willis": true,
+   "centro": [
+    1.43,
+    -1.0,
+    -1.46
+   ],
+   "faces": 10900
+  },
+  "aci_cer__d__ICA": {
+   "sigla": "R-ICA",
+   "item": "aci_cer",
+   "lado": "d",
+   "raio_mm": 1.49,
+   "willis": true,
+   "centro": [
+    -2.06,
+    -5.1,
+    -0.26
+   ],
+   "faces": 51860
+  },
+  "acm__d__M1": {
+   "sigla": "R-M1",
+   "item": "acm",
+   "lado": "d",
+   "raio_mm": 0.99,
+   "willis": true,
+   "centro": [
+    -2.71,
+    -1.46,
+    1.65
+   ],
+   "faces": 8676
+  },
+  "aci_cer__e__ICA": {
+   "sigla": "L-ICA",
+   "item": "aci_cer",
+   "lado": "e",
+   "raio_mm": 1.55,
+   "willis": true,
+   "centro": [
+    1.54,
+    -4.75,
+    -0.18
+   ],
+   "faces": 37920
+  },
+  "acm__e__M1": {
+   "sigla": "L-M1",
+   "item": "acm",
+   "lado": "e",
+   "raio_mm": 1.09,
+   "willis": true,
+   "centro": [
+    2.61,
+    -1.6,
+    1.42
+   ],
+   "faces": 6888
+  },
+  "pcom__d__Pcom": {
+   "sigla": "R-Pcom",
+   "item": "pcom",
+   "lado": "d",
+   "raio_mm": 0.9,
+   "willis": true,
+   "centro": [
+    -1.07,
+    -1.6,
+    0.34
+   ],
+   "faces": 1568
+  },
+  "pcom__e__Pcom": {
+   "sigla": "L-Pcom",
+   "item": "pcom",
+   "lado": "e",
+   "raio_mm": 0.62,
+   "willis": true,
+   "centro": [
+    0.77,
+    -1.17,
+    0.34
+   ],
+   "faces": 868
+  },
+  "acomA__m__Acom": {
+   "sigla": "Acom",
+   "item": "acomA",
+   "lado": "m",
+   "raio_mm": 0.75,
+   "willis": true,
+   "centro": [
+    0.01,
+    -0.86,
+    1.68
+   ],
+   "faces": 800
+  },
+  "aca1__d__A1A2": {
+   "sigla": "R-A1A2",
+   "item": "aca1",
+   "lado": "d",
+   "raio_mm": 1.01,
+   "willis": true,
+   "centro": [
+    -0.49,
+    -0.48,
+    1.69
+   ],
+   "faces": 7028
+  },
+  "aca1__e__A1A2": {
+   "sigla": "L-A1A2",
+   "item": "aca1",
+   "lado": "e",
+   "raio_mm": 1.03,
+   "willis": true,
+   "centro": [
+    0.47,
+    -0.65,
+    1.74
+   ],
+   "faces": 6296
+  },
+  "pericalosa__d__A3": {
+   "sigla": "R-A3",
+   "item": "pericalosa",
+   "lado": "d",
+   "raio_mm": 0.96,
+   "willis": false,
+   "centro": [
+    -0.2,
+    1.51,
+    3.43
+   ],
+   "faces": 6228
+  },
+  "pericalosa__e__A3": {
+   "sigla": "L-A3",
+   "item": "pericalosa",
+   "lado": "e",
+   "raio_mm": 0.88,
+   "willis": false,
+   "centro": [
+    0.11,
+    1.45,
+    3.43
+   ],
+   "faces": 5520
+  },
+  "acm2__d__M2": {
+   "sigla": "R-M2",
+   "item": "acm2",
+   "lado": "d",
+   "raio_mm": 0.81,
+   "willis": false,
+   "centro": [
+    -4.1,
+    0.51,
+    0.58
+   ],
+   "faces": 46376
+  },
+  "acm2__d__M3": {
+   "sigla": "R-M3",
+   "item": "acm2",
+   "lado": "d",
+   "raio_mm": 0.69,
+   "willis": false,
+   "centro": [
+    -4.66,
+    2.05,
+    -0.63
+   ],
+   "faces": 13756
+  },
+  "acm2__e__M2": {
+   "sigla": "L-M2",
+   "item": "acm2",
+   "lado": "e",
+   "raio_mm": 0.85,
+   "willis": false,
+   "centro": [
+    4.05,
+    -0.02,
+    0.3
+   ],
+   "faces": 39212
+  },
+  "acm2__e__M3": {
+   "sigla": "L-M3",
+   "item": "acm2",
+   "lado": "e",
+   "raio_mm": 0.71,
+   "willis": false,
+   "centro": [
+    4.96,
+    1.56,
+    -1.66
+   ],
+   "faces": 24256
+  },
+  "acp__d__P3P4": {
+   "sigla": "R-P3P4",
+   "item": "acp",
+   "lado": "d",
+   "raio_mm": 0.64,
+   "willis": false,
+   "centro": [
+    -1.21,
+    0.25,
+    -4.37
+   ],
+   "faces": 3796
+  },
+  "acp__e__P3P4": {
+   "sigla": "L-P3P4",
+   "item": "acp",
+   "lado": "e",
+   "raio_mm": 0.7,
+   "willis": false,
+   "centro": [
+    0.98,
+    0.29,
+    -4.79
+   ],
+   "faces": 5616
+  },
+  "vertebral__d__VA": {
+   "sigla": "R-VA",
+   "item": "vertebral",
+   "lado": "d",
+   "raio_mm": 1.44,
+   "willis": false,
+   "centro": [
+    -2.1,
+    -6.0,
+    -3.59
+   ],
+   "faces": 25676
+  },
+  "vertebral__e__VA": {
+   "sigla": "L-VA",
+   "item": "vertebral",
+   "lado": "e",
+   "raio_mm": 1.11,
+   "willis": false,
+   "centro": [
+    1.45,
+    -6.26,
+    -3.71
+   ],
+   "faces": 14816
+  },
+  "sca__d__SCA": {
+   "sigla": "R-SCA",
+   "item": "sca",
+   "lado": "d",
+   "raio_mm": 0.77,
+   "willis": false,
+   "centro": [
+    -0.31,
+    -1.59,
+    -0.66
+   ],
+   "faces": 1424
+  },
+  "sca__e__SCA": {
+   "sigla": "L-SCA",
+   "item": "sca",
+   "lado": "e",
+   "raio_mm": 0.73,
+   "willis": false,
+   "centro": [
+    0.89,
+    -1.86,
+    -0.28
+   ],
+   "faces": 1908
+  },
+  "aica__d__AICA": {
+   "sigla": "R-AICA",
+   "item": "aica",
+   "lado": "d",
+   "raio_mm": 0.7,
+   "willis": false,
+   "centro": [
+    -0.27,
+    -3.25,
+    -1.23
+   ],
+   "faces": 924
+  },
+  "aica__e__AICA": {
+   "sigla": "L-AICA",
+   "item": "aica",
+   "lado": "e",
+   "raio_mm": 0.62,
+   "willis": false,
+   "centro": [
+    0.52,
+    -3.55,
+    -1.03
+   ],
+   "faces": 420
+  },
+  "pica__d__PICA": {
+   "sigla": "R-PICA",
+   "item": "pica",
+   "lado": "d",
+   "raio_mm": 0.76,
+   "willis": false,
+   "centro": [
+    -0.95,
+    -5.63,
+    -4.22
+   ],
+   "faces": 3836
+  },
+  "pica__e__PICA": {
+   "sigla": "L-PICA",
+   "item": "pica",
+   "lado": "e",
+   "raio_mm": 0.81,
+   "willis": false,
+   "centro": [
+    1.25,
+    -4.84,
+    -3.38
+   ],
+   "faces": 2332
+  },
+  "coroant__d__AChA": {
+   "sigla": "R-AChA",
+   "item": "coroant",
+   "lado": "d",
+   "raio_mm": 0.64,
+   "willis": false,
+   "centro": [
+    -1.3,
+    -0.99,
+    0.34
+   ],
+   "faces": 1240
+  },
+  "coroant__e__AChA": {
+   "sigla": "L-AChA",
+   "item": "coroant",
+   "lado": "e",
+   "raio_mm": 0.66,
+   "willis": false,
+   "centro": [
+    1.3,
+    -1.04,
+    0.1
+   ],
+   "faces": 1680
+  },
+  "a_oft__d__OA": {
+   "sigla": "R-OA",
+   "item": "a_oft",
+   "lado": "d",
+   "raio_mm": 0.65,
+   "willis": false,
+   "centro": [
+    -1.17,
+    -1.9,
+    2.24
+   ],
+   "faces": 1872
+  },
+  "a_oft__e__OA": {
+   "sigla": "L-OA",
+   "item": "a_oft",
+   "lado": "e",
+   "raio_mm": 0.66,
+   "willis": false,
+   "centro": [
+    1.03,
+    -2.14,
+    2.19
+   ],
+   "faces": 1476
+  }
+ }
+}

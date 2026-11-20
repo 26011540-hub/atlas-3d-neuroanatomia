@@ -43,6 +43,8 @@ function setCircuito(nome) {
   const C = CIRCUITOS[nome];
   const montar = () => {
     const pts = []; C.passos.forEach(([id, n, comeco]) => cirPontos(id, n, comeco).forEach(p => pts.push(p)));
+    // sem pontos inválidos nem repetidos (duas estações quase no mesmo lugar quebram a curva centrípeta)
+    for (let i = pts.length - 1; i >= 0; i--) { const p = pts[i]; if (!isFinite(p.x + p.y + p.z) || (i > 0 && p.distanceTo(pts[i - 1]) < 0.03)) pts.splice(i, 1); }
     if (pts.length < 3) { if (st) st.textContent = 'Faltam estruturas para desenhar este circuito.'; return; }
     if (C.fechado && pts[0].distanceTo(pts[pts.length - 1]) < 0.05) pts.pop();
     const curva = new THREE.CatmullRomCurve3(pts, C.fechado, 'centripetal', 0.5); CIR.curva = curva;
@@ -67,7 +69,7 @@ function setCircuito(nome) {
 function cirAnimar(t) {
   if (!CIR.ativo || !CIR.curva) return;
   const dt = Math.min(0.05, (t - CIR.ultimo) / 1000); CIR.ultimo = t; CIR.t = (CIR.t + dt * 0.07) % 1;   // uma volta em cerca de 14 s
-  CIR.pulsos.forEach(p => p.position.copy(CIR.curva.getPointAt((CIR.t + p.userData.fase) % 1)));
+  try { CIR.pulsos.forEach(p => p.position.copy(CIR.curva.getPointAt((CIR.t + p.userData.fase) % 1))); } catch (e) { console.warn('circuito', e); return; }
   marca(); requestAnimationFrame(cirAnimar);
 }
 // desfaz o circuito quando o usuário escolhe outra estrutura
