@@ -239,3 +239,7 @@ Base: Ângelo Machado, Neuroanatomia Funcional, 4ª ed. (Atheneu). No atlas, est
 - Canal central do bulbo sem malha; plexo corioide do IV ventrículo não cruza o plano mediano.
 - Limites mesencéfalo/ponte/bulbo no corte vêm da malha do atlas: a ponte sobe bastante no dorso, conferir com o Machado.
 - Corte a 0,5 mm da linha média (as metades do atlas são abertas em x = 0).
+
+## Reforma do cerebelo, Fase 4 (20/11/2026)
+- Vasos e seios empurrados para fora do cerebelo do Sereno pelo caminho mais curto: conferir trajetos de SCA, AICA, PICA e veias cerebelares no Machado (cap. 8) e no Prometheus.
+- Seio transverso na margem posterossuperior dos hemisférios; sem crânio, a posição em relação ao osso occipital é aproximada.

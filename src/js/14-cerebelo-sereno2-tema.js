@@ -197,7 +197,7 @@ function cbtIdDoPonto(h) {
   if (h.id === 'arbvida') return loboDoCorte(h);
   return h.id;
 }
-const cbtRealcavel = id => !!id && !!META[id] && (META[id].grp === 'cereb' || META[id].grp === 'ped' || !!CBT_TETO[id]);
+const cbtRealcavel = id => !!id && !!META[id] && (META[id].grp === 'cereb' || META[id].grp === 'ped' || !!CBT_TETO[id] || (typeof CBV !== 'undefined' && CBV.ITENS.indexOf(id) >= 0));   // vasos, seios e pregas da dura do cerebelo (Fase 4) seguem as mesmas regras
 const _hovCbt = hover;
 hover = function (e) {
   const antes = CBT.ultimo && CBT.ultimo.t; _hovCbt(e);
@@ -271,6 +271,7 @@ function cbtOclusao() {
   const lista = [];
   CBT.anc.forEach(a => a.cand.forEach(c => lista.push(c)));
   CBT.fisMalhas.forEach(f => lista.push(f.userData));
+  if (typeof CBV !== 'undefined' && CBV.anc) Object.values(CBV.anc).forEach(a => { if (a.p) lista.push(a); });   // rótulos dos vasos também somem atrás do cerebelo
   lista.forEach(c => {
     const p = c.p || c.cbtMeio, dir = p.clone().sub(camera.position), d = dir.length(); dir.normalize();
     _rcO.set(camera.position, dir); _rcO.far = d - 0.25; const h = _rcO.intersectObject(m, false); if (h.length) CBT.ocl.add(c);
@@ -296,7 +297,9 @@ stepRotulos = function () {
   const extras = CBT.rot === 'todos' ? ['teto_v4', 'veusup', 'abmed', 'ablat', 'pcs', 'pcm', 'pci', 'denteado', 'interposito', 'fastigial'] : ((CBT.vista === 'ventral' || CBT.vista === 'anterior') ? ['teto_v4', 'veusup', 'abmed', 'ablat', 'pcs', 'pcm', 'pci'] : []);
   if (typeof CBI !== 'undefined' && (CBI.corte || CBI.t.cortex >= 40)) extras.push(...(CBI.interp ? ['denteado', 'interposito', 'fastigial'] : ['denteado', 'emboliforme', 'globoso', 'fastigial']));   // núcleos à vista: corte ou córtex transparente   // núcleos (por dentro) só em Mostrar todos
   if (state.sel && extras.indexOf(state.sel) < 0 && ITEMS[state.sel] && !CBS_RANK[state.sel] && !/^f_/.test(state.sel)) extras.push(state.sel);
-  extras.forEach(id => { const it = id === 'interposito' && CBI.nuc === 'formas' ? { meshes: ITEMS.emboliforme.meshes } : ITEMS[id]; if (!it) return; it.meshes.filter(q => q.visible && q.parent && q.parent.visible).slice(0, 2).forEach(q => { const b = new THREE.Box3().setFromObject(q); lista.push({ id, p: b.getCenter(new THREE.Vector3()), n: null, pri: 1 }); }); });
+  if (typeof CBV !== 'undefined') CBV.ITENS.forEach(id => { const g = META[id] && META[id].grp; if (g && state.groupOn[g] && ITEMS[id] && ITEMS[id].meshes.some(q => q.visible) && extras.indexOf(id) < 0 && id !== 'vertebral' && id !== 'basilar' && id !== 'v_occint') extras.push('@' + id); });   // vasos: âncora sobre a própria malha
+  if (typeof CBV !== 'undefined' && !CBV.anc) CBV.anc = {};
+  extras.forEach(id => { if (id[0] === '@') { const k = id.slice(1); if (!(k in CBV.anc)) CBV.anc[k] = { p: cbvAncora(k) }; const a = CBV.anc[k]; if (a.p && !tapado(a)) lista.push({ id: k, p: a.p, n: null, pri: 1 }); return; } const it = id === 'interposito' && CBI.nuc === 'formas' ? { meshes: ITEMS.emboliforme.meshes } : ITEMS[id]; if (!it) return; it.meshes.filter(q => q.visible && q.parent && q.parent.visible).slice(0, 2).forEach(q => { const b = new THREE.Box3().setFromObject(q); lista.push({ id, p: b.getCenter(new THREE.Vector3()), n: null, pri: 1 }); }); });
   const w = canvas.clientWidth, h = canvas.clientHeight, caixas = [], usados = new Set();
   lista.sort((a, b) => (b.id === state.sel) - (a.id === state.sel) || b.pri - a.pri);
   lista.forEach(a => {
