@@ -187,8 +187,8 @@ rayAt = function (e) {
   ndc.set((e.clientX - r.left) / r.width * 2 - 1, -((e.clientY - r.top) / r.height) * 2 + 1);
   ray.setFromCamera(ndc, camera);
   const list = ALLMESH.filter(m => m.visible && m.parent && m.parent.visible && m.material.opacity > 0.3);
-  const hits = ray.intersectObjects(list, false);
-  const h = hits.length ? { id: hits[0].object.userData.id, mesh: hits[0].object, point: hits[0].point, face: hits[0].face } : null;
+  const hit = ray.intersectObjects(list, false).find(q => !(q.object.material.clippingPlanes || []).some(pl => pl.distanceToPoint(q.point) < 0) && !(q.object.userData.cbiSag && !cbsgPixel(q.uv)));   // o raio ignora o plano de recorte: descarta o que foi cortado
+  const h = hit ? { id: hit.object.userData.id, mesh: hit.object, point: hit.point, face: hit.face, uv: hit.uv } : null;
   CBT.ultimo = { h, t: performance.now() }; return h;
 };
 function cbtIdDoPonto(h) {

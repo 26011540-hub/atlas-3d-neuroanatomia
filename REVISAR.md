@@ -233,3 +233,9 @@ Base: Ângelo Machado, Neuroanatomia Funcional, 4ª ed. (Atheneu). No atlas, est
 - Núcleos no mesmo nível horizontal (livros); no SUIT o interpósito e o fastigial ficam 0,5 a 0,8 cm acima do denteado.
 - Corte horizontal em y = -2,97 cm no espaço do atlas; o plano 1 do Duus pode ser oblíquo (eixo do tronco).
 - Aferências e eferências dos núcleos: texto do roteiro (Duus, p. 184), conferir no livro.
+
+## Reforma do cerebelo, Fase 3 (20/11/2026)
+- Língula e fólium não aparecem no corte mediano (o SUIT não os rotula perto da linha média); fissuras pré-central e horizontal sem rótulo no plano.
+- Canal central do bulbo sem malha; plexo corioide do IV ventrículo não cruza o plano mediano.
+- Limites mesencéfalo/ponte/bulbo no corte vêm da malha do atlas: a ponte sobe bastante no dorso, conferir com o Machado.
+- Corte a 0,5 mm da linha média (as metades do atlas são abertas em x = 0).
