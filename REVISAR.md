@@ -243,3 +243,7 @@ Base: Ângelo Machado, Neuroanatomia Funcional, 4ª ed. (Atheneu). No atlas, est
 ## Reforma do cerebelo, Fase 4 (20/11/2026)
 - Vasos e seios empurrados para fora do cerebelo do Sereno pelo caminho mais curto: conferir trajetos de SCA, AICA, PICA e veias cerebelares no Machado (cap. 8) e no Prometheus.
 - Seio transverso na margem posterossuperior dos hemisférios; sem crânio, a posição em relação ao osso occipital é aproximada.
+
+## Reforma do cerebelo, Fase 5 (21/11/2026)
+- Vias cerebelares esquemáticas, só do cerebelo esquerdo; conferir ordem das estações e cruzamentos no Duus (fig. 5.5b) e no Machado (cap. 22).
+- Síndromes com os sinais do roteiro (Duus, p. 188-191); acrescentar outros se o autor quiser.

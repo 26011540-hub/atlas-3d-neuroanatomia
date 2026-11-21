@@ -68,6 +68,15 @@ fontes:
     credito_conferido: true
     usado_hoje: true
     tipo: referencia
+  - id: duus
+    nome: "Baehr e Frotscher, Duus: Diagnóstico Topográfico em Neurologia, 5ª ed."
+    licenca: "Direitos reservados"
+    comercial_permitido: false
+    share_alike: false
+    credito_exato: "Referência de modelagem e de texto do cerebelo (cap. 5): divisão funcional, núcleos, vias e síndromes, citado por página; nenhuma figura do livro está no atlas."
+    credito_conferido: true
+    usado_hoje: true
+    tipo: referencia
   - id: prometheus
     nome: "Schünke, Schulte e Schumacher, Prometheus: Cabeça e Neuroanatomia"
     licenca: "Direitos reservados"
@@ -86,7 +95,7 @@ fontes:
     licenca: "Permissão do autor por e-mail (17 nov. 2026), uso não comercial e educacional"
     comercial_permitido: false
     share_alike: false
-    credito_exato: "Superfície do córtex cerebelar, vérmis e núcleo denteado: Sereno MI, Diedrichsen J, Tachrount M, Testa-Silva G, d'Arceuil H, De Zeeuw C. PNAS 2020;117:19538–19543 (cerebmap20, https://mri.sdsu.edu/sereno/cereb/data). Utilizado com permissão do autor (comunicação pessoal, 17 nov. 2026)."
+    credito_exato: "Superfícies do córtex cerebelar (pial) e da substância branca (corpo medular), com o vérmis: Sereno MI, Diedrichsen J, Tachrount M, Testa-Silva G, d'Arceuil H, De Zeeuw C. PNAS 2020;117:19538–19543 (cerebmap20, https://mri.sdsu.edu/sereno/cereb/data). Utilizado com permissão do autor (comunicação pessoal, 17 nov. 2026)."
     credito_conferido: true
     downloads:
       - arquivo: "cerebmap20.tgz"

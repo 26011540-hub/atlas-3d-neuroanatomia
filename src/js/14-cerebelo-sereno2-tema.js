@@ -274,6 +274,7 @@ function cbtOclusao() {
   if (typeof CBV !== 'undefined' && CBV.anc) Object.values(CBV.anc).forEach(a => { if (a.p) lista.push(a); });   // rótulos dos vasos também somem atrás do cerebelo
   lista.forEach(c => {
     const p = c.p || c.cbtMeio, dir = p.clone().sub(camera.position), d = dir.length(); dir.normalize();
+    if (typeof CBV !== 'undefined' && CBV.pronto) { for (let t = 0.3; t < d - 0.2; t += 0.08) { const x = p.x - dir.x * t, y = p.y - dir.y * t, z = p.z - dir.z * t; if (cbvSaida(x, y, z, 0)) { CBT.ocl.add(c); break; } if (t > 1 && (Math.abs(x) > 8 || y > 3 || y < -9 || z > 2 || z < -11)) break; } return; }   // marcha sobre a grade de dentro do cerebelo (Fase 4): muito mais leve que o raio contra a malha
     _rcO.set(camera.position, dir); _rcO.far = d - 0.25; const h = _rcO.intersectObject(m, false); if (h.length) CBT.ocl.add(c);
   });
   marca();
@@ -300,6 +301,7 @@ stepRotulos = function () {
   if (typeof CBV !== 'undefined') CBV.ITENS.forEach(id => { const g = META[id] && META[id].grp; if (g && state.groupOn[g] && ITEMS[id] && ITEMS[id].meshes.some(q => q.visible) && extras.indexOf(id) < 0 && id !== 'vertebral' && id !== 'basilar' && id !== 'v_occint') extras.push('@' + id); });   // vasos: âncora sobre a própria malha
   if (typeof CBV !== 'undefined' && !CBV.anc) CBV.anc = {};
   extras.forEach(id => { if (id[0] === '@') { const k = id.slice(1); if (!(k in CBV.anc)) CBV.anc[k] = { p: cbvAncora(k) }; const a = CBV.anc[k]; if (a.p && !tapado(a)) lista.push({ id: k, p: a.p, n: null, pri: 1 }); return; } const it = id === 'interposito' && CBI.nuc === 'formas' ? { meshes: ITEMS.emboliforme.meshes } : ITEMS[id]; if (!it) return; it.meshes.filter(q => q.visible && q.parent && q.parent.visible).slice(0, 2).forEach(q => { const b = new THREE.Box3().setFromObject(q); lista.push({ id, p: b.getCenter(new THREE.Vector3()), n: null, pri: 1 }); }); });
+  (CBT.ganchos || []).forEach(f => f(lista));   // outras fases acrescentam rótulos (vias da Fase 5)
   const w = canvas.clientWidth, h = canvas.clientHeight, caixas = [], usados = new Set();
   lista.sort((a, b) => (b.id === state.sel) - (a.id === state.sel) || b.pri - a.pri);
   lista.forEach(a => {
